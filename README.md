@@ -26,4 +26,8 @@ You need to have Python with virtualenv and Git installed
   pip install flask
   python -m flask run
 ```
-    
+
+## Future plans
+- [] Write a documentations
+- [] Improve the system for creating plugins
+- [] Interactions with databases
