@@ -5,6 +5,8 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
+    if not os.path.exists(f"templates/projects"):
+        os.makedirs(f"templates/projects")
     projects = os.listdir('templates/projects/')
     return render_template('index.html', projects=projects)
 
