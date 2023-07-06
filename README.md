@@ -1,3 +1,7 @@
+<div align="center">
+  <img src="./static/icon.svg">
+</div>
+
 # Other Apps
 
 Lightweight Free and Open Source alternative to Microsoft's Power Apps written in Python and Flask
