@@ -28,6 +28,6 @@ You need to have Python with virtualenv and Git installed
 ```
 
 ## Future plans
-- [] Write a documentations
-- [] Improve the system for creating plugins
-- [] Interactions with databases
+- [ ] Write a documentations
+- [ ] Improve the system for creating plugins
+- [ ] Interactions with databases
