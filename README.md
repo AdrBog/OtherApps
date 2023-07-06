@@ -35,5 +35,5 @@ You need to have Python with virtualenv and Git installed
 - [ ] Themes
 
 ## Scripts used
-<a href="https://interactjs.io/">interact.js</a> - For drag and resize items
+<a href="https://interactjs.io/">interact.js</a> - For drag and resize items <br>
 <a href="https://github.com/ajaxorg/ace-builds/">Ace</a> - For built-in code editor
