@@ -31,3 +31,4 @@ You need to have Python with virtualenv and Git installed
 - [ ] Write documentation
 - [ ] Improve the system for creating plugins
 - [ ] Interactions with databases
+- [ ] Themes
