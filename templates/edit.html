@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/edit.css') }}">
+    <title>{{ id }} - Other Apps</title>
+</head>
+<body>
+    <div class="window" id="settings-window" style="width: 30%; visibility: hidden;">
+        <div class="horizontal-container">
+            <span style="font-size: 24px;">App Settings</span>
+            <button onclick="document.getElementById('settings-window').style.visibility = 'hidden';">X</button>
+        </div>
+        <div class="form-table" id="table-app">
+            <table>
+                <tr>
+                    <td>Display Name</td>
+                    <td><input type="text" id="edit-info-app-name"></td>
+                </tr>
+                <tr>
+                    <td>Screen Size (W / H)</td>
+                    <td>
+                        <table>
+                            <td><input type="number" id="edit-info-app-w" min="0"></td>
+                            <td><input type="number" id="edit-info-app-h" min="0"></td>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Default Screen</td>
+                    <td><select id="edit-info-default-screen">
+                    </select></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div class="window" id="editor-window" style="visibility: hidden;">
+        <div class="horizontal-container">
+            <div>
+                <span id="editor-title" style="font-size: 24px;">Code editor</span>
+            </div>
+            <button onclick="document.getElementById('editor-window').style.visibility = 'hidden'; can_click = true;">X</button>
+        </div>
+        <div id="text-editor"></div>
+    </div>
+    <div class="vertical-container">
+        <div id="tool-bar" class="navbar">
+            <a class="primary" href="{{ url_for('index') }}">Other Apps</a>
+            <a href="#" onclick="save()">Save</a>
+            <a href="#" onclick="test()">Test</a>
+            <div class="dropdown">
+                <a class="dropbtn">Insert</a>
+                <div id="tool-bar-insert" class="dropdown-content">
+                    <a href="#" onclick="insert('screen');">Screen</a>
+                    <a href="#" onclick="insert('label');">Label</a>
+                    <a href="#" onclick="insert('button');">Button</a>
+                </div>
+            </div>
+            <a href="#" onclick="document.getElementById('settings-window').style.visibility = 'visible'">App Settings</a>
+        </div>
+        <div id="editor">
+            <div class="horizontal-container">
+                <div id="nav-sidebar">
+                    <span style="font-size: 24px;">Tree View</span>
+                    <hr>
+                    <div>
+                        <div id="control-map">
+                        </div>
+                    </div>
+                </div>
+                <div id="editor-screen" style="flex: 1 1; display: flex; overflow: scroll;">
+                    <div id="virtual-screen" style="position: relative; width: 800px; height: 450px;"></div>
+                </div>
+                <div id="control-sidebar">
+                    <span id="info-type"></span><br/>
+                    <hr/>
+                    <div id="control-button">
+                        <div id="table-id" style="overflow-y: hidden; height: 0;">
+                            <table id="table-id-options">
+                                <tr>
+                                    <td>Name (ID)</td>
+                                    <td><input type="text" id="edit-info-name"/></td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div id="table-text" style="overflow-y: hidden; height: 0;">
+                            <table id="table-text-options">
+                                <tr>
+                                    <td>
+                                        Text
+                                    </td>
+                                    <td>
+                                        <textarea id="edit-info-text" rows="4" spellcheck="false" mode="html" placeholder="Text"></textarea>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div id="table-show" style="overflow-y: hidden; height: 0;">
+                            <hr>
+                            <table id="table-show-options">
+                                <tr>
+                                    <td>Visibility</td>
+                                    <td><select id="edit-info-visible">
+                                        <option value="visible">Visible</option>
+                                        <option value="hidden">Hidden</option>
+                                    </select></td>
+                                </tr>
+                                <tr>
+                                    <td>Position (X / Y)</td>
+                                    <td>
+                                        <table>
+                                            <td><input type="number" id="edit-info-x" min="0"></td>
+                                            <td><input type="number" id="edit-info-y" min="0"></td>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Size (W / H)</td>
+                                    <td>
+                                        <table>
+                                            <td><input type="number" id="edit-info-w" min="32"></td>
+                                            <td><input type="number" id="edit-info-h" min="32"></td>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Z-Index</td>
+                                    <td><input type="number" id="edit-info-z" min="-999" max="998"></td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div id="table-decor" style="overflow-y: hidden; height: 0;">
+                            <hr>
+                            <table id="table-decor-options">
+                                <tr>
+                                    <td>Fill</td>
+                                    <td><input type="color" id="edit-info-fill"></td>
+                                </tr>
+                                <tr>
+                                    <td>Color</td>
+                                    <td><input type="color" id="edit-info-color"></td>
+                                </tr>
+                                <tr>
+                                    <td>Font Size</td>
+                                    <td><input type="number" id="edit-info-font-size" min="0"></td>
+                                </tr>
+                                <tr>
+                                    <td>Font Family</td>
+                                    <td><select id="edit-info-font-family">
+                                        <option value="Arial">Arial</option>
+                                        <option value="Verdana">Verdana</option>
+                                        <option value="Tahoma">Tahoma</option>
+                                        <option value="Trebuchet MS">Trebuchet MS</option>
+                                        <option value="Times New Roman">Times New Roman</option>
+                                        <option value="Georgia">Georgia</option>
+                                        <option value="Garamond">Garamond</option>
+                                        <option value="sans-serif">Sans Serif</option>
+                                        <option value="Courier New">Courier New</option>
+                                        <option value="Brush Script MT">Brush Script MT</option>
+                                        <option value="System-UI">System-UI</option>
+                                    </select></td>
+                                </tr>
+                                <tr>
+                                    <td>Border</td>
+                                    <td><input type="text" id="edit-info-border"></td>
+                                </tr>
+                                <tr>
+                                    <td>Border Radius</td>
+                                    <td><input type="number" id="edit-info-border-r" min="0"></td>
+                                </tr>
+                                <tr>
+                                    <td>Background Image</td>
+                                    <td><textarea id="edit-info-bgimage" rows="4" spellcheck="false" mode="html" placeholder="Background Image"></textarea></td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div id="table-screen" style="overflow-y: hidden; height: 0;">
+                            <table id="table-screen-options">
+                                <tr>
+                                    <td>Fill</td>
+                                    <td><input type="color" id="edit-info-bgcolor"></td>
+                                </tr>
+                                <tr>
+                                    <td>On Visible</td>
+                                    <td><textarea id="edit-info-onvisible" rows="4" spellcheck="false" mode="javascript" placeholder="On Visible"></textarea></td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div id="table-button" style="overflow-y: hidden; height: 0;">
+                            <hr>
+                            <table id="table-button-options">
+                                <tr>
+                                    <td>
+                                        On Click
+                                    </td>
+                                    <td>
+                                        <textarea id="edit-info-onclick" rows="4" spellcheck="false" mode="javascript" placeholder="On Click"></textarea>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="/static/addons/extraInsert.js"></script>
+    <script src="/static/addons/extraEdits.js"></script>
+    <script src="/static/js/interact.js"></script>
+    <script src="/static/js/src-min-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/static/js/src-min-noconflict/mode-javascript.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/static/js/src-min-noconflict/mode-html.js" type="text/javascript" charset="utf-8"></script>
+    <script>
+        var screens, screen_list, currentScreen;
+        var currentId = 0;
+
+        var aceEditor = ace.edit("text-editor");
+        aceEditor.session.setUseWrapMode(true);
+        var appname = "{{ id }}";
+        var urlsave = "/save";
+        var urltest = "/play/" + appname + "/test";
+        var can_click = true;
+        //var screen = document.getElementById("screen");
+        var map = document.getElementById("control-map");
+        var xmlsave = "";
+        //var xmlUrl = {{ id }};
+        var xml = {{ xmlfile | safe }};
+        var selected;
+        var textarea_selected;
+
+        const editorWindow =        document.getElementById("editor-window");
+        const virtualScreen =       document.getElementById("virtual-screen");
+        var screen_childrens =      virtualScreen.getElementsByTagName("div");
+        
+        const tableApp =            document.getElementById("table-app");
+        const tableId =             document.getElementById("table-id");
+        const tableText =           document.getElementById("table-text");
+        const tableShow =           document.getElementById("table-show");
+        const tableDecor =          document.getElementById("table-decor");
+        const tableScreen =         document.getElementById("table-screen");
+        const tableButton =         document.getElementById("table-button");
+
+        const infoAppName =         document.getElementById("edit-info-app-name");
+        const infoAppW =            document.getElementById("edit-info-app-w");
+        const infoAppH =            document.getElementById("edit-info-app-h");
+        const infoDefaultScreen =   document.getElementById("edit-info-default-screen");
+        const infoType =            document.getElementById("info-type");
+        const infoName =            document.getElementById("edit-info-name");
+        const infoText =            document.getElementById("edit-info-text");
+        const infoVisible =         document.getElementById("edit-info-visible");
+        const infoX =               document.getElementById("edit-info-x");
+        const infoY =               document.getElementById("edit-info-y");
+        const infoW =               document.getElementById("edit-info-w");
+        const infoH =               document.getElementById("edit-info-h");
+        const infoZ =               document.getElementById("edit-info-z");
+        const infoFill =            document.getElementById("edit-info-fill");
+        const infoColor =           document.getElementById("edit-info-color");
+        const infoFontSize =        document.getElementById("edit-info-font-size");
+        const infoFontFamily =      document.getElementById("edit-info-font-family");
+        const infoBorder =          document.getElementById("edit-info-border");
+        const infoBorderRadius =    document.getElementById("edit-info-border-r");
+        const infoBgImage =         document.getElementById("edit-info-bgimage");
+        const infoBgColor =         document.getElementById("edit-info-bgcolor");
+        const infoOnVisible =       document.getElementById("edit-info-onvisible");
+        const infoOnClick =         document.getElementById("edit-info-onclick");
+
+        // Custom events
+        const itemClicked =         new Event("item-clicked");
+        const tableIdChanged =      new Event("table-id-changed");
+        const tableTextChanged =    new Event("table-text-changed");
+        const tableShowChanged =    new Event("table-show-changed");
+        const tableDecorChanged =   new Event("table-decor-changed");
+        const tableScreenChanged =  new Event("table-screen-changed");
+        const tableButtonChanged =  new Event("table-button-changed");
+
+        document.addEventListener('keyup', (e) => {
+            if(selected.id != "screen")
+                if(e.key == "Delete")
+                    if (can_click){
+                        if (selected.getAttribute('class').split(' ')[0] == "Screen"){
+                            if (confirm("Are you sure you want to delete " + selected.getAttribute("Id") + "?")) {
+                                document.getElementById("map-screen-for-" + currentScreen.getAttribute("id")).remove();
+                                document.getElementById(currentScreen.getAttribute("id")).remove();
+                            }
+                        }else{
+                            selected.remove();
+                            click(document.getElementById(currentScreen.getAttribute("id")));
+                        }
+                    }
+                    refresh_map();
+        })
+        map.addEventListener('click', (e) => {
+            if (can_click){
+                infoName.classList.remove("error");
+                click(document.getElementById(e.target.getAttribute("point")));
+            }     
+        });
+        map.addEventListener('dblclick', (e) => click_map(e.target));
+        virtualScreen.addEventListener('click', (e) => {
+            if (can_click){
+                infoName.classList.remove("error");
+                click(e.target);
+            }
+        });
+        tableApp.addEventListener('input', () => {
+            virtualScreen.style.width = infoAppW.value + 'px';
+            virtualScreen.style.height = infoAppH.value + 'px';
+        })
+        tableId.addEventListener('input', () => {
+            old_name = selected.getAttribute("id");
+            
+            if(selected.getAttribute("class").startsWith("Screen") == true){
+                if(document.getElementById(infoName.value) != null){
+                    infoName.classList.add("error");
+                } else {
+                    infoName.classList.remove("error");
+                    document.getElementById("map-screen-for-" + old_name).setAttribute("id", "map-screen-for-" + infoName.value);
+                    document.getElementById("map-children-" + old_name).setAttribute("point", infoName.value);
+                    document.getElementById("map-children-" + old_name).innerHTML = "<span class='icon'>® </span>" + infoName.value;
+                    document.getElementById("map-children-" + old_name).setAttribute("id", "map-children-" + infoName.value);
+                    document.getElementById("map-childrens-for-" + old_name).setAttribute("id", "map-childrens-for-" + infoName.value);
+                    selected.setAttribute("id", infoName.value);
+                }   
+            } else {
+                if(document.getElementById(infoName.value) != null){
+                    infoName.classList.add("error");
+                } else {
+                    infoName.classList.remove("error");
+                    selected.setAttribute("id", infoName.value);
+                }
+                refresh_map();
+            }
+            document.dispatchEvent(tableIdChanged);
+        })
+        tableText.addEventListener('input', () => {
+            selected.innerHTML = infoText.value;
+            document.dispatchEvent(tableTextChanged);
+        })
+        tableShow.addEventListener('input', () => {
+            selected.setAttribute("data-x", infoX.value);
+            selected.setAttribute("data-y", infoY.value);
+            selected.style.transform = 'translate(' + infoX.value +'px, '+ infoY.value + 'px)';
+            selected.style.visibility = infoVisible.value;
+            selected.style.width = infoW.value + 'px';
+            selected.style.height = infoH.value + 'px';
+            selected.style.zIndex = infoZ.value;
+            document.dispatchEvent(tableShowChanged);
+        })
+        tableDecor.addEventListener('input', () => {
+            selected.style.backgroundColor = infoFill.value;
+            selected.style.color = infoColor.value;
+            selected.style.fontSize = infoFontSize.value + 'px';
+            selected.style.fontFamily = infoFontFamily.value;
+            selected.style.border = infoBorder.value;
+            selected.style.borderRadius = infoBorderRadius.value + 'px';
+            selected.style.backgroundImage = infoBgImage.value;
+            document.dispatchEvent(tableDecorChanged);
+        })
+        tableScreen.addEventListener('input', () => {
+            currentScreen.style.backgroundColor = infoBgColor.value;
+            selected.setAttribute("onVisible", infoOnVisible.value);
+            document.dispatchEvent(tableScreenChanged);
+        })
+        tableButton.addEventListener('input', () => {
+            selected.setAttribute("onClickALT", infoOnClick.value);
+            document.dispatchEvent(tableButtonChanged);
+        })
+        document.querySelectorAll('textarea').forEach(item => {
+            item.addEventListener('dblclick', (e) => {
+                textarea_selected = item;
+                document.getElementById("editor-title").innerHTML = selected.getAttribute("id") + ' ' + textarea_selected.getAttribute("placeholder");
+                aceEditor.setValue(textarea_selected.value);
+                aceEditor.session.setMode("ace/mode/" + textarea_selected.getAttribute("mode"));
+                editorWindow.style.visibility = 'visible';
+                can_click = false;
+            })
+        })
+        aceEditor.on('input', function() {
+            textarea_selected.value = aceEditor.getValue();
+            textarea_selected.dispatchEvent(new Event('input', {bubbles:true}));
+        }); 
+
+        function rgb2hex(rgb){
+            rgb = rgb.substring(4, rgb.length-1).replace(/ /g, '').split(',');
+            r = Number(rgb[0]).toString(16);
+            g = Number(rgb[1]).toString(16);
+            b = Number(rgb[2]).toString(16);
+            return('#' + r + g + b);
+        }
+
+        function generateXML(){
+            screen_list = virtualScreen.getElementsByClassName("Screen");
+            xmlsave = '';
+            xmlsave += '<App DisplayName="' + infoAppName.value + '" DefaultScreen="' + infoDefaultScreen.value + '" Width="' + infoAppW.value + '" Height="' + infoAppH.value + '">';
+            for (i = 0; i < screen_list.length; i++){
+                current_screen_childrens = screen_list[i].getElementsByTagName("div");
+                xmlsave += '<Screen Name="' + screen_list[i].getAttribute("id") + '" Style="' + encodeURI(screen_list[i].getAttribute('style')) + '" OnVisible="' + encodeURI(screen_list[i].getAttribute('onVisible')) + '">';
+                for (x = 0; x < current_screen_childrens.length; x ++){
+                    xmlsave += '<Children ' + 
+                            'Type="' + current_screen_childrens[x].getAttribute('class').split(' ')[0] + '" ' +
+                            'Name="' + current_screen_childrens[x].getAttribute('id') + '" ' +
+                            'Text="' + encodeURI(current_screen_childrens[x].innerHTML) + '" ' +
+                            'X="' + current_screen_childrens[x].getAttribute('data-x') + '" ' +
+                            'Y="' + current_screen_childrens[x].getAttribute('data-y') + '" ' +
+                            'OnSelect="' + encodeURI(current_screen_childrens[x].getAttribute('onClickALT')) + '" ' +
+                            'Style="' + encodeURI(current_screen_childrens[x].getAttribute('style')) + '"/>';
+                }
+                xmlsave += '</Screen>';
+            }
+            xmlsave += '</App>';
+        }
+
+        function test(){
+            generateXML();
+            fetch(urlsave, {
+                method: "POST",
+                body: JSON.stringify({
+                    "id": "{{ id }}",
+                    "xmldata": xmlsave,
+                    "screen" : "test"
+                }),
+                headers: {"Content-type": "application/json; charset=UTF-8"}
+            })
+            .then(response => response.json()) 
+            .then(json => console.log(json))
+            .catch(err => console.log(err));
+
+            window.open(urltest, '_blank').focus();
+        }
+
+        function save() {
+            generateXML();
+            fetch(urlsave, {
+                method: "POST",
+                body: JSON.stringify({
+                    "id": "{{ id }}",
+                    "xmldata": xmlsave,
+                    "screen" : 1
+                }),
+                headers: {"Content-type": "application/json; charset=UTF-8"}
+            })
+            .then(response => response.json()) 
+            .then( alert("App saved")) //json => console.log(json))
+            .catch(err => console.log(err));
+        }
+
+        function click_map(item){
+            if (item.getAttribute("class").split(' ')[0] == "map-screen"){
+                if (document.getElementById("map-childrens-for-" + item.getAttribute("point")).getAttribute("expand") == "true"){
+                    document.getElementById("map-childrens-for-" + item.getAttribute("point")).setAttribute("expand", "false");
+                } else {
+                    document.getElementById("map-childrens-for-" + item.getAttribute("point")).setAttribute("expand", "true")
+                }
+                refresh_map();
+            }
+        }
+
+        function refresh_screens(){
+            screen_list = virtualScreen.getElementsByClassName("Screen");
+            currentDefaultScreen = infoDefaultScreen.value;
+            infoDefaultScreen.innerHTML = "";
+            for (i = 0; i < screen_list.length; i ++){
+                if (screen_list[i].getAttribute("id") == currentDefaultScreen){
+                    infoDefaultScreen.innerHTML += '<option value="' + screen_list[i].getAttribute("id") + '"selected >' + screen_list[i].getAttribute("id") + '</option>'
+                } else {
+                    infoDefaultScreen.innerHTML += '<option value="' + screen_list[i].getAttribute("id") + '">' + screen_list[i].getAttribute("id") + '</option>'
+                }
+                
+            }
+        }
+
+        function changeScreen(screen_name){
+            currentScreen = screen_name;
+
+            Array.from(virtualScreen.getElementsByClassName("Screen")).forEach(
+                (el) => {
+                    el.style.height = "0";
+                }
+            )
+            currentScreen.style.height = "100%";
+        }
+
+        function click(item) {
+            selected = item;
+
+            switch(item.getAttribute("class").split(" ")[0]){
+                case "Screen":
+                    tableId.style.height = "auto";
+                    tableText.style.height = "0";
+                    tableShow.style.height = "0";
+                    tableDecor.style.height = "0";
+                    tableScreen.style.height = "auto";
+                    tableButton.style.height = "0";
+                    break;
+                case "Button":
+                    tableId.style.height = "auto";
+                    tableText.style.height = "auto";
+                    tableShow.style.height = "auto";
+                    tableDecor.style.height = "auto";
+                    tableScreen.style.height = "0";
+                    tableButton.style.height = "auto";
+                    break;
+                case "Label":
+                    tableId.style.height = "auto";
+                    tableText.style.height = "auto";
+                    tableShow.style.height = "auto";
+                    tableDecor.style.height = "auto";
+                    tableScreen.style.height = "0";
+                    tableButton.style.height = "0";
+                    break;
+            }
+
+            if (item.getAttribute("class").startsWith("Screen") == true)
+            {
+                changeScreen(item);
+                Array.from(screen_childrens).forEach(
+                    (el) => {
+                        el.classList.remove("selected");
+                        el.classList.remove("drag-resize");
+                        document.getElementById("map-children-" + el.getAttribute("id")).classList.remove("map-selected");
+                        document.getElementById("map-children-" + selected.getAttribute("id")).classList.add("map-selected");
+                    }
+                );
+                infoType.innerHTML = "Screen";
+                infoName.value = item.getAttribute("id");
+                infoBgColor.value = rgb2hex(item.style.backgroundColor);
+                infoOnVisible.value = item.getAttribute("onVisible");
+            } else {
+                Array.from(screen_childrens).forEach(
+                    (el) => {
+                        el.classList.remove("selected");
+                        el.classList.remove("drag-resize");
+                        document.getElementById("map-children-" + el.getAttribute("id")).classList.remove("map-selected");
+                    }
+
+                );
+                item.classList.add("selected");
+                item.classList.add("drag-resize");
+                document.getElementById("map-children-" + selected.getAttribute("id")).classList.add("map-selected");
+                infoType.innerHTML = item.getAttribute("class").split(" ")[0];
+                infoName.value = item.getAttribute("id");
+                infoText.value = item.innerHTML;
+                infoX.value = item.getAttribute("data-x");
+                infoY.value = item.getAttribute("data-y");
+                infoW.value = item.style.width.replace(/\D/g,'');
+                infoH.value = item.style.height.replace(/\D/g,'');
+                infoZ.value = item.style.zIndex;
+                infoFill.value = rgb2hex(item.style.backgroundColor);
+                infoColor.value = rgb2hex(item.style.color);
+                infoFontSize.value = item.style.fontSize.replace(/\D/g,'');
+                infoFontFamily.value = item.style.fontFamily;
+                infoBorder.value = item.style.border;
+                infoBorderRadius.value = item.style.borderRadius.replace(/\D/g,''); 
+                infoBgImage.value = getComputedStyle(item).backgroundImage;
+                infoOnClick.value = item.getAttribute("onClickALT");
+            }
+            document.dispatchEvent(itemClicked);
+        }
+        
+        function refresh_map(){
+            map_childrens = map.getElementsByTagName("div");
+            for (i = 0; i < screen_childrens.length; i++){
+                if (screen_childrens[i].getAttribute("class") == "Screen"){
+                    screen_id = screen_childrens[i].getAttribute("id");
+                    if (document.getElementById("map-screen-for-" + screen_id) == null){
+                        map.innerHTML += '<div id="map-screen-for-' + screen_id + '"></div>';
+                        document.getElementById("map-screen-for-" + screen_id).innerHTML += '<div class="map-screen" id="map-children-' + screen_id + '" point="' + screen_id + '"><span class="icon">® </span>' + screen_id + '</div>';
+                        document.getElementById("map-screen-for-" + screen_id).innerHTML += '<div id="map-childrens-for-' + screen_id + '" expand="true" style="overflow: hidden;"></div>';
+                    }
+                    console.log(screen_childrens[i]);
+                    current_map_childrens = document.getElementById("map-childrens-for-" + screen_id);
+                    current_map_childrens_list = current_map_childrens.getElementsByTagName("div");
+                    current_screen_childrens = document.getElementById(screen_id).getElementsByTagName("div");
+
+                    if (current_map_childrens.getAttribute("expand") == "true"){
+                        current_map_childrens.style.height = "auto";
+                    } else {
+                        current_map_childrens.style.height = "0";
+                    }
+
+                    for (x = 0; x < current_screen_childrens.length; x++){
+                        if (document.getElementById("map-children-" + current_screen_childrens[x].getAttribute("id")) == null){
+                            switch(current_screen_childrens[x].getAttribute("class").split(" ")[0]){
+                                case "Button":
+                                    print_icon = "0 ";
+                                    break;
+                                case "Label":
+                                    print_icon = "S  ";
+                                    break;
+                            }
+                            current_map_childrens.innerHTML += '<div class="map-children" id="map-children-'+ current_screen_childrens[x].getAttribute("id") +'" point="'+ current_screen_childrens[x].getAttribute("id") +'"><span class="icon">' + print_icon + '</span>'+ current_screen_childrens[x].getAttribute("id") +'</div>';
+                        }          
+                        
+                    }
+                    for (x = 0; x < current_map_childrens_list.length; x++){
+                        if(document.getElementById(current_map_childrens_list[x].getAttribute("point")) == null)
+                            current_map_childrens_list[x].remove();
+                    }
+                }
+            }
+            refresh_screens();
+        }
+
+        function insert(type){
+            switch (type) {
+                case "label":
+                    while(document.getElementById("Label" + currentId) != null){
+                        currentId++;
+                    }
+                    currentScreen.innerHTML += '<div class="Label" id="Label' + currentId + '" style="' +
+                                        'position: absolute; overflow: hidden; user-select: none;' +
+                                        'transform: translate(60px, 60px);' +
+                                        'width: 160px; height: 60px;' +
+                                        'background-color: #fff;' +
+                                        'background-repeat: no-repeat;' +
+                                        'background-attachment: fixed;' +
+                                        'background-position: center;' +
+                                        'background-size: contain;' +
+                                        'font-size: 15px;' +
+                                        'visibility: visible;"' +
+                                        'data-x="60" data-y="60">Text</div>';
+                    refresh_map();
+                    return "Label" + currentId;
+                    break;
+                case "button":
+                    while(document.getElementById("Button" + currentId) != null){
+                        currentId++;
+                    }
+                    currentScreen.innerHTML += '<div class="Button" id="Button' + currentId + '" style="' +
+                                        'position: absolute; text-align: center; display: flex; justify-content: center; align-items: center; overflow: hidden; user-select: none;' +
+                                        'transform: translate(60px, 60px);' +
+                                        'width: 160px; height: 60px;' +
+                                        'background-color: rgb(56, 96, 178);' +
+                                        'background-repeat: no-repeat;' +
+                                        'background-attachment: fixed;' +
+                                        'background-position: center;' +
+                                        'background-size: contain;' +
+                                        'color: #fff;' +
+                                        'border: 2px solid rgb(42, 75, 140);' +
+                                        'border-radius: 10px;' +
+                                        'font-size: 15px;' +
+                                        'visibility: visible;"' +
+                                        'data-x="60" data-y="60" onClickALT="null">Button</div>';
+                    refresh_map();
+                    return "Button" + currentId;
+                    break;
+                
+                case "screen":
+                    while(document.getElementById("Screen" + currentId) != null){
+                            currentId++;
+                    }
+                    virtualScreen.innerHTML += '<div class="Screen" name="Screen' + currentId + '" id="Screen' + currentId + '" style="position: relative; width: 100%; height: 100%; overflow: hidden; background-color: #fff;"></div>';
+                    currentScreen = document.getElementById("Screen" + currentId);
+                    refresh_map();
+                    return "Screen" + currentId;
+                    break;
+            
+                default:
+                    break;
+            } 
+        }
+
+        
+
+        var parser = new DOMParser();
+        var xmlDoc = parser.parseFromString(xml, "text/xml");
+        var app = xmlDoc.getElementsByTagName("App")[0];
+        var childrens = xmlDoc.getElementsByTagName("Children");
+        var screens = xmlDoc.getElementsByTagName("Screen");
+        for (i = 0; i < screens.length; i++){
+            var screen_name = screens[i].getAttribute("Name");
+            virtualScreen.innerHTML += '<div class="Screen" name="' + screen_name + '" id="' + screen_name + '" style="' + decodeURI(screens[i].getAttribute("Style")) + '" onVisible="' + decodeURI(screens[i].getAttribute("OnVisible")).replace(/"/g, "&quot;") + '" ></div>';
+            var screen_element = document.getElementById(screen_name);
+            current_screen_childrens = screens[i].getElementsByTagName("Children");
+            for (x = 0; x < current_screen_childrens.length; x++) {
+                screen_element.innerHTML += '<div class="' + current_screen_childrens[x].getAttribute("Type") + ' resize-drag" ' +
+                                        'id="' + current_screen_childrens[x].getAttribute("Name") + '" ' +
+                                        'style="' + decodeURI(current_screen_childrens[x].getAttribute("Style")).replace(/"/g, "&quot;") + '" ' +
+                                        '" onClickALT="' + decodeURI(current_screen_childrens[x].getAttribute("OnSelect")).replace(/"/g, "&quot;") + '" ' +
+                                        'data-x="' + current_screen_childrens[x].getAttribute("X") + '" ' +
+                                        'data-y="' + current_screen_childrens[x].getAttribute("Y") + '" ' +
+                                        '>' + decodeURI(current_screen_childrens[x].getAttribute("Text")) +'</div>';        
+            }
+        }
+
+        refresh_map();
+        click(document.getElementById(app.getAttribute("DefaultScreen")));
+        infoDefaultScreen.value = app.getAttribute("DefaultScreen");
+        infoAppName.value = app.getAttribute("DisplayName");
+        infoAppW.value = app.getAttribute("Width");
+        infoAppH.value = app.getAttribute("Height");
+        virtualScreen.style.width = infoAppW.value + 'px';
+        virtualScreen.style.height = infoAppH.value + 'px';
+
+        interact('#nav-sidebar').resizable({
+            edges: { left: false, right: true, bottom: false, top: false },
+            listeners: {
+                move (event) {
+                    var target = event.target
+                    target.style.width = event.rect.width + 'px'
+                }
+            },
+            modifiers: [
+                interact.modifiers.restrictEdges({outer: 'parent'}),
+                interact.modifiers.restrictSize({min: { width: 128 }, max: { width: 512 }})
+            ],
+        })
+
+        interact('#control-sidebar').resizable({
+            edges: { left: true, right: false, bottom: false, top: false },
+            listeners: {
+                move (event) {
+                    var target = event.target
+                    target.style.width = event.rect.width + 'px'
+                }
+            },
+            modifiers: [
+                interact.modifiers.restrictEdges({outer: 'parent'}),
+                interact.modifiers.restrictSize({min: { width: 128 }, max: { width: 512 }})
+            ],
+        })
+
+        interact('.drag-resize')
+        .resizable({
+            // resize from all edges and corners
+            edges: { left: true, right: true, bottom: true, top: true },
+
+            listeners: {
+            move (event) {
+                var target = event.target
+                var x = (parseFloat(target.getAttribute('data-x')) || 0)
+                var y = (parseFloat(target.getAttribute('data-y')) || 0)
+
+                // update the element's style
+                target.style.width = event.rect.width + 'px'
+                target.style.height = event.rect.height + 'px'
+
+                // translate when resizing from top or left edges
+                x += event.deltaRect.left
+                y += event.deltaRect.top
+
+                target.style.transform = 'translate(' + x + 'px,' + y + 'px)'
+
+                target.setAttribute('data-x', x)
+                target.setAttribute('data-y', y)
+            }
+            },
+            modifiers: [
+            // keep the edges inside the parent
+            interact.modifiers.restrictEdges({
+                outer: 'parent'
+            }),
+
+            // minimum size
+            interact.modifiers.restrictSize({
+                min: { width: 32, height: 32 }
+            })
+            ],
+        })
+        .draggable({
+            listeners: { move: window.dragMoveListener },
+            modifiers: [
+            interact.modifiers.restrictRect({
+                restriction: 'parent',
+                endOnly: true
+            })
+            ]
+        })
+
+        function dragMoveListener (event) {
+            var target = event.target
+            // keep the dragged position in the data-x/data-y attributes
+            var x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx
+            var y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy
+
+            // translate the element
+            target.style.transform = 'translate(' + x + 'px, ' + y + 'px)'
+
+            // update the posiion attributes
+            target.setAttribute('data-x', x)
+            target.setAttribute('data-y', y)
+            }
+
+        // this function is used later in the resizing and gesture demos
+        window.dragMoveListener = dragMoveListener
+    </script>
+</body>
+</html>

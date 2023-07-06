@@ -1,0 +1,275 @@
+@font-face {
+    font-family: 'icon-worksregular';
+    src: url('/static/fonts/icon-works-webfont.eot');
+    src: url('/static/fonts/icon-works-webfont.eot?#iefix') format('embedded-opentype'),
+         url('/static/fonts/icon-works-webfont.woff') format('woff'),
+         url('/static/fonts/icon-works-webfont.ttf') format('truetype'),
+         url('/static/fonts/icon-works-webfont.svg#icon-worksregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+[data-theme=light],
+:root:not([data-theme=dark]) {
+    --primary: 	#4300f1;
+    --primary-hover: #4300f1;
+    --primary-focus: #4300f1;
+    --primary-inverse: #fff;
+    --secondary: #fff;
+    --secondary-hover: hsl(0, 0%, 80%);
+    --secondary-focus: rgba(89, 107, 120, 0.125);
+    --secondary-inverse: #000000;
+}
+
+body{
+    height: 100vh;
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+a{
+    color: var(--primary);
+}
+
+#app-list{
+    margin: 32px;
+}
+
+#app-list table {
+    width: 100%;
+    background-color: var(--secondary);
+    color: var(--primary);
+}
+
+#app-list td{
+    padding: 14px;
+}
+
+.app-row:hover{
+    background-color: var(--secondary-hover);
+    color: var(--primary-hover);
+}
+
+
+
+.primary{
+    background-color: var(--primary);
+    color: white;
+}
+
+button{
+    border-radius: 0;
+    background-color: rgba(0, 0, 0, 0);
+    font-size: 16px;
+    border: 2px dotted;
+    border-color: rgba(0, 0, 0, 0);
+    padding-top: 10px;
+    padding-bottom: 10px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+button:hover{
+    background-color: rgba(0, 0, 0, 0.1);
+    cursor:pointer;
+}
+
+button:active{
+    border-color: #505050;
+}
+
+.screen{
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.app iframe {
+    display:block;
+    margin: 0 auto;
+}
+
+.app{
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #505050;
+}
+
+.vertical-container{
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+}
+
+.horizontal-container{
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+#formula-bar{
+    background-color: #f1f1f1;
+    border-top: 1px solid rgba(0, 0, 0, 0.2);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+#nav-sidebar, #control-sidebar{
+    background-color: #f4f4f4;
+    width: 256px;
+    border-right: 1px solid rgba(0, 0, 0, 0.2);
+    border-left: 1px solid rgba(0, 0, 0, 0.2);
+    padding: 10px;
+    overflow-y: scroll;
+}
+
+#info-type{
+    font-size: 24px;
+}
+
+
+#control-button *{
+    font-size: 12px;
+    resize: none;
+    width: 100%;
+    table-layout: fixed;
+    overflow-x: hidden;
+}
+
+.form-table *{
+    font-size: 16px;
+    resize: none;
+    width: 100%;
+    table-layout: fixed;
+    overflow: hidden;
+}
+
+#control-button input, #control-button textarea, .form-table input{
+    padding: 2px 6px;
+    margin: 2px 0;
+    box-sizing: border-box;
+}
+
+input, textarea{
+    color: #000;
+    border-radius: 0;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+#editor{
+    height: 100%;
+    overflow: hidden;
+}
+
+.window{
+    position: absolute;
+    z-index: 999;
+    margin-top: 30px;
+    padding: 10px;
+    width: 75%;
+    left: 50%;
+    transform: translate(-50%, 0);
+    background-color: #f1f1f1;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+}
+
+#text-editor {
+    font-size: 24px;
+    padding: 0px;
+    width: 100%;
+    height: 400px;
+}
+
+.error{
+    color: #ff0000;
+}
+
+.icon{
+    display: inline-block;
+    width: 20px;
+    margin-right: 4px;
+    text-align: center;
+    font-family: "icon-worksregular";
+}
+
+/* Navbar container */
+.navbar {
+    overflow: hidden;
+    background-color: #333;
+    font-family: Arial;
+}
+  
+  /* Links inside the navbar */
+.navbar a {
+    float: left;
+    font-size: 16px;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+  
+/* The dropdown container */
+.dropdown {
+    float: left;
+    overflow: hidden;
+}
+  
+/* Dropdown button */
+.dropdown .dropbtn {
+    font-size: 16px;
+    border: none;
+    outline: none;
+    color: white;
+    padding: 14px 16px;
+    background-color: inherit;
+    font-family: inherit; /* Important for vertical align on mobile phones */
+    margin: 0; /* Important for vertical align on mobile phones */
+}
+  
+/* Add a red background color to navbar links on hover */
+.navbar a:hover, .dropdown:hover .dropbtn {
+    background-color: #505050;
+}
+  
+/* Dropdown content (hidden by default) */
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+  
+/* Links inside the dropdown */
+.dropdown-content a {
+    float: none;
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    text-align: left;
+}
+  
+/* Add a grey background color to dropdown links on hover */
+.dropdown-content a:hover {
+    background-color: #ddd;
+}
+  
+/* Show the dropdown menu on hover */
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+#about-icon{
+    width: 100%;
+    height: 128px;
+    background-image: url("/static/icon.svg");
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+}

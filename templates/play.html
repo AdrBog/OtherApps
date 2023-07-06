@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
+    <title>Other Apps</title>
+</head>
+<body>
+    <div class="screen">
+        <span id="display-name"></span>
+        <div class="app">
+            <iframe id="app-frame" src="{{ url_for('embed', id=id , screen=screen) }}" frameborder="0"></iframe>
+        </div>
+    </div>
+    <script>
+        const appFrame = document.getElementById("app-frame");
+        window.addEventListener('load', function () {
+            document.getElementById("display-name").innerHTML = document.getElementById('app-frame').contentWindow.document.getElementById("virtual-screen").getAttribute("name");
+            appFrame.style.width = document.getElementById('app-frame').contentWindow.document.getElementById("virtual-screen").style.width;
+            appFrame.style.height = document.getElementById('app-frame').contentWindow.document.getElementById("virtual-screen").style.height;
+        })
+    </script>
+</body>
+</html>

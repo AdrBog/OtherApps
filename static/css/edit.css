@@ -1,0 +1,47 @@
+body{
+    background-color: #e0e0e0;
+}
+
+/*.editor{
+    display: flexbox;
+    flex: 1 1;
+}
+*/
+.selected{
+    box-shadow: 0px 0px 0px 8px rgba(0,217,255,0.2), 0px 0px 0px 4px rgba(0,217,255,0.4);
+}
+
+.map-screen, .map-children{
+    user-select: none;
+    border: 2px dotted;
+    border-color: rgba(0, 0, 0, 0);
+    padding-top: 4px;
+    padding-bottom: 4px;
+}
+
+.map-children{
+    padding-left: 32px;
+}
+
+.map-screen{
+    font-weight: bold;
+    padding-left: 4px;
+}
+
+.map-children:hover, .map-screen:hover{
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.map-selected, .map-selected:hover{
+    background-color: rgba(0, 0, 0, 0.1);
+    border-color:rgba(0, 0, 0, 1);
+}
+
+
+#virtual-screen{
+    display:block;
+    margin: auto auto;
+    width: 800px;
+    height: 450px;
+	aspect-ratio: 16 / 9;
+}
