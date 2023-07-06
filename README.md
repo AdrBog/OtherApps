@@ -12,6 +12,7 @@ Disclaimer! Other Apps is still under development. And it is focused for small b
 
 <div align="center">
   <img src="./res/sample01.png" height="400px">
+  <img src="./res/sample02.png" height="400px">
 </div>
 
 
