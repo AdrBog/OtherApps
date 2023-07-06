@@ -4,7 +4,11 @@
 
 # Other Apps
 
-Lightweight Free and Open Source alternative to Microsoft's Power Apps written in Python and Flask
+Lightweight Free and Open Source alternative to Microsoft's Power Apps written in Python and Flask.
+
+Other Apps works with Javascript and HTML (Instead of that strange language that Power Apps uses), this allows you to do everything you could do in javascript, without limitations.
+
+Disclaimer! Other Apps is still under development. And it is focused for small business/local networks. I do not recommend using it for large enterprises.
 
 <div align="center">
   <img src="./res/sample01.png" height="400px">
@@ -12,6 +16,7 @@ Lightweight Free and Open Source alternative to Microsoft's Power Apps written i
 
 
 ## Installation
+You need to have Python with virtualenv and Git installed
 
 ```bash
   git clone https://github.com/OtherExit/OtherApps.git
