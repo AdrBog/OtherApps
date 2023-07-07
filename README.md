@@ -11,8 +11,8 @@ Other Apps works with Javascript and HTML (Instead of that strange language that
 Disclaimer! Other Apps is still under development. And it is focused for small business/local networks. I do not recommend using it for large enterprises.
 
 <div align="center">
-  <img src="./res/sample01.png" height="400px">
-  <img src="./res/sample02.png" height="400px">
+  <img src="./res/sample01.png">
+  <img src="./res/sample02.png">
 </div>
 
 
