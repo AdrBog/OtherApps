@@ -42,9 +42,7 @@
             </div>
             <button onclick="document.getElementById('editor-window').style.visibility = 'hidden'; can_click = true;">X</button>
         </div>
-        <div id="text-editor-cont">
-            <textarea id="text-editor" cols="30" rows="10"></textarea>
-        </div>
+        <div id="text-editor"></div>
     </div>
     <div class="vertical-container">
         <div id="tool-bar" class="navbar">
@@ -209,10 +207,15 @@
     </div>
     {% include 'plugins.html' %}
     <script src="/static/js/interact.js"></script>
+    <script src="/static/js/src-min-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/static/js/src-min-noconflict/mode-javascript.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/static/js/src-min-noconflict/mode-html.js" type="text/javascript" charset="utf-8"></script>
     <script>
         var screens, screen_list, currentScreen;
         var currentId = 0;
 
+        var aceEditor = ace.edit("text-editor");
+        aceEditor.session.setUseWrapMode(true);
         var appname = "{{ id }}";
         var urlsave = "/save";
         var urltest = "/play/" + appname + "/test";
@@ -260,7 +263,6 @@
         const infoBgColor =         document.getElementById("edit-info-bgcolor");
         const infoOnVisible =       document.getElementById("edit-info-onvisible");
         const infoOnClick =         document.getElementById("edit-info-onclick");
-        const textEditor =          document.getElementById("text-editor");
 
         // Custom events
         const itemClicked =         new Event("item-clicked");
@@ -363,20 +365,20 @@
             selected.setAttribute("onClickALT", infoOnClick.value);
             document.dispatchEvent(tableButtonChanged);
         })
-        textEditor.addEventListener('input', () => {
-            textarea_selected.value = textEditor.value;
-            textarea_selected.dispatchEvent(new Event('input', {bubbles:true}));
-        })
-        document.querySelectorAll('textarea:not(#text-editor)').forEach(item => {
+        document.querySelectorAll('textarea').forEach(item => {
             item.addEventListener('dblclick', (e) => {
                 textarea_selected = item;
                 document.getElementById("editor-title").innerHTML = selected.getAttribute("id") + ' ' + textarea_selected.getAttribute("placeholder");
-                textEditor.value = textarea_selected.value;
+                aceEditor.setValue(textarea_selected.value);
+                aceEditor.session.setMode("ace/mode/" + textarea_selected.getAttribute("mode"));
                 editorWindow.style.visibility = 'visible';
                 can_click = false;
             })
         })
-        
+        aceEditor.on('input', function() {
+            textarea_selected.value = aceEditor.getValue();
+            textarea_selected.dispatchEvent(new Event('input', {bubbles:true}));
+        }); 
 
         function rgb2hex(rgb){
             rgb = rgb.substring(4, rgb.length-1).replace(/ /g, '').split(',');
