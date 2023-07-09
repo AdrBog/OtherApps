@@ -367,7 +367,7 @@
             textarea_selected.value = textEditor.value;
             textarea_selected.dispatchEvent(new Event('input', {bubbles:true}));
         })
-        document.querySelectorAll('textarea').forEach(item => {
+        document.querySelectorAll('textarea:not(#text-editor)').forEach(item => {
             item.addEventListener('dblclick', (e) => {
                 textarea_selected = item;
                 document.getElementById("editor-title").innerHTML = selected.getAttribute("id") + ' ' + textarea_selected.getAttribute("placeholder");
