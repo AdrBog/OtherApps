@@ -3,21 +3,22 @@ var pasteinfo = Array(8);
 document.addEventListener('keydown', e => {
     // Copy
     if (e.ctrlKey && e.key === 'c') {
-        pasteinfo = [
-            selected.getAttribute("id"),
-            selected.innerHTML,
-            selected.getAttribute("class").split(" ", 1)[0],
-            selected.getAttribute("class").split(" ", 1)[0].toLowerCase(),
-            selected.getAttribute("style"),
-            selected.getAttribute("data-x"),
-            selected.getAttribute("data-y"),
-            selected.getAttribute("onclickalt"),
-        ];
+        if (can_click)
+            pasteinfo = [
+                selected.getAttribute("id"),
+                selected.innerHTML,
+                selected.getAttribute("class").split(" ", 1)[0],
+                selected.getAttribute("class").split(" ", 1)[0].toLowerCase(),
+                selected.getAttribute("style"),
+                selected.getAttribute("data-x"),
+                selected.getAttribute("data-y"),
+                selected.getAttribute("onclickalt"),
+            ];
     }
 
     // Paste
     if (e.ctrlKey && e.key === 'v') {
-        if (pasteinfo[3] != "screen"){
+        if (pasteinfo[3] != "screen" && can_click){
             new_item = insert(pasteinfo[3]);
             new_element = document.getElementById(new_item);
             new_element.setAttribute("style", pasteinfo[4]);
