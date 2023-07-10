@@ -29,7 +29,7 @@ You need to have Python with virtualenv and Git installed
 ```
 
 ## Future plans
-- [ ] Write documentation
+- [ ] Write documentation (I'm on it)
 - [ ] Improve the system for creating plugins
 - [ ] Interactions with databases
 - [ ] Themes
