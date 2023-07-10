@@ -14,7 +14,7 @@ With apt:
 ```
 With pacman:
 ```bash
-    sudo pacman -S python-pip git
+  sudo pacman -S python-pip git
 ```
 Virtualenv should come preinstalled with Python
 
@@ -23,26 +23,26 @@ We'll install Flask with pip later
 ## 1.2 - Installing OtherApps
 You can obtain OtherApps's source code from the GitHub repo:
 ```bash
-    git clone https://github.com/OtherExit/OtherApps.git
-    cd OtherApps
+  git clone https://github.com/OtherExit/OtherApps.git
+  cd OtherApps
 ```
 Once you are inside the directory, you can create the virtual environment:
 ```bash
-    python -m venv venv
+  python -m venv venv
 ```
 A folder named venv should be created. Now you need to activate the virtual environment:
 ```bash
-    source venv/bin/activate
+  source venv/bin/activate
 ```
 You can check that it worked, looking at your shell prompt. If it starts with (venv), you are in the virtual environment.
 
 Install Flask in your virtual environment:
 ```bash
-    pip install flask
+  pip install flask
 ```
 You have everything installed, now you can start OtherApps with the following command:
 ```bash
-    python -m flask run
+  python -m flask run
 ```
 Open your web browser and enter "127.0.0.1:5000" to access OtherApps
                     
