@@ -45,4 +45,9 @@ You have everything installed, now you can start OtherApps with the following co
   python -m flask run
 ```
 Open your web browser and enter "127.0.0.1:5000" to access OtherApps
+
+Note: if you are going to edit the source code, it'll be useful to use flask in debug mode
+```bash
+  python -m flask run --debug
+```
                     
