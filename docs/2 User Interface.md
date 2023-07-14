@@ -36,6 +36,6 @@ Since you have not yet edited your project, the application will be empty.
 </div>
 
 ## 2.3 Editor
-Coming soon
+To enter the editor, click on the button that says "edit". In the next chapter you will learn more about the editor.
 
 
