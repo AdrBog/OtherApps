@@ -28,12 +28,6 @@ You need to have Python with virtualenv and Git installed
   python -m flask run
 ```
 
-## Future plans
-- [ ] Write documentation (I'm on it)
-- [ ] Improve the system for creating plugins
-- [ ] Interactions with databases
-- [ ] Themes
-
 ## Scripts used
 <a href="https://interactjs.io/">interact.js</a> <br>
 <a href="https://github.com/ajaxorg/ace-builds/blob/master/LICENSE">Ace Editor<a>
