@@ -3,13 +3,14 @@ from flask import Flask, render_template, request, jsonify
 
 app = Flask(__name__)
 projects_dir = "projects"
+version="0.11"
 
 @app.route('/')
 def index():
     if not os.path.exists(f"{projects_dir}"):
         os.makedirs(f"{projects_dir}")
     projects = os.listdir(f'{projects_dir}/')
-    return render_template('index.html', projects=projects)
+    return render_template('index.html', projects=projects, ver=version)
 
 @app.route('/play/<id>/<screen>')
 def play(id, screen):
@@ -29,7 +30,7 @@ def edit(id):
     with open(f'{projects_dir}/{id}/1.xml', 'r') as file:
         xml += file.read().replace('\n', '')
     xml += "`"
-    return render_template('edit.html', id=id, xmlfile=xml)
+    return render_template('edit.html', id=id, xmlfile=xml, ver=version)
 
 @app.route('/remove/<id>')
 def remove(id):

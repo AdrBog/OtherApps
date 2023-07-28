@@ -7,21 +7,16 @@
     <title>Other Apps | Projects</title>
 </head>
 <body>
-    <div class="window" id="about-window" style="width: 30%; visibility: hidden;">
+    <div class="window" id="about-window" style="width: 50%; visibility: hidden;">
         <div class="horizontal-container">
-            <span style="font-size: 24px;">About</span>
+            <span style="font-size: 24px;">About version {{ ver }}</span>
             <button onclick="document.getElementById('about-window').style.visibility = 'hidden';">X</button>
         </div>
-        <p>
-            <div id="about-icon"></div> <br><br>
-            Other Apps v 0.1 <hr>
-            Lightweight Free and Open Source alternative to Microsoft's Power Apps <br> <br>
-            Created by: Adrián Bogdan (aka OtherExit) <br>
-            With the help of <a href="https://interactjs.io/"  target=”_blank”>interact.js</a>
-            <br>
-            <hr>
-            <a href="https://github.com/OtherExit/OtherApps" target=”_blank”>Source Code</a>
-        </p>
+        <button onclick="document.getElementById('about-page1').style.height = '400px'; document.getElementById('about-page2').style.height = '0'">About</button>
+        <button onclick="document.getElementById('about-page1').style.height = '0'; document.getElementById('about-page2').style.height = '400px'">Third-party scripts</button><br>
+        <hr>
+        <iframe id="about-page1" src="/static/about/about.html" frameborder="0" style="height: 400px; width: 100%; overflow: hidden;"></iframe>
+        <iframe id="about-page2" src="/static/about/third-party.html" frameborder="0" style="height: 0; width: 100%; overflow: hidden;"></iframe>
     </div>
     <div class="window" id="newapp-window" style="width: 30%; visibility: hidden;">
         <div class="horizontal-container">
@@ -31,12 +26,12 @@
         <div class="form-table">
             <table>
                 <tr>
-                    <td>App Name (must no contain spaces)</td>
+                    <td>App Name</td>
                     <td><input type="text" id="app-id"></td>
                 </tr>
                 <tr>
                     <td></td>
-                    <td><button class="primary" onclick="save()">Create</button></td>
+                    <td><button class="primary" onclick="check_save()">Create</button></td>
                 </tr>
             </table>
         </div>
@@ -68,22 +63,32 @@
     </div>
     <script>
         var urlsave = "/save";
+        var forbiddenchars = /[`!@#$%^&*()+=\[\]{};':"\\|,.<>\/?~ ]/;
         const appId = document.getElementById("app-id");
 
+        function delete_p(sid){
+            if(confirm("Are you sure you want to delete " + sid + "?")){
+                window.location = "/remove/" + sid;
+            }
+        }
 
         appId.addEventListener('input', () => {
-            if (appId.value == null){
-                appId.classList.add("error");
-            } else if (document.getElementById(appId.value) != null){
+            if ( ! appId.value || forbiddenchars.test(appId.value) || document.getElementById(appId.value) != null){
                 appId.classList.add("error");
             } else {
                 appId.classList.remove("error");
             }
         })
 
-        function delete_p(sid){
-            if(confirm("Are you sure you want to delete " + sid + "?")){
-                window.location = "/remove/" + sid;
+        function check_save(){
+            if ( ! appId.value){
+                alert("Can't create this app\nIt doesn't have a name")
+            } else if (forbiddenchars.test(appId.value)){
+                alert("Can't create this app\nIt contains special characters")
+            } else if (document.getElementById(appId.value) != null){
+                alert("Can't create " + appId.value + "\nThis app already exists");
+            } else {
+                save();
             }
         }
 

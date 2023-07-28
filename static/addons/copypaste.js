@@ -1,3 +1,5 @@
+// This addon lets you copy and paste items
+
 var pasteinfo = Array(8);
 
 document.addEventListener('keydown', e => {
@@ -26,7 +28,8 @@ document.addEventListener('keydown', e => {
             new_element.setAttribute("data-y", pasteinfo[6]);
             new_element.setAttribute("onclickalt", pasteinfo[7]);
             new_element.innerHTML = pasteinfo[1];
-            click(new_element);
+            new_id = rename(new_item, pasteinfo[0]);
+            click(document.getElementById(new_id));
         }
     }
 });

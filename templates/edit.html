@@ -75,7 +75,7 @@
                 <div id="control-sidebar">
                     <span id="info-type"></span><br/>
                     <hr/>
-                    <div id="control-options">
+                    <div id="control-button">
                         <div id="table-id" style="overflow-y: hidden; height: 0;">
                             <table id="table-id-options">
                                 <tr>
@@ -217,6 +217,7 @@
         var aceEditor = ace.edit("text-editor");
         aceEditor.session.setUseWrapMode(true);
         var appname = "{{ id }}";
+        var current_ver = "{{ ver }}"
         var urlsave = "/save";
         var urltest = "/play/" + appname + "/test";
         var can_click = true;
@@ -310,7 +311,7 @@
             old_name = selected.getAttribute("id");
             
             if(selected.getAttribute("class").startsWith("Screen") == true){
-                if(document.getElementById(infoName.value) != null){
+                if(document.getElementById(infoName.value) != null || ! infoName.value){
                     infoName.classList.add("error");
                 } else {
                     infoName.classList.remove("error");
@@ -322,7 +323,7 @@
                     selected.setAttribute("id", infoName.value);
                 }   
             } else {
-                if(document.getElementById(infoName.value) != null){
+                if(document.getElementById(infoName.value) != null || ! infoName.value){
                     infoName.classList.add("error");
                 } else {
                     infoName.classList.remove("error");
@@ -391,7 +392,7 @@
         function generateXML(){
             screen_list = virtualScreen.getElementsByClassName("Screen");
             xmlsave = '';
-            xmlsave += '<App DisplayName="' + infoAppName.value + '" DefaultScreen="' + infoDefaultScreen.value + '" Width="' + infoAppW.value + '" Height="' + infoAppH.value + '">';
+            xmlsave += '<App DisplayName="' + infoAppName.value + '" DefaultScreen="' + infoDefaultScreen.value + '" Width="' + infoAppW.value + '" Height="' + infoAppH.value + '" OAVer="' + current_ver + '">';
             for (i = 0; i < screen_list.length; i++){
                 current_screen_childrens = screen_list[i].getElementsByTagName("div");
                 xmlsave += '<Screen Name="' + screen_list[i].getAttribute("id") + '" Style="' + encodeURI(screen_list[i].getAttribute('style')) + '" OnVisible="' + encodeURI(screen_list[i].getAttribute('onVisible')) + '">';
@@ -478,6 +479,16 @@
                 }
             )
             currentScreen.style.height = "100%";
+        }
+
+        function rename(oldid, newid) {
+            element = document.getElementById(oldid);
+            while(document.getElementById(newid) != null){
+                newid = newid + "_1";
+            }
+            element.setAttribute("id", newid);
+            refresh_map();
+            return newid;
         }
 
         function click(item) {
@@ -567,7 +578,6 @@
                         document.getElementById("map-screen-for-" + screen_id).innerHTML += '<div class="map-screen" id="map-children-' + screen_id + '" point="' + screen_id + '"><span class="icon">® </span>' + screen_id + '</div>';
                         document.getElementById("map-screen-for-" + screen_id).innerHTML += '<div id="map-childrens-for-' + screen_id + '" expand="true" style="overflow: hidden;"></div>';
                     }
-                    console.log(screen_childrens[i]);
                     current_map_childrens = document.getElementById("map-childrens-for-" + screen_id);
                     current_map_childrens_list = current_map_childrens.getElementsByTagName("div");
                     current_screen_childrens = document.getElementById(screen_id).getElementsByTagName("div");
@@ -636,7 +646,7 @@
                                         'background-position: center;' +
                                         'background-size: contain;' +
                                         'color: #fff;' +
-                                        'border: 2px solid rgba(0, 0, 0, 0.2);' +
+                                        'border: 2px solid rgb(42, 75, 140);' +
                                         'border-radius: 10px;' +
                                         'font-size: 15px;' +
                                         'visibility: visible;"' +
@@ -652,6 +662,7 @@
                     virtualScreen.innerHTML += '<div class="Screen" name="Screen' + currentId + '" id="Screen' + currentId + '" style="position: relative; width: 100%; height: 100%; overflow: hidden; background-color: #fff;"></div>';
                     currentScreen = document.getElementById("Screen" + currentId);
                     refresh_map();
+                    click(document.getElementById("Screen" + currentId));
                     return "Screen" + currentId;
                     break;
             
@@ -665,6 +676,9 @@
         var parser = new DOMParser();
         var xmlDoc = parser.parseFromString(xml, "text/xml");
         var app = xmlDoc.getElementsByTagName("App")[0];
+        if (app.getAttribute("OAVer") != current_ver){
+            alert("It seems that this app was created with an older version of Other Apps\nYou can still run and edit the app, but it MAY NOT work correctly.");
+        }
         var childrens = xmlDoc.getElementsByTagName("Children");
         var screens = xmlDoc.getElementsByTagName("Screen");
         for (i = 0; i < screens.length; i++){
@@ -673,7 +687,7 @@
             var screen_element = document.getElementById(screen_name);
             current_screen_childrens = screens[i].getElementsByTagName("Children");
             for (x = 0; x < current_screen_childrens.length; x++) {
-                screen_element.innerHTML += '<div class="' + current_screen_childrens[x].getAttribute("Type") + ' resize-drag" ' +
+                screen_element.innerHTML += '<div class="' + current_screen_childrens[x].getAttribute("Type") + ' drag-resize" ' +
                                         'id="' + current_screen_childrens[x].getAttribute("Name") + '" ' +
                                         'style="' + decodeURI(current_screen_childrens[x].getAttribute("Style")).replace(/"/g, "&quot;") + '" ' +
                                         '" onClickALT="' + decodeURI(current_screen_childrens[x].getAttribute("OnSelect")).replace(/"/g, "&quot;") + '" ' +
