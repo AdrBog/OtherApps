@@ -93,7 +93,7 @@
         }
 
         function save(){
-            xmldata = '<App DisplayName="My App" DefaultScreen="Screen0" Width="800" Height="480"><Screen Name="Screen0" Style="position:%20relative;%20width:%20100%25;%20height:%20100%25;%20overflow:%20hidden;%20background-color:%20rgb(255,%20255,%20255);" OnVisible=""></Screen></App>';
+            xmldata = '<App DisplayName="My App" DefaultScreen="Screen0" Width="800" Height="480" OAVer="{{ ver }}"><Screen Name="Screen0" Style="position:%20relative;%20width:%20100%25;%20height:%20100%25;%20overflow:%20hidden;%20background-color:%20rgb(255,%20255,%20255);" OnVisible=""></Screen></App>';
             fetch(urlsave, {
                 method: "POST",
                 body: JSON.stringify({
