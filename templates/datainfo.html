@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body style="margin: 32px;">
+    <span class="title">{{ id }} </span> <br>
+    <hr>
+    <span class="subtitle">Execute SQLite query</span> <br>
+    Here you can edit a query to be executed in your database, you may lose data if used incorrectly. <br>
+    If you have just created the database, that database is empty, you have to run a query to create at least one table.
+    <div id="text-editor"></div>
+    <button class="primary wide" onclick="execute(aceEditor.getValue())">Execute query</button>
+    <hr>
+    <span class="subtitle">iFrame previews</span><br>
+    Here you can view your database iframes before using them in your app, be sure to enter a table name first. You can edit the files using an external code editor. <br><br>
+    <label for="table-name">Table name:</label>
+    <input type="text" name="table-name" id="table-name">
+    <table style="table-layout: fixed; width: 200px;">
+        <tr>
+            <td><button onclick="databaseFrame.src = '/database/list/{{id}}/' + tableName.value;" >Gallery</button></td>
+            <td><button onclick="databaseFrame.src = '/database/new_item/{{id}}/' + tableName.value;">New form</button></td>
+        </tr>
+    </table>
+    <iframe id="database-frame" style="width: 100%; height: 400px; padding: 10px;" src="" frameborder="1"></iframe>
+    <br><br><br><br>
+    <script src="/static/js/src-min-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/static/js/src-min-noconflict/mode-javascript.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/static/js/src-min-noconflict/mode-html.js" type="text/javascript" charset="utf-8"></script>
+    <script>
+        urlsave = "/database/exec/{{ id }}";
+        databaseFrame = document.getElementById("database-frame");
+        tableName = document.getElementById("table-name");
+        aceEditor = ace.edit("text-editor");
+        aceEditor.session.setUseWrapMode(true);
+        aceEditor.session.setMode("ace/mode/sql");
+        aceEditor.setValue("{{ schema }}");
+
+        function execute(final_command){
+            console.log(aceEditor.getValue());
+            fetch(urlsave, {
+                method: "POST",
+                body: JSON.stringify({"final_command": final_command}),
+                headers: {"Content-type": "application/json; charset=UTF-8"}
+            })
+            .then(response => response.json())
+            .then(alert("Query successfully executed!"))
+            .catch(err => console.log(err));
+        }
+    </script>
+</body>
+</html>

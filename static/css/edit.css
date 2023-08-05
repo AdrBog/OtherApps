@@ -36,7 +36,4 @@ body{
 #virtual-screen{
     display:block;
     margin: auto auto;
-    width: 800px;
-    height: 450px;
-	aspect-ratio: 16 / 9;
 }

@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    {% for row in table_data %}
+        <a href="{{ url_for('database_preview', id=id, table=table, item_id=row['id']) }}">
+            <h2>{{ row['title'] | safe }}</h2>
+        </a>
+        <span>{{ row['created'] }}</span>
+        <a href="{{ url_for('database_edit_item', id=id, table=table, item_id=row['id']) }}">
+            <span>Edit</span>
+        </a>
+        <hr>
+    {% endfor %}
+</body>
+</html>

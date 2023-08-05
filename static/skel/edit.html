@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="horizontal-container" style="width: 100%;">
+        <div id="generate-form" class="vertical-container" style="width: 100%;">
+        </div>
+    </div>
+    <script>
+        urlsave = "/database/exec/{{ id }}";
+        columns = JSON.parse("{{ columns_names | safe }}".replace(/'/g, '"'));
+        columns_types = JSON.parse("{{ columns_types | safe }}".replace(/'/g, '"'));
+        inputs = document.getElementsByTagName("input");
+        textareas = document.getElementsByTagName("textarea");
+        textdata = ["", ""];
+        ignore_columns = /created|id/gi;
+        value = new Array();
+
+        {%for i in range(0,len)%}
+            value[{{i}}] = decodeURI("{{item[i]}}").replace(/\%27/g, "'")
+        {%endfor%}
+
+        function get_type(type){
+            switch(type){
+                case "INTEGER":
+                    return "number";
+                    break;
+                case "REAL":
+                    return "number";
+                    break;
+                case "TEXT":
+                    return "text";
+                    break;
+            }
+        }
+
+        function generate_form(){
+            for (let x = 0; x < columns.length; x++){
+                if (ignore_columns.test(columns[x]) == false){
+                    if (columns_types[x] != "LONGTEXT"){
+                        document.getElementById("generate-form").innerHTML += "" +
+                            "<label for='" + columns[x] + "'>" + columns[x].charAt(0).toUpperCase() + columns[x].slice(1).replace("_", " ") + "</label>" +
+                            "<input type='" + get_type(columns_types[x]) +  "' name='" + columns[x] + "' value='" + value[x] + "'></input><br>";
+                    } else {
+                        document.getElementById("generate-form").innerHTML += "" + 
+                            "<label for='" + columns[x] + "'>" + columns[x].charAt(0).toUpperCase() + columns[x].slice(1).replace("_", " ") + "</label>" +
+                            "<textarea name='" + columns[x] + "' rows='3'>" + value[x] + "</textarea>";
+                    }
+                }
+                ignore_columns.lastIndex = 0;
+            }
+            document.getElementById("generate-form").innerHTML += "<div>" +
+            "<button class='primary' style='margin:10px; width: 200px;' onclick='edit()'>Save changes</button>" +
+            "<button class='delete' style='margin:10px; width: 200px;' onclick='del()'>Delete</button>" +
+            "</div>";
+        }
+
+        function edit(){
+            for (let x = 0; x < inputs.length; x++) {
+                textdata[0] += inputs[x].getAttribute("name") + " = '" + inputs[x].value.replace(/'/g, "%27") + "', ";
+            }
+            for (let x = 0; x < textareas.length; x++) {
+                textdata[0] += textareas[x].getAttribute("name") + " = '" + encodeURI(textareas[x].value.replace(/'/g, "%27")) + "' ";
+            }
+            final_command = "UPDATE {{ table }} SET " + textdata[0].slice(0, -1) + " WHERE id = " + value[0];
+            execute(final_command);
+        }
+
+        function del(){
+            if(confirm("Are you sure you want to delete this item?")){
+                final_command = "DELETE FROM {{ table }} WHERE id = " + value[0];
+                execute(final_command);
+            }
+        }
+
+        function execute(final_command){
+            console.log(final_command);
+            fetch(urlsave, {
+                method: "POST",
+                body: JSON.stringify({"final_command": final_command}),
+                headers: {"Content-type": "application/json; charset=UTF-8"}
+            })
+            .then(response => response.json()) 
+            .catch(err => console.log(err));
+        }
+
+        generate_form();
+    </script>
+</body>
+</html>

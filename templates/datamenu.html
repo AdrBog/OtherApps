@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/edit.css') }}">
+    <title>Other Apps | Database Manager</title>
+</head>
+<body>
+    <div class="window" id="newapp-window" style="width: 30%; visibility: hidden;">
+        <div class="horizontal-container space-between">
+            <span style="font-size: 24px;">New Database</span>
+            <button onclick="document.getElementById('newapp-window').style.visibility = 'hidden';">X</button>
+        </div>
+        <div class="form-table">
+            <table>
+                <tr>
+                    <td>Database Name</td>
+                    <td><input type="text" id="database-id"></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td><button class="primary" onclick="check_save()">Create</button></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div class="vertical-container">
+        <div id="tool-bar" class="navbar">
+            <a class="primary" href="{{ url_for('index') }}">Other Apps</a>
+            <a href="#" onclick="document.getElementById('newapp-window').style.visibility = 'visible'">New Database</a>
+        </div>
+        <div class="horizontal-container">
+            <div class="sidebar">
+                <span class="sidebar-header">Databases</span>
+                <hr>
+                <div id="database-map">
+                    {% for database in databases %}
+                        <div class="map-screen" id="{{database}}" onclick="select('{{ database }}')">{{ database }}</div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div style="flex: 1; overflow: hidden;">
+                <iframe id="database-iframe" style="width: 100%; height: 100%;" src="about:blank" frameborder="0"></iframe>
+            </div>
+        </div>  
+    </div>
+    <script>
+        const iframe = document.getElementById("database-iframe");
+        const databaseMap = document.getElementById("database-map");
+        const databaseId = document.getElementById("database-id");
+        var forbiddenchars = /[`!@#$%^&*()+=\[\]{};':"\\|,.<>\/?~ ]/;
+        var map_databases = databaseMap.getElementsByTagName("div");
+        
+        databaseId.addEventListener('input', () => {
+            if ( ! databaseId.value || forbiddenchars.test(databaseId.value) || document.getElementById(databaseId.value) != null){
+                databaseId.classList.add("error");
+            } else {
+                databaseId.classList.remove("error");
+            }
+        })
+
+        function check_save(){
+            if ( ! databaseId.value){
+                alert("Can't create this database\nIt doesn't have a name")
+            } else if (forbiddenchars.test(databaseId.value)){
+                alert("Can't create this database\nIt contains special characters")
+            } else if (document.getElementById(databaseId.value) != null){
+                alert("Can't create " + databaseId.value + "\nThis database already exists");
+            } else {
+                save();
+            }
+        }
+
+        function save(){
+            window.location.href = "/database/new/" + databaseId.value;
+        }
+
+        function select(database){
+            iframe.src = "/database/info/" + database;
+            Array.from(map_databases).forEach(
+                (el) => {
+                    el.classList.remove("map-selected");
+                }
+            );
+            document.getElementById(database).classList.add("map-selected");
+        }
+    </script>
+</body>
+</html>

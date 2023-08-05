@@ -8,7 +8,7 @@
 </head>
 <body>
     <div class="window" id="about-window" style="width: 50%; visibility: hidden;">
-        <div class="horizontal-container">
+        <div class="horizontal-container space-between">
             <span style="font-size: 24px;">About version {{ ver }}</span>
             <button onclick="document.getElementById('about-window').style.visibility = 'hidden';">X</button>
         </div>
@@ -19,7 +19,7 @@
         <iframe id="about-page2" src="/static/about/third-party.html" frameborder="0" style="height: 0; width: 100%; overflow: hidden;"></iframe>
     </div>
     <div class="window" id="newapp-window" style="width: 30%; visibility: hidden;">
-        <div class="horizontal-container">
+        <div class="horizontal-container space-between">
             <span style="font-size: 24px;">New App</span>
             <button onclick="document.getElementById('newapp-window').style.visibility = 'hidden';">X</button>
         </div>
@@ -40,6 +40,7 @@
         <div id="tool-bar" class="navbar">
             <a class="primary" href="{{ url_for('index') }}">Other Apps</a>
             <a href="#" onclick="document.getElementById('newapp-window').style.visibility = 'visible'">New App</a>
+            <a href="{{ url_for('database_menu') }}">Database manager</a>
             <a href="#" onclick="document.getElementById('about-window').style.visibility = 'visible'">About</a>
         </div>
         <div id="app-list">
@@ -48,7 +49,7 @@
                 {% for project in projects %}
                 <tr>
                     <td class="app-row">
-                        <div class="horizontal-container">
+                        <div class="horizontal-container space-between">
                             <a id="{{ project }}" href="{{ url_for('play', id=project, screen=1) }}">{{ project }}</a>
                             <div>
                                 <a href="{{ url_for('edit', id=project )}}">Edit</a>

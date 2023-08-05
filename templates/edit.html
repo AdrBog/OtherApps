@@ -8,7 +8,7 @@
 </head>
 <body>
     <div class="window" id="settings-window" style="width: 30%; visibility: hidden;">
-        <div class="horizontal-container">
+        <div class="horizontal-container space-between">
             <span style="font-size: 24px;">App Settings</span>
             <button onclick="document.getElementById('settings-window').style.visibility = 'hidden';">X</button>
         </div>
@@ -36,7 +36,7 @@
         </div>
     </div>
     <div class="window" id="editor-window" style="visibility: hidden;">
-        <div class="horizontal-container">
+        <div class="horizontal-container space-between">
             <div>
                 <span id="editor-title" style="font-size: 24px;">Code editor</span>
             </div>
@@ -60,9 +60,9 @@
             <a href="#" onclick="document.getElementById('settings-window').style.visibility = 'visible'">App Settings</a>
         </div>
         <div id="editor">
-            <div class="horizontal-container">
-                <div id="nav-sidebar">
-                    <span style="font-size: 24px;">Tree View</span>
+            <div class="horizontal-container space-between">
+                <div id="nav-sidebar" class="sidebar">
+                    <span class="sidebar-header">Tree View</span>
                     <hr>
                     <div>
                         <div id="control-map">
@@ -70,10 +70,10 @@
                     </div>
                 </div>
                 <div id="editor-screen" style="flex: 1 1; display: flex; overflow: scroll;">
-                    <div id="virtual-screen" style="position: relative; width: 800px; height: 450px;"></div>
+                    <div id="virtual-screen"></div>
                 </div>
-                <div id="control-sidebar">
-                    <span id="info-type"></span><br/>
+                <div id="control-sidebar" class="sidebar">
+                    <span id="info-type" class="sidebar-header"></span><br/>
                     <hr/>
                     <div id="control-button">
                         <div id="table-id" style="overflow-y: hidden; height: 0;">
@@ -305,6 +305,7 @@
         });
         tableApp.addEventListener('input', () => {
             virtualScreen.style.width = infoAppW.value + 'px';
+            virtualScreen.style.minWidth = infoAppW.value + 'px';
             virtualScreen.style.height = infoAppH.value + 'px';
         })
         tableId.addEventListener('input', () => {
@@ -543,7 +544,6 @@
                         el.classList.remove("drag-resize");
                         document.getElementById("map-children-" + el.getAttribute("id")).classList.remove("map-selected");
                     }
-
                 );
                 item.classList.add("selected");
                 item.classList.add("drag-resize");
@@ -618,7 +618,7 @@
                         currentId++;
                     }
                     currentScreen.innerHTML += '<div class="Label" id="Label' + currentId + '" style="' +
-                                        'position: absolute; overflow: hidden; user-select: none;' +
+                                        'display: flex; position: absolute; overflow: hidden; user-select: none;' +
                                         'transform: translate(60px, 60px);' +
                                         'width: 160px; height: 60px;' +
                                         'background-color: #fff;' +
@@ -637,7 +637,7 @@
                         currentId++;
                     }
                     currentScreen.innerHTML += '<div class="Button" id="Button' + currentId + '" style="' +
-                                        'position: absolute; text-align: center; display: flex; justify-content: center; align-items: center; overflow: hidden; user-select: none;' +
+                                        'display: flex; position: absolute; text-align: center; display: flex; justify-content: center; align-items: center; overflow: hidden; user-select: none;' +
                                         'transform: translate(60px, 60px);' +
                                         'width: 160px; height: 60px;' +
                                         'background-color: rgb(56, 96, 178);' +
@@ -677,7 +677,7 @@
         var xmlDoc = parser.parseFromString(xml, "text/xml");
         var app = xmlDoc.getElementsByTagName("App")[0];
         if (app.getAttribute("OAVer") != current_ver){
-            alert("It seems that this app was created with an older version of Other Apps\nYou can still run and edit the app, but it MAY NOT work correctly.");
+            alert("It seems that this app was created with an older version of Other Apps\nYou can still run and edit the app, but it MAY NOT work correctly.\nApp's version: " + app.getAttribute("OAVer") +"\nYour current OtherApp version: " + current_ver);
         }
         var childrens = xmlDoc.getElementsByTagName("Children");
         var screens = xmlDoc.getElementsByTagName("Screen");
@@ -704,6 +704,7 @@
         infoAppW.value = app.getAttribute("Width");
         infoAppH.value = app.getAttribute("Height");
         virtualScreen.style.width = infoAppW.value + 'px';
+        virtualScreen.style.minWidth = infoAppW.value + 'px';
         virtualScreen.style.height = infoAppH.value + 'px';
 
         interact('#nav-sidebar').resizable({
