@@ -4,17 +4,40 @@
 
 # Other Apps
 
+[![GPL v3](https://img.shields.io/badge/License-GNU%20v3-blue)](https://www.gnu.org/licenses/gpl-3.0.en.html)
+
 Lightweight Free and Open Source alternative to Microsoft's Power Apps written in Python and Flask.
 
 Other Apps works with Javascript and HTML (Instead of that strange language that Power Apps uses), this allows you to do everything you could do in javascript, without limitations.
 
 Disclaimer! Other Apps is still under development. And it is focused for small business/local networks. I do not recommend using it for large enterprises.
 
-<div align="center">
-  <img src="./res/sample01.png">
-  <img src="./res/sample02.png">
-</div>
+## Features
 
+-   [x] No Ads
+-   [x] No Tracking
+-   [x] Lightweight
+-   [x] No account needed
+-   [x] SQLite databases
+-   [x] Unlimited database size
+-   [x] Unrestricted HTML embedding
+-   [ ] Documentation (Coming soon)
+-   [ ] Themes (Coming soon)
+
+## Screenshots
+
+<table style="width: 100%; table-layout: fixed;">
+  <tr>
+    <td>App Editor</td>
+    <td>Code Editor</td>
+    <td>Database</td>
+  </tr>
+  <tr>
+    <td><img src="https://raw.githubusercontent.com/OtherExit/OtherApps/main/res/sample01.png"></td>
+    <td><img src="https://raw.githubusercontent.com/OtherExit/OtherApps/main/res/sample02.png"></td>
+    <td><img src="https://raw.githubusercontent.com/OtherExit/OtherApps/main/res/sample03.png"></td>
+  </tr>
+</table>
 
 ## Installation
 You need to have Python with virtualenv and Git installed
