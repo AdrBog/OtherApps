@@ -310,28 +310,13 @@
         })
         tableId.addEventListener('input', () => {
             old_name = selected.getAttribute("id");
-            
-            if(selected.getAttribute("class").startsWith("Screen") == true){
-                if(document.getElementById(infoName.value) != null || ! infoName.value){
-                    infoName.classList.add("error");
-                } else {
-                    infoName.classList.remove("error");
-                    document.getElementById("map-screen-for-" + old_name).setAttribute("id", "map-screen-for-" + infoName.value);
-                    document.getElementById("map-children-" + old_name).setAttribute("point", infoName.value);
-                    document.getElementById("map-children-" + old_name).innerHTML = "<span class='icon'>® </span>" + infoName.value;
-                    document.getElementById("map-children-" + old_name).setAttribute("id", "map-children-" + infoName.value);
-                    document.getElementById("map-childrens-for-" + old_name).setAttribute("id", "map-childrens-for-" + infoName.value);
-                    selected.setAttribute("id", infoName.value);
-                }   
+            if(document.getElementById(infoName.value) != null || ! infoName.value){
+                infoName.classList.add("error");
             } else {
-                if(document.getElementById(infoName.value) != null || ! infoName.value){
-                    infoName.classList.add("error");
-                } else {
-                    infoName.classList.remove("error");
-                    selected.setAttribute("id", infoName.value);
-                }
-                refresh_map();
+                infoName.classList.remove("error");
+                rename(old_name, infoName.value);
             }
+            refresh_map();
             document.dispatchEvent(tableIdChanged);
         })
         tableText.addEventListener('input', () => {
@@ -487,7 +472,16 @@
             while(document.getElementById(newid) != null){
                 newid = newid + "_1";
             }
-            element.setAttribute("id", newid);
+            if (element.getAttribute("class").startsWith ("Screen")){
+                document.getElementById("map-screen-for-" + oldid).setAttribute("id", "map-screen-for-" + newid);
+                document.getElementById("map-children-" + oldid).setAttribute("point", newid);
+                document.getElementById("map-children-" + oldid).innerHTML = "<span class='icon'>® </span>" + newid;
+                document.getElementById("map-children-" + oldid).setAttribute("id", "map-children-" + newid);
+                document.getElementById("map-childrens-for-" + oldid).setAttribute("id", "map-childrens-for-" + newid);
+                element.setAttribute("id", newid);
+            } else {
+                element.setAttribute("id", newid);
+            }
             refresh_map();
             return newid;
         }
