@@ -24,6 +24,23 @@ document.addEventListener('keydown', e => {
             rename(selected.getAttribute("id"), newName);
     }
 
+    // Cut
+    if (e.ctrlKey && e.key === 'x') {
+        if (can_click && selected.getAttribute("class").split(" ", 1)[0].toLowerCase() != "screen"){
+            pasteinfo = [
+                selected.getAttribute("id"),
+                selected.innerHTML,
+                selected.getAttribute("class").split(" ", 1)[0],
+                selected.getAttribute("class").split(" ", 1)[0].toLowerCase(),
+                selected.getAttribute("style"),
+                selected.getAttribute("data-x"),
+                selected.getAttribute("data-y"),
+                selected.getAttribute("onclickalt"),
+            ];
+            del(selected.getAttribute("id"));
+        }
+    }
+
     // Copy
     if (e.ctrlKey && e.key === 'c') {
         if (can_click)

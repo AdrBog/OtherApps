@@ -278,15 +278,7 @@
             if(selected.id != "screen")
                 if(e.key == "Delete")
                     if (can_click){
-                        if (selected.getAttribute('class').split(' ')[0] == "Screen"){
-                            if (confirm("Are you sure you want to delete " + selected.getAttribute("Id") + "?")) {
-                                document.getElementById("map-screen-for-" + currentScreen.getAttribute("id")).remove();
-                                document.getElementById(currentScreen.getAttribute("id")).remove();
-                            }
-                        }else{
-                            selected.remove();
-                            click(document.getElementById(currentScreen.getAttribute("id")));
-                        }
+                        del(selected.getAttribute("id"));
                     }
                     refresh_map();
         })
@@ -484,6 +476,19 @@
             }
             refresh_map();
             return newid;
+        }
+
+        function del(id){
+            element = document.getElementById(id);
+            if (element.getAttribute('class').split(' ')[0] == "Screen"){
+                if (confirm("Are you sure you want to delete " + element.getAttribute("Id") + "?")) {
+                    document.getElementById("map-screen-for-" + currentScreen.getAttribute("id")).remove();
+                    document.getElementById(currentScreen.getAttribute("id")).remove();
+                }
+            }else{
+                element.remove();
+                click(document.getElementById(currentScreen.getAttribute("id")));
+            }
         }
 
         function click(item) {

@@ -147,6 +147,10 @@ button:active{
     box-sizing: border-box;
 }
 
+#generate-form textarea {
+    margin: 16px 0;
+}
+
 input, textarea{
     color: #000;
     border-radius: 0;

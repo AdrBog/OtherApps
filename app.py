@@ -1,4 +1,4 @@
-import os, shutil, sqlite3
+import os, shutil, sqlite3, json
 from flask import Flask, render_template, request, jsonify, redirect, url_for
 from werkzeug.exceptions import abort
 
@@ -101,7 +101,15 @@ def database_info(id):
     path = os.path.abspath('templates/databases/' + id)
     with open(f'templates/databases/{id}/schema.sql', 'r') as file:
         schema = file.read().replace('\n', '\\n')
-    return render_template('datainfo.html', id=id, path=path, schema=schema)
+    conn = sqlite3.connect(f'templates/databases/{id}/database.db')
+    cursor = conn.cursor()
+    cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
+    tables = cursor.fetchall()
+    tables = json.dumps(tables)
+    conn.close()
+    projects = os.listdir(f'{projects_dir}/')
+    print(projects)
+    return render_template('datainfo.html', id=id, path=path, schema=schema, tables=tables, projects=projects)
 
 @app.route('/database/list/<id>/<table>')
 def database_list(id, table):

@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/edit.css') }}">
-    <title>Other Apps | Database Manager</title>
+    <title>Database Manager | Other Apps</title>
 </head>
 <body>
     <div class="window" id="newapp-window" style="width: 30%; visibility: hidden;">
@@ -52,6 +52,10 @@
         const databaseId = document.getElementById("database-id");
         var forbiddenchars = /[`!@#$%^&*()+=\[\]{};':"\\|,.<>\/?~ ]/;
         var map_databases = databaseMap.getElementsByTagName("div");
+
+        iframe.contentWindow.document.open();
+        iframe.contentWindow.document.write(`<head><link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"></head><body style="margin: 32px; color: rgba(0,0,0,0.4);"><span class="title">Welcome to the database manager</span><hr>Select a database to view its information<br>If you don't have any database created, click on <b>[New Database]</b></body>`);
+        iframe.contentWindow.document.close();
         
         databaseId.addEventListener('input', () => {
             if ( ! databaseId.value || forbiddenchars.test(databaseId.value) || document.getElementById(databaseId.value) != null){

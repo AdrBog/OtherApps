@@ -6,7 +6,7 @@
 <body>
     {% for row in table_data %}
         <a href="{{ url_for('database_preview', id=id, table=table, item_id=row['id']) }}">
-            <h2>{{ row['title'] | safe }}</h2>
+            <span class="title">{{ row['title'] | safe }}</span> <br>
         </a>
         <span>{{ row['created'] }}</span>
         <a href="{{ url_for('database_edit_item', id=id, table=table, item_id=row['id']) }}">
