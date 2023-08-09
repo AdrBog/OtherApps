@@ -26,18 +26,9 @@ Disclaimer! Other Apps is still under development. And it is focused for small b
 
 ## Screenshots
 
-<table style="width: 100%; table-layout: fixed;">
-  <tr>
-    <td>App Editor</td>
-    <td>Code Editor</td>
-    <td>Database</td>
-  </tr>
-  <tr>
-    <td><img src="https://raw.githubusercontent.com/OtherExit/OtherApps/main/res/sample01.png"></td>
-    <td><img src="https://raw.githubusercontent.com/OtherExit/OtherApps/main/res/sample02.png"></td>
-    <td><img src="https://raw.githubusercontent.com/OtherExit/OtherApps/main/res/sample03.png"></td>
-  </tr>
-</table>
+| App Editor                                                                                   | Code Editor                                                                                  | Gallery inside app                                                                            |
+| -------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- |
+| ![Screenshot 1](https://raw.githubusercontent.com/OtherExit/OtherApps/main/res/sample01.png) | ![Screenshot 2](https://raw.githubusercontent.com/OtherExit/OtherApps/main/res/sample02.png) | ![Screenshot 3](https://raw.githubusercontent.com/OtherExit/OtherApps/main/res/sample03.png) |
 
 ## Installation
 You need to have Python with virtualenv and Git installed
