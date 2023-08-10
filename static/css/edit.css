@@ -1,5 +1,6 @@
 body{
-    background-color: #e0e0e0;
+    background-color: var(--background-1);
+    color: var(--text);
 }
 
 .selected{

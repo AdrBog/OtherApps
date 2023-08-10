@@ -1,3 +1,4 @@
+@import url("colors.css"); 
 @font-face {
     font-family: 'icon-worksregular';
     src: url('/static/fonts/icon-works-webfont.eot');
@@ -8,19 +9,6 @@
     font-weight: normal;
     font-style: normal;
 
-}
-
-[data-theme=light],
-:root:not([data-theme=dark]) {
-    --primary: 	#4300f1;
-    --primary-hover: #4300f1;
-    --primary-focus: #4300f1;
-    --primary-inverse: #fff;
-    --secondary: #fff;
-    --secondary-hover: hsl(0, 0%, 80%);
-    --secondary-focus: rgba(89, 107, 120, 0.125);
-    --delete: #ff0000;
-    --secondary-inverse: #000000;
 }
 
 body{
@@ -47,9 +35,14 @@ a{
     padding: 14px;
 }
 
+.app-row{
+    background-color: var(--dropdown-bg);
+    color: var(--dropdown-fg);
+}
+
 .app-row:hover{
-    background-color: var(--secondary-hover);
-    color: var(--primary-hover);
+    background-color: var(--dropdown-bg-hover);
+    color: var(--dropdown-fg-hover);
 }
 
 
@@ -170,7 +163,8 @@ input, textarea{
     width: 75%;
     left: 50%;
     transform: translate(-50%, 0);
-    background-color: #f1f1f1;
+    background-color: var(--window-bg);
+    color: var(--window-fg);
     border: 1px solid rgba(0, 0, 0, 0.2);
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
 }
@@ -197,7 +191,8 @@ input, textarea{
 /* Navbar container */
 .navbar {
     overflow: hidden;
-    background-color: #333;
+    background-color: var(--toolbar-bg);
+    color: var(--toolbar-fg);
     font-family: Arial;
 }
   
@@ -205,10 +200,14 @@ input, textarea{
 .navbar a {
     float: left;
     font-size: 16px;
-    color: white;
+    color: var(--toolbar-fg);
     text-align: center;
     padding: 14px 16px;
     text-decoration: none;
+}
+
+.navbar a.primary {
+    color: var(--primary-inverse);
 }
   
 /* The dropdown container */
@@ -222,7 +221,7 @@ input, textarea{
     font-size: 16px;
     border: none;
     outline: none;
-    color: white;
+    color: var(--toolbar-fg);
     padding: 14px 16px;
     background-color: inherit;
     font-family: inherit; /* Important for vertical align on mobile phones */
@@ -231,15 +230,18 @@ input, textarea{
   
 /* Add a red background color to navbar links on hover */
 .navbar a:hover, .dropdown:hover .dropbtn {
-    background-color: #505050;
+    background-color: var(--toolbar-bg-hover);
+    color: var(--toolbar-fg-hover);
 }
   
 /* Dropdown content (hidden by default) */
 .dropdown-content {
     display: none;
     position: absolute;
-    background-color: #f9f9f9;
-    min-width: 160px;
+    background-color: var(--dropdown-bg);
+    min-width: 200px;
+    max-height: 420px;
+    overflow-y: scroll;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
     z-index: 999;
 }
@@ -247,7 +249,7 @@ input, textarea{
 /* Links inside the dropdown */
 .dropdown-content a {
     float: none;
-    color: black;
+    color: var(--dropdown-fg);
     padding: 12px 16px;
     text-decoration: none;
     display: block;
@@ -256,7 +258,8 @@ input, textarea{
   
 /* Add a grey background color to dropdown links on hover */
 .dropdown-content a:hover {
-    background-color: #ddd;
+    background-color: var(--dropdown-bg-hover);
+    color: var(--dropdown-fg-hover);
 }
   
 /* Show the dropdown menu on hover */
@@ -278,7 +281,7 @@ input, textarea{
 }
 
 .sidebar {
-    background-color: #f4f4f4;
+    background-color: var(--background-2);
     width: 256px;
     border-right: 1px solid rgba(0, 0, 0, 0.2);
     border-left: 1px solid rgba(0, 0, 0, 0.2);

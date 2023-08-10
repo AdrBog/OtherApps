@@ -5,6 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <title>Other Apps | Projects</title>
+    <style>
+        body{
+            background-color: var(--background-3);
+            color: var(--text);
+        }
+    </style>
 </head>
 <body>
     <div class="window" id="about-window" style="width: 50%; visibility: hidden;">
@@ -70,6 +76,7 @@
         function delete_p(sid){
             if(confirm("Are you sure you want to delete " + sid + "?")){
                 window.location = "/remove/" + sid;
+                alert(sid + " has been removed");
             }
         }
 

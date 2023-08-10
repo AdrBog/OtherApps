@@ -1,12 +1,13 @@
 // This addon adds more options to the insert button
 
 document.getElementById("tool-bar-insert").innerHTML += '<hr>' +
+    '<a href="#" onclick="extraInsert(\'database\')">Database</a>' +
+    '<hr>' +
     '<a href="#" onclick="extraInsert(\'plus\')">Plus Icon</a>' +
     '<a href="#" onclick="extraInsert(\'refresh\')">Refresh Icon</a>' +
     '<a href="#" onclick="extraInsert(\'back\')">Back Icon</a>' +
-    '<a href="#" onclick="extraInsert(\'home\')">Home Icon</a>' +
-    '<hr>' +
-    '<a href="#" onclick="extraInsert(\'database\')">Database</a>';
+    '<a href="#" onclick="extraInsert(\'home\')">Home Icon</a>' ;
+    
 
 function extraInsert(item) {
     switch (item) {

@@ -67,7 +67,7 @@ def edit(id):
 @app.route('/remove/<id>')
 def remove(id):
     shutil.rmtree(f'{projects_dir}/{id}')
-    return render_template('remove.html', id=id)
+    return redirect("/", code=302)
 
 @app.route('/save', methods=['GET', 'POST'])
 def save():
@@ -108,7 +108,6 @@ def database_info(id):
     tables = json.dumps(tables)
     conn.close()
     projects = os.listdir(f'{projects_dir}/')
-    print(projects)
     return render_template('datainfo.html', id=id, path=path, schema=schema, tables=tables, projects=projects)
 
 @app.route('/database/list/<id>/<table>')
@@ -138,7 +137,12 @@ def database_new(id):
     shutil.copyfile(f"{skel_dir}/edit.html", f"templates/databases/{id}/edit.html")
     shutil.copyfile(f"{skel_dir}/preview.html", f"templates/databases/{id}/preview.html")
     shutil.copyfile(f"{skel_dir}/list.html", f"templates/databases/{id}/list.html")
-    return render_template('datacreated.html', id=id)
+    return redirect("/database/menu", code=302)
+
+@app.route('/database/remove/<id>')
+def database_remove(id):
+    shutil.rmtree(f'templates/databases/{id}')
+    return redirect("/database/menu", code=302)
 
 @app.route('/database/preview/<id>/<table>/<item_id>')
 def database_preview(id, table, item_id):
