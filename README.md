@@ -21,14 +21,21 @@ Disclaimer! Other Apps is still under development. And it is focused for small b
 -   [x] SQLite databases
 -   [x] Unlimited database size
 -   [x] Unrestricted HTML embedding
+-   [x] Themes
 -   [ ] Documentation (Coming soon)
--   [ ] Themes (Coming soon)
+
 
 ## Screenshots
 
 | App Editor                                                                                   | Code Editor                                                                                  | Gallery inside app                                                                            |
 | -------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- |
 | ![Screenshot 1](https://raw.githubusercontent.com/OtherExit/OtherApps/main/res/sample01.png) | ![Screenshot 2](https://raw.githubusercontent.com/OtherExit/OtherApps/main/res/sample02.png) | ![Screenshot 3](https://raw.githubusercontent.com/OtherExit/OtherApps/main/res/sample03.png) |
+
+## Themes
+
+| Light theme                                                                                  | Dark theme                                                                                   |
+| -------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- |
+| ![Screenshot 4](https://raw.githubusercontent.com/OtherExit/OtherApps/main/res/sample04.png) | ![Screenshot 5](https://raw.githubusercontent.com/OtherExit/OtherApps/main/res/sample05.png) |
 
 ## Installation
 You need to have Python with virtualenv and Git installed
