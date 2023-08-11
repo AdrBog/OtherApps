@@ -1,0 +1,62 @@
+:root {
+    --font: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
+    --shade-1: #fff;
+    --shade-2: #f1f1f1;
+    --shade-3: #f4f4f4;
+    --shade-4: #333333;
+    --shade-5: #c2c2c2;
+    --shade-6: #505050;
+    --shade-7: #fff;
+
+    --background-1: #e0e0e0;
+    --background-2: var(--shade-3);
+    --background-3: var(--shade-1);
+
+    --sidebar-border: 1px solid rgba(0, 0, 0, 0.2);
+
+    --text: #000;
+    --links: #4300f1;
+
+    --input-bg: var(--shade-7);
+
+    --window-bg: var(--shade-2);
+    --window-fg: var(--text);
+    --window-border: 1px solid rgba(0, 0, 0, 0.2);
+    --window-radius: 0;
+    --window-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+
+    --map-border: var(--text);
+    --map-hover: #dbdbdb;
+    --map-active: #dbdbdb;
+
+    --primary: 	#4300f1;
+    --primary-hover: #4300f1;
+    --primary-inverse: var(--text);
+    --primary-text: #eee;
+
+    --secondary: rgba(0,0,0,0);
+    --secondary-hover: var(--shade-5);
+    --secondary-inverse: var(--text);
+
+    --delete: #ff0000;
+
+    --toolbar-bg: var(--shade-4);
+    --toolbar-fg: #fff;
+    --toolbar-bg-hover: var(--shade-6);
+    --toolbar-fg-hover: #fff;
+
+    --dropdown-bg: var(--shade-7);
+    --dropdown-fg: #000;
+    --dropdown-bg-hover: var(--shade-5);
+    --dropdown-fg-hover: #000;
+    --dropdown-border: 0;
+    --dropdown-radius: 0;
+    --dropdown-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+
+    --wk-scrollbar-bg: var(--background-2);
+    --wk-scrollbar-fg: var(--shade-5);
+
+    --button-radius: 0;
+    --input-radius: 0;
+}

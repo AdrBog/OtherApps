@@ -11,7 +11,9 @@
 }
 
 #display-name{
-    margin: 10px;
+    background-color: var(--background-1);
+    color: var(--text);
+    padding: 10px;
     font-size: 20px;
 }
 

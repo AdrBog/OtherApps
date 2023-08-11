@@ -63,7 +63,7 @@
             document.getElementById("schema").innerHTML += "<button onclick='goto(\"" + tables[x][0] + "\")'>" + tables[x][0] + "</button>";
             
         }
-        document.getElementById("schema").innerHTML += "<br><span style='font-size:14px; color: rgba(0,0,0,0.5);'>" + tables.length + " table/s in total</span>";
+        document.getElementById("schema").innerHTML += "<br><span style='font-size:14px; color: var(--text); opacity: 0.5;'>" + tables.length + " table/s in total</span>";
 
         function goto(table){
             window.open("#frames", "_self");

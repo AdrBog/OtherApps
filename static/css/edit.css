@@ -25,12 +25,12 @@ body{
 }
 
 .map-children:hover, .map-screen:hover{
-    background-color: rgba(0, 0, 0, 0.05);
+    background-color: var(--map-hover);
 }
 
 .map-selected, .map-selected:hover{
-    background-color: rgba(0, 0, 0, 0.1);
-    border-color:rgba(0, 0, 0, 1);
+    background-color: var(--map-active);
+    border-color:var(--map-border);
 }
 
 
