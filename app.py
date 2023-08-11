@@ -108,7 +108,7 @@ def database_info(id):
     tables = json.dumps(tables)
     conn.close()
     projects = os.listdir(f'{projects_dir}/')
-    return render_template('datainfo.html', id=id, path=path, schema=schema, tables=tables, projects=projects)
+    return render_template('datainfo.html', id=id, path=path, schema=schema, tables=tables, projects=projects, ver=version)
 
 @app.route('/database/list/<id>/<table>')
 def database_list(id, table):
