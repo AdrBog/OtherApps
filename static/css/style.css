@@ -12,6 +12,10 @@
 
 }
 
+.logo{
+    content: var(--logo);
+}
+
 body{
     color: var(--text);
     height: 100vh;
@@ -38,13 +42,13 @@ a{
 }
 
 .app-row{
-    background-color: var(--dropdown-bg);
-    color: var(--dropdown-fg);
+    background-color: var(--list-bg);
+    color: var(--list-fg);
 }
 
 .app-row:hover{
-    background-color: var(--dropdown-bg-hover);
-    color: var(--dropdown-fg-hover);
+    background-color: var(--list-bg-hover);
+    color: var(--list-fg-hover);
 }
 
 
@@ -64,8 +68,7 @@ button{
     background-color: var(--secondary);
     color: var(--secondary-inverse);
     font-size: 16px;
-    border: 2px dotted;
-    border-color: rgba(0, 0, 0, 0);
+    border: var(--button-border);
     padding-top: 10px;
     padding-bottom: 10px;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -144,13 +147,13 @@ button:active{
 }
 
 input:not(.error), textarea{
-    color: var(--text);
+    color: var(--input-fg);
 }
 
 input, textarea{
     background-color: var(--input-bg);
     border-radius: var(--input-radius);
-    border: 1px solid rgba(0, 0, 0, 0.2);
+    border: var(--input-border);
 }
 
 #editor{
@@ -283,7 +286,7 @@ input, textarea{
 }
 
 .sidebar {
-    background-color: var(--background-2);
+    background-color: var(--sidebar-bg);
     width: 256px;
     border-right: var(--sidebar-border);
     border-left: var(--sidebar-border);

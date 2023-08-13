@@ -1,62 +1,66 @@
 :root {
     --font: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    --logo: url("/static/icon.svg");
 
-    --shade-1: #fff;
-    --shade-2: #f1f1f1;
-    --shade-3: #f4f4f4;
-    --shade-4: #333333;
-    --shade-5: #c2c2c2;
-    --shade-6: #505050;
-    --shade-7: #fff;
+    --background-1:             #e0e0e0;
+    --background-2:             #f4f4f4;
+    --background-3:             #fff;
+    
+    --text:                     #000;
+    --links:                    #4300f1;
+    
 
-    --background-1: #e0e0e0;
-    --background-2: var(--shade-3);
-    --background-3: var(--shade-1);
+    --window-bg:                #f1f1f1;
+    --window-fg:                #000;
+    --window-border:            1px solid rgba(0, 0, 0, 0.2);
+    --window-shadow:            0px 8px 16px 0px rgba(0,0,0,0.2);
+    --window-radius:            0;
+    
+    --map-border:               #000;
+    --map-hover:                #dbdbdb;
+    --map-active:               #dbdbdb;
 
-    --sidebar-border: 1px solid rgba(0, 0, 0, 0.2);
+    --primary: 	                #4300f1;
+    --primary-hover:            #4300f1;
+    --primary-inverse:          #000;
+    --primary-text:             #eee;
 
-    --text: #000;
-    --links: #4300f1;
+    --secondary:                rgba(0,0,0,0);
+    --secondary-hover:          #c2c2c2;
+    --secondary-inverse:        #000;
 
-    --input-bg: var(--shade-7);
+    --sidebar-bg:               #f4f4f4;
+    --sidebar-fg:               #000;
+    --sidebar-border:           1px solid rgba(0, 0, 0, 0.2);
 
-    --window-bg: var(--shade-2);
-    --window-fg: var(--text);
-    --window-border: 1px solid rgba(0, 0, 0, 0.2);
-    --window-radius: 0;
-    --window-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    --delete:                   #ff0000;
 
-    --map-border: var(--text);
-    --map-hover: #dbdbdb;
-    --map-active: #dbdbdb;
+    --toolbar-bg:               #333333;
+    --toolbar-fg:               #fff;
+    --toolbar-bg-hover:         #505050;
+    --toolbar-fg-hover:         #fff;
 
-    --primary: 	#4300f1;
-    --primary-hover: #4300f1;
-    --primary-inverse: var(--text);
-    --primary-text: #eee;
+    --dropdown-bg:              #fff;
+    --dropdown-fg:              #000;
+    --dropdown-bg-hover:        #c2c2c2;
+    --dropdown-fg-hover:        #000;
+    --dropdown-shadow:          0px 8px 16px 0px rgba(0,0,0,0.2);
+    --dropdown-border:          0;
+    --dropdown-radius:          0;
+    
+    --wk-scrollbar-bg:          #f4f4f4;
+    --wk-scrollbar-fg:          #c2c2c2;
 
-    --secondary: rgba(0,0,0,0);
-    --secondary-hover: var(--shade-5);
-    --secondary-inverse: var(--text);
+    --button-border:            2px dotted rgba(0, 0, 0, 0);
+    --button-radius:            0;
 
-    --delete: #ff0000;
+    --input-bg:                 #fff;
+    --input-fg:                 #000;
+    --input-border:             1px solid rgba(0, 0, 0, 0.2);
+    --input-radius:             0;
 
-    --toolbar-bg: var(--shade-4);
-    --toolbar-fg: #fff;
-    --toolbar-bg-hover: var(--shade-6);
-    --toolbar-fg-hover: #fff;
-
-    --dropdown-bg: var(--shade-7);
-    --dropdown-fg: #000;
-    --dropdown-bg-hover: var(--shade-5);
-    --dropdown-fg-hover: #000;
-    --dropdown-border: 0;
-    --dropdown-radius: 0;
-    --dropdown-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-
-    --wk-scrollbar-bg: var(--background-2);
-    --wk-scrollbar-fg: var(--shade-5);
-
-    --button-radius: 0;
-    --input-radius: 0;
+    --list-bg:                  #fff;
+    --list-fg:                  #000;
+    --list-bg-hover:            #c2c2c2;
+    --list-fg-hover:            #000;    
 }
