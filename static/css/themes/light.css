@@ -8,26 +8,40 @@
     
     --text:                     #000;
     --links:                    #4300f1;
-    
 
     --window-bg:                #f1f1f1;
     --window-fg:                #000;
     --window-border:            1px solid rgba(0, 0, 0, 0.2);
     --window-shadow:            0px 8px 16px 0px rgba(0,0,0,0.2);
     --window-radius:            0;
-    
-    --map-border:               #000;
-    --map-hover:                #dbdbdb;
-    --map-active:               #dbdbdb;
 
-    --primary: 	                #4300f1;
-    --primary-hover:            #4300f1;
-    --primary-inverse:          #000;
-    --primary-text:             #eee;
+    --map-bg:                   rgba(0,0,0,0);
+    --map-fg:                   #000;
+    --map-bg-hover:             #dbdbdb;
+    --map-fg-hover:             #000;
+    --map-bg-active:            #dbdbdb;
+    --map-fg-active:            #000;
+    --map-border:               2px dotted #000;
 
-    --secondary:                rgba(0,0,0,0);
-    --secondary-hover:          #c2c2c2;
-    --secondary-inverse:        #000;
+    --primary-bg: 	            #4300f1;
+    --primary-fg:               #fff;
+    --primary-bg-hover:         #505050;
+    --primary-fg-hover:         #fff;
+    --primary-bg-active:        #505050;
+    --primary-fg-active:        #fff;
+    --primary-border:           2px dotted rgba(0,0,0,0);
+    --primary-border-hover:     2px dotted rgba(0,0,0,0);
+    --primary-border-active:    2px dotted rgba(0,0,0,1);
+
+    --secondary-bg:             rgba(0,0,0,0);
+    --secondary-fg:             #000;
+    --secondary-bg-hover:       #c2c2c2;
+    --secondary-fg-hover:       #000;
+    --secondary-bg-active:      #c2c2c2;
+    --secondary-fg-active:      #000;
+    --secondary-border:         2px dotted rgba(0,0,0,0);
+    --secondary-border-hover:   2px dotted rgba(0,0,0,0);
+    --secondary-border-active:  2px dotted rgba(0,0,0,1);
 
     --sidebar-bg:               #f4f4f4;
     --sidebar-fg:               #000;

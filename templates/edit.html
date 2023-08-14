@@ -211,8 +211,8 @@
             </div>
         </div>
     </div>
-    {% include 'plugins.html' %}
     <script src="/static/js/interact.js"></script>
+    {% include 'plugins.html' %}
     <script src="/static/js/src-min-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
     <script src="/static/js/src-min-noconflict/mode-javascript.js" type="text/javascript" charset="utf-8"></script>
     <script src="/static/js/src-min-noconflict/mode-html.js" type="text/javascript" charset="utf-8"></script>
@@ -234,6 +234,10 @@
         var xml = {{ xmlfile | safe }};
         var selected;
         var textarea_selected;
+
+        // Snap grid
+        var xgrid = 32;
+        var ygrid = 32;
 
         const editorWindow =        document.getElementById("editor-window");
         const virtualScreen =       document.getElementById("virtual-screen");
@@ -624,16 +628,17 @@
                     }
                     currentScreen.innerHTML += '<div class="Label" id="Label' + currentId + '" style="' +
                                         'display: flex; position: absolute; overflow: hidden; user-select: none;' +
-                                        'transform: translate(60px, 60px);' +
-                                        'width: 160px; height: 60px;' +
+                                        'transform: translate(64px, 64px);' +
+                                        'width: 160px; height: 64px;' +
                                         'background-color: #fff;' +
                                         'background-repeat: no-repeat;' +
                                         'background-attachment: fixed;' +
                                         'background-position: center;' +
                                         'background-size: contain;' +
                                         'font-size: 15px;' +
-                                        'visibility: visible;"' +
-                                        'data-x="60" data-y="60">Text</div>';
+                                        'visibility: visible;' +
+                                        'box-sizing: border-box"' +
+                                        'data-x="64" data-y="64">Text</div>';
                     refresh_map();
                     return "Label" + currentId;
                     break;
@@ -643,8 +648,8 @@
                     }
                     currentScreen.innerHTML += '<div class="Button" id="Button' + currentId + '" style="' +
                                         'display: flex; position: absolute; text-align: center; display: flex; justify-content: center; align-items: center; overflow: hidden; user-select: none;' +
-                                        'transform: translate(60px, 60px);' +
-                                        'width: 160px; height: 60px;' +
+                                        'transform: translate(64px, 64px);' +
+                                        'width: 160px; height: 64px;' +
                                         'background-color: rgb(56, 96, 178);' +
                                         'background-repeat: no-repeat;' +
                                         'background-attachment: fixed;' +
@@ -654,8 +659,9 @@
                                         'border: 2px solid rgba(0, 0, 0, 0.2);' +
                                         'border-radius: 10px;' +
                                         'font-size: 15px;' +
-                                        'visibility: visible;"' +
-                                        'data-x="60" data-y="60" onClickALT="null">Button</div>';
+                                        'visibility: visible;' +
+                                        'box-sizing: border-box"' +
+                                        'data-x="64" data-y="64" onClickALT="null">Button</div>';
                     refresh_map();
                     return "Button" + currentId;
                     break;

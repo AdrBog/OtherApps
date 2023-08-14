@@ -5,6 +5,7 @@ More shortcuts will be added in the future, but for now we have these shortcuts:
 | --------- | -----|
 | F2  | Rename selected item |
 | F5     |   Test the app |
+| Ctrl            |    Snap to grid   |
 | Ctrl + s      |    Save the app |
 | Ctrl + x      |    Cut  (not screens) |
 | Ctrl + c      |    Copy  (not screens) |
@@ -20,3 +21,6 @@ to:
 ```html
 <!--<script src="/static/addons/keyboard.js"></script>-->
 ```
+
+## Known issues
+- Snap to grid does not work in Firefox unless the **privacy.resistFingerprinting** option is set to false. You can change it in **about:config**. Another alternative is to change the keyboard shortcut to one that Firefox can detect.

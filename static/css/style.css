@@ -9,7 +9,6 @@
          url('/static/fonts/icon-works-webfont.svg#icon-worksregular') format('svg');
     font-weight: normal;
     font-style: normal;
-
 }
 
 .logo{
@@ -54,8 +53,21 @@ a{
 
 
 .primary{
-    background-color: var(--primary);
-    color: var(--primary-text);
+    background-color: var(--primary-bg);
+    color: var(--primary-fg);
+    border: var(--primary-border);
+}
+
+.primary:hover{
+    background-color: var(--primary-bg-hover);
+    color: var(--primary-fg-hover);
+    border: var(--primary-border-hover);
+}
+
+.primary:active{
+    background-color: var(--primary-bg-active);
+    color: var(--primary-fg-active);
+    border: var(--primary-border-active);
 }
 
 .delete{
@@ -65,22 +77,26 @@ a{
 
 button{
     border-radius: var(--button-radius);
-    background-color: var(--secondary);
-    color: var(--secondary-inverse);
+    background-color: var(--secondary-bg);
+    color: var(--secondary-fg);
     font-size: 16px;
-    border: var(--button-border);
+    border: var(--secondary-border);
     padding-top: 10px;
     padding-bottom: 10px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: var(--font);
 }
 
 button:hover{
-    background-color: var(--secondary-hover);
+    background-color: var(--secondary-bg-hover);
+    color: var(--secondary-fg-hover);
+    border: var(--secondary-border-hover);
     cursor:pointer;
 }
 
 button:active{
-    border-color: var(--text);
+    background-color: var(--secondary-bg-active);
+    color: var(--secondary-fg-active);
+    border: var(--secondary-border-active);
 }
 
 .screen{
@@ -214,7 +230,7 @@ input, textarea{
 }
 
 .navbar a.primary {
-    color: var(--primary-text);
+    color: var(--primary-fg);
 }
   
 /* The dropdown container */
@@ -292,6 +308,7 @@ input, textarea{
     border-left: var(--sidebar-border);
     padding: 10px;
     overflow-y: scroll;
+    box-sizing: border-box;
 }
 
 .sidebar-header{

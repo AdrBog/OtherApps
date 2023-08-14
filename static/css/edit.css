@@ -11,6 +11,8 @@ body{
     user-select: none;
     border: 2px dotted;
     border-color: rgba(0, 0, 0, 0);
+    background-color: var(--map-bg);
+    color: var(--map-fg);
     padding-top: 4px;
     padding-bottom: 4px;
 }
@@ -25,12 +27,14 @@ body{
 }
 
 .map-children:hover, .map-screen:hover{
-    background-color: var(--map-hover);
+    background-color: var(--map-bg-hover);
+    color: var(--map-fg-hover);
 }
 
 .map-selected, .map-selected:hover{
-    background-color: var(--map-active);
-    border-color:var(--map-border);
+    background-color: var(--map-bg-active);
+    color: var(--map-fg-active);
+    border: var(--map-border);
 }
 
 
