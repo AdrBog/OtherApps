@@ -165,6 +165,7 @@
                                         <option value="Courier New">Courier New</option>
                                         <option value="Brush Script MT">Brush Script MT</option>
                                         <option value="System-UI">System-UI</option>
+                                        <option value="icon-worksregular">Icon-Works</option>
                                     </select></td>
                                 </tr>
                                 <tr>
@@ -276,7 +277,6 @@
         const infoOnClick =         document.getElementById("edit-info-onclick");
 
         // Custom events
-        const itemClicked =         new Event("item-clicked");
         const tableIdChanged =      new Event("table-id-changed");
         const tableTextChanged =    new Event("table-text-changed");
         const tableShowChanged =    new Event("table-show-changed");
@@ -487,17 +487,31 @@
             refresh_map();
             return newid;
         }
-
+        
         function del(id){
             element = document.getElementById(id);
             if (element.getAttribute('class').split(' ')[0] == "Screen"){
                 if (confirm("Are you sure you want to delete " + element.getAttribute("Id") + "?")) {
                     document.getElementById("map-screen-for-" + currentScreen.getAttribute("id")).remove();
                     document.getElementById(currentScreen.getAttribute("id")).remove();
+                    document.dispatchEvent(new CustomEvent("item-deleted", {
+                        "detail": {
+                            "id": id,
+                            "type": element.getAttribute('class').split(' ')[0],
+                            "element": element
+                        }
+                    }));
                 }
             }else{
                 element.remove();
                 click(document.getElementById(currentScreen.getAttribute("id")));
+                document.dispatchEvent(new CustomEvent("item-deleted", {
+                    "detail": {
+                        "id": id,
+                        "type": element.getAttribute('class').split(' ')[0],
+                        "element": element
+                    }
+                }));
             }
         }
 
@@ -574,7 +588,14 @@
                 infoBgImage.value = getComputedStyle(item).backgroundImage;
                 infoOnClick.value = item.getAttribute("onClickALT");
             }
-            document.dispatchEvent(itemClicked);
+            //document.dispatchEvent(itemClicked);
+            document.dispatchEvent(new CustomEvent("item-clicked",{
+                "detail":{
+                    "id": item.getAttribute("id"),
+                    "type": item.getAttribute("class").split(" ")[0],
+                    "element": item
+                }
+            }));
         }
         
         function refresh_map(){
@@ -640,6 +661,7 @@
                                         'box-sizing: border-box"' +
                                         'data-x="64" data-y="64">Text</div>';
                     refresh_map();
+                    document.dispatchEvent(new CustomEvent("item-created", {"detail":{"id": "Label" + currentId, "type": type}}));
                     return "Label" + currentId;
                     break;
                 case "button":
@@ -663,6 +685,7 @@
                                         'box-sizing: border-box"' +
                                         'data-x="64" data-y="64" onClickALT="null">Button</div>';
                     refresh_map();
+                    document.dispatchEvent(new CustomEvent("item-created", {"detail":{"id": "Button" + currentId, "type": type}}));
                     return "Button" + currentId;
                     break;
                 
@@ -670,10 +693,11 @@
                     while(document.getElementById("Screen" + currentId) != null){
                             currentId++;
                     }
-                    virtualScreen.innerHTML += '<div class="Screen" name="Screen' + currentId + '" id="Screen' + currentId + '" style="position: relative; width: 100%; height: 100%; overflow: hidden; background-color: #fff;"></div>';
+                    virtualScreen.innerHTML += '<div screen class="Screen" name="Screen' + currentId + '" id="Screen' + currentId + '" style="position: relative; width: 100%; height: 100%; overflow: hidden; background-color: #fff;"></div>';
                     currentScreen = document.getElementById("Screen" + currentId);
                     refresh_map();
                     click(document.getElementById("Screen" + currentId));
+                    document.dispatchEvent(new CustomEvent("item-created", {"detail":{"id": "Screen" + currentId, "type": type}}));
                     return "Screen" + currentId;
                     break;
             
@@ -694,7 +718,7 @@
         var screens = xmlDoc.getElementsByTagName("Screen");
         for (i = 0; i < screens.length; i++){
             var screen_name = screens[i].getAttribute("Name");
-            virtualScreen.innerHTML += '<div class="Screen" name="' + screen_name + '" id="' + screen_name + '" style="' + decodeURI(screens[i].getAttribute("Style")) + '" onVisible="' + decodeURI(screens[i].getAttribute("OnVisible")).replace(/"/g, "&quot;") + '" ></div>';
+            virtualScreen.innerHTML += '<div screen class="Screen" name="' + screen_name + '" id="' + screen_name + '" style="' + decodeURI(screens[i].getAttribute("Style")) + '" onVisible="' + decodeURI(screens[i].getAttribute("OnVisible")).replace(/"/g, "&quot;") + '" ></div>';
             var screen_element = document.getElementById(screen_name);
             current_screen_childrens = screens[i].getElementsByTagName("Children");
             for (x = 0; x < current_screen_childrens.length; x++) {

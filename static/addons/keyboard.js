@@ -3,9 +3,6 @@
 
 var pasteinfo = Array(8);
 
-var snapx = 16;
-var snapy = 16;
-
 document.addEventListener('keydown', e => {
     // Save
     if (e.ctrlKey && e.key === 's'){
@@ -73,87 +70,4 @@ document.addEventListener('keydown', e => {
             click(document.getElementById(new_id));
         }
     }
-
-    // Snap to grid
-    if(e.ctrlKey && selected.getAttribute("class").split(" ", 1)[0].toLowerCase() != "screen"){
-        selected.classList.remove("drag-resize");
-        selected.classList.add("grid");
-    }
 })
-
-document.addEventListener('keyup', e => {
-    // Deactivate snap to grid
-    if(e.key = "Control"){
-        Array.from(screen_childrens).forEach(
-            (el) => {
-                el.classList.remove("grid");
-            }
-        );
-        if (selected.getAttribute("class").split(" ", 1)[0].toLowerCase() != "screen")
-            selected.classList.add("drag-resize");
-    }
-})
-
-
-interact(".grid")
-.resizable({
-    edges: { left: true, right: true, bottom: true, top: true },
-    listeners: {
-    move (event) {
-        var target = event.target
-        var x = (parseFloat(target.getAttribute('data-x')) || 0)
-        var y = (parseFloat(target.getAttribute('data-y')) || 0)
-
-        // update the element's style
-        target.style.width = event.rect.width+ 'px'
-        target.style.height = event.rect.height + 'px'
-
-        // translate when resizing from top or left edges
-        x += event.deltaRect.left
-        y += event.deltaRect.top
-
-        target.style.transform = 'translate(' + x + 'px,' + y + 'px)'
-
-        target.setAttribute('data-x', x)
-        target.setAttribute('data-y', y)
-    }
-    },
-    modifiers: [
-    interact.modifiers.snap({
-        targets: [interact.snappers.grid({ x: snapx, y: snapy })],
-        range: Infinity,
-        relativePoints: [ { x: 0, y: 0 } ]
-    }),
-    // keep the edges inside the parent
-    interact.modifiers.restrictEdges({
-        outer: 'parent'
-    }),
-
-    // minimum size
-    interact.modifiers.restrictSize({
-        min: { width: 32, height: 32 }
-    })
-    ],
-})
-.draggable({
-    listeners: { move (event){
-        var target = event.target
-        var x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx
-        var y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy
-        target.style.transform = 'translate(' + x + 'px, ' + y + 'px)'
-        target.setAttribute('data-x', x)
-        target.setAttribute('data-y', y)
-    } },
-    modifiers: [
-        interact.modifiers.snap({
-            targets: [
-              interact.snappers.grid({ x: snapx, y: snapy })
-            ],
-            range: Infinity,
-            relativePoints: [ { x: 0, y: 0 } ]
-          }),
-        interact.modifiers.restrictRect({
-            restriction: 'parent',
-            endOnly: true
-    })
-]})
