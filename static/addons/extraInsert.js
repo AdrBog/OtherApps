@@ -1,4 +1,8 @@
-// This addon adds more options to the insert button
+// Replace original label and button inserts
+document.getElementById("a-label").setAttribute("onclick", "extraInsert('label')");
+document.getElementById("a-button").setAttribute("onclick", "extraInsert('button')");
+
+// This addon adds extra options to the insert button
 
 document.getElementById("tool-bar-insert").innerHTML += '<hr>' +
     '<a href="#" onclick="extraInsert(\'database\')">Database</a>' +
@@ -11,6 +15,17 @@ document.getElementById("tool-bar-insert").innerHTML += '<hr>' +
 
 function extraInsert(item) {
     switch (item) {
+        case "label":
+            newitemID = insert("label");
+            newitemElement = document.getElementById(newitemID);
+            newitemElement.style.backgroundColor = "transparent";
+            newitemElement.style.whiteSpace = "pre";
+            break;
+        case "button":
+            newitemID = insert("button");
+            newitemElement = document.getElementById(newitemID);
+            newitemElement.style.whiteSpace = "pre";
+            break;
         case "plus":
             newitemID = insert("button");
             newitemElement = document.getElementById(newitemID);
@@ -52,11 +67,15 @@ function extraInsert(item) {
             rename(newitemID, "Home");
             break;
         case "database":
+            database = prompt("Enter database name, look at database manager if you don't remember.");
+            table = prompt("Enter table name, look at database manager if you don't remember.");
+            if (!database || !table)
+                break;
             newitemID = insert("label");
             newitemElement = document.getElementById(newitemID);
             newitemElement.style.width = "420px";
             newitemElement.style.height = "256px";
-            newitemElement.innerHTML = "<span style='display:flex; margin: 32px; flex: 1;'>\n\t<iframe src='/database/list/id/table' style='flex: 1;'></iframe>\n</span>";
+            newitemElement.innerHTML = "<span style='display:flex; margin: 32px; flex: 1;'>\n\t<iframe src='/database/list/" + database + "/" + table + "' style='flex: 1;'></iframe>\n</span>";
             rename(newitemID, "Database");
             break;
     }

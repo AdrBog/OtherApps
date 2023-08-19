@@ -20,11 +20,11 @@
         </div>
         <div class="form-table" id="table-app">
             <table>
-                <tr>
+                <tr id="tr-info-app-name">
                     <td>Display Name</td>
                     <td><input type="text" id="edit-info-app-name"></td>
                 </tr>
-                <tr>
+                <tr id="tr-info-app-w-h">
                     <td>Screen Size (W / H)</td>
                     <td>
                         <table>
@@ -33,7 +33,7 @@
                         </table>
                     </td>
                 </tr>
-                <tr>
+                <tr id="tr-info-default-screen">
                     <td>Default Screen</td>
                     <td><select id="edit-info-default-screen">
                     </select></td>
@@ -58,9 +58,9 @@
             <div class="dropdown">
                 <a class="dropbtn">Insert</a>
                 <div id="tool-bar-insert" class="dropdown-content">
-                    <a href="#" onclick="insert('screen');">Screen</a>
-                    <a href="#" onclick="insert('label');">Label</a>
-                    <a href="#" onclick="insert('button');">Button</a>
+                    <a id="a-screen" href="#" onclick="insert('screen');">Screen</a>
+                    <a id="a-label" href="#" onclick="insert('label');">Label</a>
+                    <a id="a-button" href="#" onclick="insert('button');">Button</a>
                 </div>
             </div>
             <a href="#" onclick="document.getElementById('settings-window').style.visibility = 'visible'">App Settings</a>
@@ -84,7 +84,7 @@
                     <div id="control-button">
                         <div id="table-id" style="overflow-y: hidden; height: 0;">
                             <table id="table-id-options">
-                                <tr>
+                                <tr id="tr-info-name">
                                     <td>Name (ID)</td>
                                     <td><input type="text" id="edit-info-name"/></td>
                                 </tr>
@@ -92,7 +92,7 @@
                         </div>
                         <div id="table-text" style="overflow-y: hidden; height: 0;">
                             <table id="table-text-options">
-                                <tr>
+                                <tr id="tr-info-text">
                                     <td>
                                         Text
                                     </td>
@@ -105,14 +105,7 @@
                         <div id="table-show" style="overflow-y: hidden; height: 0;">
                             <hr>
                             <table id="table-show-options">
-                                <tr>
-                                    <td>Visibility</td>
-                                    <td><select id="edit-info-visible">
-                                        <option value="visible">Visible</option>
-                                        <option value="hidden">Hidden</option>
-                                    </select></td>
-                                </tr>
-                                <tr>
+                                <tr id="tr-info-x-y">
                                     <td>Position (X / Y)</td>
                                     <td>
                                         <table>
@@ -121,7 +114,7 @@
                                         </table>
                                     </td>
                                 </tr>
-                                <tr>
+                                <tr id="tr-info-w-h">
                                     <td>Size (W / H)</td>
                                     <td>
                                         <table>
@@ -130,7 +123,7 @@
                                         </table>
                                     </td>
                                 </tr>
-                                <tr>
+                                <tr id="tr-info-z">
                                     <td>Z-Index</td>
                                     <td><input type="number" id="edit-info-z" min="-999" max="998"></td>
                                 </tr>
@@ -139,44 +132,27 @@
                         <div id="table-decor" style="overflow-y: hidden; height: 0;">
                             <hr>
                             <table id="table-decor-options">
-                                <tr>
+                                <tr id="tr-info-fill">
                                     <td>Fill</td>
                                     <td><input type="color" id="edit-info-fill"></td>
                                 </tr>
-                                <tr>
+                                <tr id="tr-info-color">
                                     <td>Color</td>
                                     <td><input type="color" id="edit-info-color"></td>
                                 </tr>
-                                <tr>
+                                <tr id="tr-info-font-size">
                                     <td>Font Size</td>
                                     <td><input type="number" id="edit-info-font-size" min="0"></td>
                                 </tr>
-                                <tr>
-                                    <td>Font Family</td>
-                                    <td><select id="edit-info-font-family">
-                                        <option value="Arial">Arial</option>
-                                        <option value="Verdana">Verdana</option>
-                                        <option value="Tahoma">Tahoma</option>
-                                        <option value="Trebuchet MS">Trebuchet MS</option>
-                                        <option value="Times New Roman">Times New Roman</option>
-                                        <option value="Georgia">Georgia</option>
-                                        <option value="Garamond">Garamond</option>
-                                        <option value="sans-serif">Sans Serif</option>
-                                        <option value="Courier New">Courier New</option>
-                                        <option value="Brush Script MT">Brush Script MT</option>
-                                        <option value="System-UI">System-UI</option>
-                                        <option value="icon-worksregular">Icon-Works</option>
-                                    </select></td>
-                                </tr>
-                                <tr>
+                                <tr id="tr-info-border">
                                     <td>Border</td>
                                     <td><input type="text" id="edit-info-border"></td>
                                 </tr>
-                                <tr>
+                                <tr id="tr-info-border-r">
                                     <td>Border Radius</td>
                                     <td><input type="number" id="edit-info-border-r" min="0"></td>
                                 </tr>
-                                <tr>
+                                <tr id="tr-info-bgimage">
                                     <td>Background Image</td>
                                     <td><textarea id="edit-info-bgimage" rows="4" spellcheck="false" mode="html" placeholder="Background Image"></textarea></td>
                                 </tr>
@@ -184,11 +160,11 @@
                         </div>
                         <div id="table-screen" style="overflow-y: hidden; height: 0;">
                             <table id="table-screen-options">
-                                <tr>
+                                <tr id="tr-info-bgcolor">
                                     <td>Fill</td>
                                     <td><input type="color" id="edit-info-bgcolor"></td>
                                 </tr>
-                                <tr>
+                                <tr id="tr-info-onvisible">
                                     <td>On Visible</td>
                                     <td><textarea id="edit-info-onvisible" rows="4" spellcheck="false" mode="javascript" placeholder="On Visible"></textarea></td>
                                 </tr>
@@ -197,7 +173,7 @@
                         <div id="table-button" style="overflow-y: hidden; height: 0;">
                             <hr>
                             <table id="table-button-options">
-                                <tr>
+                                <tr id="tr-info-onclick">
                                     <td>
                                         On Click
                                     </td>
@@ -228,21 +204,15 @@
         var urlsave = "/save";
         var urltest = "/play/" + appname + "/test";
         var can_click = true;
-        //var screen = document.getElementById("screen");
-        var map = document.getElementById("control-map");
         var xmlsave = "";
-        //var xmlUrl = {{ id }};
         var xml = {{ xmlfile | safe }};
         var selected;
         var textarea_selected;
 
-        // Snap grid
-        var xgrid = 32;
-        var ygrid = 32;
-
         const editorWindow =        document.getElementById("editor-window");
         const virtualScreen =       document.getElementById("virtual-screen");
         var screen_childrens =      virtualScreen.getElementsByTagName("div");
+        var map =                   document.getElementById("control-map");
         
         const tableApp =            document.getElementById("table-app");
         const tableId =             document.getElementById("table-id");
@@ -259,7 +229,6 @@
         const infoType =            document.getElementById("info-type");
         const infoName =            document.getElementById("edit-info-name");
         const infoText =            document.getElementById("edit-info-text");
-        const infoVisible =         document.getElementById("edit-info-visible");
         const infoX =               document.getElementById("edit-info-x");
         const infoY =               document.getElementById("edit-info-y");
         const infoW =               document.getElementById("edit-info-w");
@@ -268,7 +237,6 @@
         const infoFill =            document.getElementById("edit-info-fill");
         const infoColor =           document.getElementById("edit-info-color");
         const infoFontSize =        document.getElementById("edit-info-font-size");
-        const infoFontFamily =      document.getElementById("edit-info-font-family");
         const infoBorder =          document.getElementById("edit-info-border");
         const infoBorderRadius =    document.getElementById("edit-info-border-r");
         const infoBgImage =         document.getElementById("edit-info-bgimage");
@@ -329,7 +297,6 @@
             selected.setAttribute("data-x", infoX.value);
             selected.setAttribute("data-y", infoY.value);
             selected.style.transform = 'translate(' + infoX.value +'px, '+ infoY.value + 'px)';
-            selected.style.visibility = infoVisible.value;
             selected.style.width = infoW.value + 'px';
             selected.style.height = infoH.value + 'px';
             selected.style.zIndex = infoZ.value;
@@ -339,7 +306,6 @@
             selected.style.backgroundColor = infoFill.value;
             selected.style.color = infoColor.value;
             selected.style.fontSize = infoFontSize.value + 'px';
-            selected.style.fontFamily = infoFontFamily.value;
             selected.style.border = infoBorder.value;
             selected.style.borderRadius = infoBorderRadius.value + 'px';
             selected.style.backgroundImage = infoBgImage.value;
@@ -582,7 +548,6 @@
                 infoFill.value = rgb2hex(item.style.backgroundColor);
                 infoColor.value = rgb2hex(item.style.color);
                 infoFontSize.value = item.style.fontSize.replace(/\D/g,'');
-                infoFontFamily.value = item.style.fontFamily;
                 infoBorder.value = item.style.border;
                 infoBorderRadius.value = item.style.borderRadius.replace(/\D/g,''); 
                 infoBgImage.value = getComputedStyle(item).backgroundImage;
