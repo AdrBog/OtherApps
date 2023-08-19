@@ -39,6 +39,9 @@
         virtualScreen.setAttribute("name", app.getAttribute("DisplayName"));
         virtualScreen.style.width = app.getAttribute("Width") + 'px';
         virtualScreen.style.height = app.getAttribute("Height") + 'px';
+        Array.from(virtualScreen.getElementsByTagName("div")).forEach((item) => {
+            eval("_" + item.getAttribute("id") + " = document.getElementById('" + item.getAttribute("id") + "')")
+        });
 
         navigate(app.getAttribute("DefaultScreen"));
     </script>
