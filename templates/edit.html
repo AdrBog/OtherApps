@@ -208,6 +208,7 @@
         var xml = {{ xmlfile | safe }};
         var selected;
         var textarea_selected;
+        const valid_name = /^[a-zA-Z0-9_]{1,50}$/g;
 
         const editorWindow =        document.getElementById("editor-window");
         const virtualScreen =       document.getElementById("virtual-screen");
@@ -280,10 +281,11 @@
         })
         tableId.addEventListener('input', () => {
             old_name = selected.getAttribute("id");
-            if(document.getElementById(infoName.value) != null || ! infoName.value){
+            valid_name.lastIndex = 0;
+            infoName.classList.remove("error");
+            if(document.getElementById(infoName.value) != null || !valid_name.test(infoName.value)){
                 infoName.classList.add("error");
             } else {
-                infoName.classList.remove("error");
                 rename(old_name, infoName.value);
             }
             refresh_map();
