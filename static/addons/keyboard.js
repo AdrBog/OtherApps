@@ -1,9 +1,16 @@
 // This addon lets you add keyboard shortcuts to OtherApps
-// The copy and paste shortcuts are edited in "copypaste.js"
 
 var pasteinfo = Array(8);
 
 document.addEventListener('keydown', e => {
+    if (e.key === "Escape"){
+        e.preventDefault();
+        Array.from(document.getElementsByClassName("window")).forEach((win) => {
+            win.style.visibility = 'hidden';
+        })
+        can_click = true;
+    }
+
     // Save
     if (e.ctrlKey && e.key === 's'){
         e.preventDefault();

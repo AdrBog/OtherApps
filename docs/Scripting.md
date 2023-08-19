@@ -11,8 +11,8 @@ Scripts can be added from the OnVisible property of the Screens or the OnClick p
 ## Referencing items
 Suppose we have the following scenario:
 - Screen0
- - Label0
- - Button0
+    - Label0
+    - Button0
 
 And we want to change "Label0" text for another one when clicking "Button0". We have to add a script in the OnClick property of "Button0".
 We could use the traditional javascript way of referencing the label:

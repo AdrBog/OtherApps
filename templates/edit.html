@@ -553,7 +553,6 @@
                 infoBgImage.value = getComputedStyle(item).backgroundImage;
                 infoOnClick.value = item.getAttribute("onClickALT");
             }
-            //document.dispatchEvent(itemClicked);
             document.dispatchEvent(new CustomEvent("item-clicked",{
                 "detail":{
                     "id": item.getAttribute("id"),
