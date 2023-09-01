@@ -196,6 +196,7 @@
     <script>
         var screens, screen_list, currentScreen;
         var currentId = 0;
+        var buffer;
 
         var aceEditor = ace.edit("text-editor");
         aceEditor.session.setUseWrapMode(true);
@@ -484,6 +485,13 @@
         }
 
         function click(item) {
+            if (item.parentElement != virtualScreen){
+                while(!item.parentElement.getAttribute("class"))
+                    item = item.parentElement;
+                while(item.parentElement.getAttribute("class").split(" ")[0] != "Screen")
+                    item = item.parentElement;
+            }
+
             selected = item;
 
             switch(item.getAttribute("class").split(" ")[0]){

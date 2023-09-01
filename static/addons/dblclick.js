@@ -11,7 +11,7 @@ function openEditor(textarea){
 
 document.getElementById("virtual-screen").addEventListener('dblclick', (e) => {
     if (can_click)
-        switch(e.target.getAttribute("class").split(" ")[0]){
+        switch(selected.getAttribute("class").split(" ")[0]){
             case "Label":
                 openEditor(document.getElementById("edit-info-text"));
                 break;
