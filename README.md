@@ -49,6 +49,9 @@ You need to have Python with virtualenv and Git installed
   python -m flask run
 ```
 
+## Help
+If you need help, you can read the (incomplete) documentation or see the [examples](https://github.com/OtherExit/OtherApps-Examples)
+
 ## Scripts used
 <a href="https://interactjs.io/">interact.js</a> <br>
 <a href="https://github.com/ajaxorg/ace-builds/blob/master/LICENSE">Ace Editor<a>

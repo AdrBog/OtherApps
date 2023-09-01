@@ -6,6 +6,18 @@ document.getElementById("tr-info-text").insertAdjacentHTML("afterend",
     "</tr>"
 )
 
+// Display
+document.getElementById("tr-info-text").insertAdjacentHTML("afterend",
+    "<tr>" +
+    "<td>Display</td>" + 
+    "<td><select id='edit-info-display'>" +
+    "<option value='flex'>Flex</option>" +
+    "<option value='grid'>Grid</option>" +
+    "<option value='block'>Block</option>" +
+    "</select>" +
+    "</tr>"
+)
+
 // Visibility
 document.getElementById("tr-info-w-h").insertAdjacentHTML("afterend",
     "<tr>" +
@@ -64,6 +76,7 @@ document.getElementById("tr-info-font-size").insertAdjacentHTML("afterend",
 
 document.addEventListener('item-clicked', () => {
     document.getElementById("edit-info-visible").value = selected.style.visibility;
+    document.getElementById("edit-info-display").value = selected.style.display;
     document.getElementById("edit-info-font-family").value = selected.style.fontFamily;
     document.getElementById("edit-info-text-align").value = selected.style.justifyContent;
     document.getElementById("edit-info-use-pre").checked = selected.style.whiteSpace == "pre";
@@ -71,6 +84,7 @@ document.addEventListener('item-clicked', () => {
 })
 
 document.addEventListener('table-text-changed', () => {
+    selected.style.display = document.getElementById("edit-info-display").value;
     if(document.getElementById("edit-info-use-pre").checked){
         selected.style.whiteSpace = "pre";
     } else {

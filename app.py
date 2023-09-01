@@ -5,7 +5,7 @@ from werkzeug.exceptions import abort
 app = Flask(__name__)
 projects_dir = "projects"
 skel_dir = "static/skel"
-version="0.22"
+version="0.23"
 
 def get_db_connection(id):
     conn = sqlite3.connect(f'templates/databases/{id}/database.db')

@@ -14,6 +14,10 @@ function destroy(id){
     document.getElementById(id).remove();
 }
 
+function values(element, tag = "input"){
+    return element.getElementsByTagName(tag);
+}
+
 function sqlquery(database, query){
     url = "/database/exec/" + database;
     fetch(url, {

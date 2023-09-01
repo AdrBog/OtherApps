@@ -10,7 +10,9 @@ document.getElementById("tool-bar-insert").innerHTML += '<hr>' +
     '<a href="#" onclick="extraInsert(\'plus\')">Plus Icon</a>' +
     '<a href="#" onclick="extraInsert(\'refresh\')">Refresh Icon</a>' +
     '<a href="#" onclick="extraInsert(\'back\')">Back Icon</a>' +
-    '<a href="#" onclick="extraInsert(\'home\')">Home Icon</a>' ;
+    '<a href="#" onclick="extraInsert(\'home\')">Home Icon</a>' +
+    '<hr>' +
+    '<a href="#" onclick="extraInsert(\'input\')">Input</a>';
     
 
 function extraInsert(item) {
@@ -78,5 +80,15 @@ function extraInsert(item) {
             newitemElement.innerHTML = "<span style='display:flex; margin: 32px; flex: 1;'>\n\t<iframe src='/database/list/" + database + "/" + table + "' style='flex: 1;'></iframe>\n</span>";
             rename(newitemID, "Database");
             break;
+        case "input":
+            newitemID = insert("label");
+            newitemElement = document.getElementById(newitemID);
+            newitemElement.style.width = "294px";
+            newitemElement.style.height = "52px";
+            newitemElement.style.display = "grid";
+            newitemElement.innerHTML = "Text: <input type='text'>";
+            rename(newitemID, "Input");
+            break;
+
     }
 }
