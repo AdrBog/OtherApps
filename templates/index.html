@@ -18,11 +18,16 @@
             <span style="font-size: 24px;">About version {{ ver }}</span>
             <button onclick="document.getElementById('about-window').style.visibility = 'hidden';">X</button>
         </div>
-        <button onclick="document.getElementById('about-page1').style.height = '400px'; document.getElementById('about-page2').style.height = '0'">About</button>
-        <button onclick="document.getElementById('about-page1').style.height = '0'; document.getElementById('about-page2').style.height = '400px'">Third-party scripts</button><br>
+        <button onclick="document.getElementById('about-page1').style.height = '400px'; document.getElementById('about-page2').style.height = '0'; document.getElementById('about-page3').style.height = '0';">About</button>
+        <button onclick="document.getElementById('about-page1').style.height = '0'; document.getElementById('about-page2').style.height = '400px' ; document.getElementById('about-page3').style.height = '0';">Third-party scripts</button>
+        <button onclick="document.getElementById('about-page1').style.height = '0'; document.getElementById('about-page2').style.height = '0' ; document.getElementById('about-page3').style.height = '400px';">Change-log</button><br>
         <hr>
-        <iframe id="about-page1" src="/static/about/about.html" frameborder="0" style="height: 400px; width: 100%; overflow: hidden;"></iframe>
-        <iframe id="about-page2" src="/static/about/third-party.html" frameborder="0" style="height: 0; width: 100%; overflow: hidden;"></iframe>
+        <div style="position: relative; height: 400px;">
+            <iframe id="about-page1" src="/static/about/about.html" frameborder="0" style="position: absolute; height: 400px; width: 100%; overflow: hidden;"></iframe>
+            <iframe id="about-page2" src="/static/about/third-party.html" frameborder="0" style="position: absolute; height: 0; width: 100%; overflow: hidden;"></iframe>
+            <iframe id="about-page3" src="/static/about/changelog.html" frameborder="0" style="position: absolute; height: 0; width: 100%; overflow: hidden;"></iframe>
+
+        </div>
     </div>
     <div class="window" id="newapp-window" style="width: 30%; visibility: hidden;">
         <div class="horizontal-container space-between">

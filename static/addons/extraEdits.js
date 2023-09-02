@@ -55,6 +55,7 @@ document.getElementById("tr-info-font-size").insertAdjacentHTML("afterend",
     "<option value='Brush Script MT'>Brush Script MT</option>" +
     "<option value='System-UI'>System-UI</option>" +
     "<option value='icon-worksregular'>Icon-Works</option>" +
+    "<option value='aurulent-sans-mono'>Aurulent Sans Mono</option>" +
     "</select>" +
     "</td></tr>"
 );

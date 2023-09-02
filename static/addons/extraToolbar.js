@@ -12,7 +12,7 @@ toolbar.insertAdjacentHTML(
 const extraToolbar = document.getElementById("extra-tool-bar");
 
 extraToolbar.innerHTML += "" + 
-    "<input type='checkbox' id='snap_to_grid' name='snap_to_grid'>" +
+    "<input type='checkbox' id='snap_to_grid' name='snap_to_grid' checked>" +
     "<label for='snap_to_grid' style='padding-right:8px;'>Snap to grid</label>";
 
 extraToolbar.addEventListener("input", () => {

@@ -11,6 +11,13 @@
     font-style: normal;
 }
 
+@font-face {
+    font-family: 'aurulent-sans-mono';
+    src: url('/static/fonts/AurulentSansMNerdFontMono-Regular.otf');
+    font-weight: normal;
+    font-style: normal;
+}
+
 .logo{
     content: var(--logo);
 }

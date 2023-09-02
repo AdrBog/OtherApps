@@ -190,11 +190,12 @@
     </div>
     <script src="/static/js/interact.js"></script>
     {% include 'plugins.html' %}
-    <script src="/static/js/src-min-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
-    <script src="/static/js/src-min-noconflict/mode-javascript.js" type="text/javascript" charset="utf-8"></script>
-    <script src="/static/js/src-min-noconflict/mode-html.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/static/js/src-min-noconflict/ace.js"></script>
+    <script src="/static/js/src-min-noconflict/mode-javascript.js"></script>
+    <script src="/static/js/src-min-noconflict/mode-html.js"></script>
+    <script src="/static/js/sortable.min.js"></script>
     <script>
-        var screens, screen_list, currentScreen;
+        var screens, currentScreen;
         var currentId = 0;
         var buffer;
 
@@ -347,7 +348,13 @@
         }
 
         function generateXML(){
-            screen_list = virtualScreen.getElementsByClassName("Screen");
+            map_list = Array.from(document.querySelectorAll("[id^=map-screen-for-]"));
+            
+            screen_list = new Array;
+
+            for (let x = 0; x < map_list.length; x++)
+                screen_list.push(document.getElementById(map_list[x].getAttribute("id").split("-").pop()));
+            
             xmlsave = '';
             xmlsave += '<App DisplayName="' + infoAppName.value + '" DefaultScreen="' + infoDefaultScreen.value + '" Width="' + infoAppW.value + '" Height="' + infoAppH.value + '" OAVer="' + current_ver + '">';
             for (i = 0; i < screen_list.length; i++){
@@ -578,7 +585,7 @@
                 if (screen_childrens[i].getAttribute("class") == "Screen"){
                     screen_id = screen_childrens[i].getAttribute("id");
                     if (document.getElementById("map-screen-for-" + screen_id) == null){
-                        map.innerHTML += '<div id="map-screen-for-' + screen_id + '"></div>';
+                        map.innerHTML += '<div id="map-screen-for-' + screen_id + '" class="list-group-item"></div>';
                         document.getElementById("map-screen-for-" + screen_id).innerHTML += '<div class="map-screen" id="map-children-' + screen_id + '" point="' + screen_id + '"><span class="icon">® </span>' + screen_id + '</div>';
                         document.getElementById("map-screen-for-" + screen_id).innerHTML += '<div id="map-childrens-for-' + screen_id + '" expand="true" style="overflow: hidden;"></div>';
                     }
@@ -807,6 +814,10 @@
 
         // this function is used later in the resizing and gesture demos
         window.dragMoveListener = dragMoveListener
+
+        new Sortable(document.getElementById("control-map"), {
+            animation: 150,
+        });
     </script>
 </body>
 </html>
