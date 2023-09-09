@@ -11,7 +11,8 @@
     <script>
         var screen = document.getElementById("screen");
         //var xmlUrl = {{ id }};
-        var xml = {{ xmlfile | safe }};
+        var default_screen = "{{ s }}";
+        var xml = `{{ xmlfile | safe }}`;
         var currentScreen;
 
         const virtualScreen =       document.getElementById("virtual-screen");
@@ -42,8 +43,12 @@
         Array.from(virtualScreen.getElementsByTagName("div")).forEach((item) => {
             eval("_" + item.getAttribute("id") + " = document.getElementById('" + item.getAttribute("id") + "')")
         });
-
-        navigate(app.getAttribute("DefaultScreen"));
+        if (default_screen == "None"){
+            navigate(app.getAttribute("DefaultScreen"));
+        } else {
+            navigator(default_screen);
+        }
+        
     </script>
 </body>
 </html>

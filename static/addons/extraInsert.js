@@ -13,6 +13,8 @@ document.getElementById("tool-bar-insert").innerHTML += '<hr>' +
     '<a href="#" onclick="extraInsert(\'home\')">Home Icon</a>' +
     '<hr>' +
     '<a href="#" onclick="extraInsert(\'input\')">Input</a>' +
+    '<a href="#" onclick="extraInsert(\'checkbox\')">Checkbox</a>' +
+    '<a href="#" onclick="extraInsert(\'radio\')">Radio</a>' +
     '<a href="#" onclick="extraInsert(\'select\')">Select</a>';
     
 
@@ -96,19 +98,44 @@ function extraInsert(item) {
         case "input":
             newitemID = insert("label");
             newitemElement = document.getElementById(newitemID);
-            newitemElement.style.width = "294px";
-            newitemElement.style.height = "52px";
+            newitemElement.style.width = "256px";
+            newitemElement.style.height = "64px";
             newitemElement.style.display = "grid";
-            newitemElement.innerHTML = "Text: <input type='text'>";
+            newitemElement.style.overflow = "unset";
+            newitemElement.style.backgroundColor = "transparent";
+            newitemElement.innerHTML = "Text: <input type='text' class='themed-blue'>";
             rename(newitemID, "Input");
+            break;
+        case "checkbox":
+            newitemID = insert("label");
+            newitemElement = document.getElementById(newitemID);
+            newitemElement.style.width = "128px";
+            newitemElement.style.height = "64px";
+            newitemElement.style.display = "block";
+            newitemElement.style.overflow = "unset";
+            newitemElement.style.backgroundColor = "transparent";
+            newitemElement.innerHTML = "<input type='checkbox' class='themed-blue'> Checkbox";
+            rename(newitemID, "Checkbox");
+            break;
+        case "radio":
+            newitemID = insert("label");
+            newitemElement = document.getElementById(newitemID);
+            newitemElement.style.width = "128px";
+            newitemElement.style.height = "128px";
+            newitemElement.style.display = "block";
+            newitemElement.style.overflow = "unset";
+            newitemElement.style.backgroundColor = "transparent";
+            newitemElement.innerHTML = "<input type='radio' name='radio-sample' class='themed-blue'>\n<span style='vertical-align: middle;'>Option 1</span><br>\n<input type='radio' name='radio-sample' class='themed-blue'>\n<span style='vertical-align: middle;'>Option 2</span>";
+            rename(newitemID, "Radio");
             break;
         case "select":
             newitemID = insert("label");
             newitemElement = document.getElementById(newitemID);
-            newitemElement.style.width = "294px";
-            newitemElement.style.height = "52px";
+            newitemElement.style.width = "256px";
+            newitemElement.style.height = "64px";
             newitemElement.style.display = "grid";
-            newitemElement.innerHTML = "Text: \n<select>\n\t<option value='A'>A</option>\n\t<option value='B'>B</option>\n\t<option value='C'>C</option>\n</select>";
+            newitemElement.style.backgroundColor = "transparent";
+            newitemElement.innerHTML = "Text: \n<select class='themed-blue'>\n\t<option value='A'>A</option>\n\t<option value='B'>B</option>\n\t<option value='C'>C</option>\n</select>";
             rename(newitemID, "Select");
             break;
 

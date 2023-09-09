@@ -5,7 +5,7 @@ from werkzeug.exceptions import abort
 app = Flask(__name__)
 projects_dir = "projects"
 skel_dir = "static/skel"
-version="0.23"
+version="0.24"
 
 def get_db_connection(id):
     conn = sqlite3.connect(f'templates/databases/{id}/database.db')
@@ -50,19 +50,20 @@ def play(id, screen):
 
 @app.route('/embed/<id>/<screen>')
 def embed(id, screen):
-    xml = "`"
+    s = request.args.get('s', type = str)
     with open(f'{projects_dir}/{id}/{screen}.xml', 'r') as file:
-        xml += file.read().replace('\n', '')
-    xml += "`"
-    return render_template('embed.html', id=id, xmlfile=xml)
+        xml = file.read().replace('\n', '')
+    return render_template('embed.html', id=id, xmlfile=xml, s=s)
 
 @app.route('/edit/<id>')
 def edit(id):
-    xml = "`"
-    with open(f'{projects_dir}/{id}/1.xml', 'r') as file:
-        xml += file.read().replace('\n', '')
-    xml += "`"
-    return render_template('edit.html', id=id, xmlfile=xml, ver=version)
+    c = request.args.get('c', default = '1', type = str)
+    try:
+        with open(f'{projects_dir}/{id}/{c}.xml', 'r') as file:
+            xml = file.read().replace('\n', '')
+    except:
+        xml = '<App DisplayName="Component" DefaultScreen="Screen0" Width="800" Height="480" OAVer="0.24"><Screen Name="Screen0" Style="position:%20relative;%20width:%20100%25;%20height:%20100%25;%20overflow:%20hidden;background-color:%20rgb(255,%20255,%20255);" OnVisible=""></Screen></App>'
+    return render_template('edit.html', id=id, xmlfile=xml, ver=version, c=c)
 
 @app.route('/remove/<id>')
 def remove(id):

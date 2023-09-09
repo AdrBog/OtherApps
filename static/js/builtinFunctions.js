@@ -1,4 +1,4 @@
-function navigate(screen_name){
+function navigate(screen_name) {
     currentScreen = document.getElementById(screen_name);
 
     Array.from(virtualScreen.getElementsByClassName("Screen")).forEach(
@@ -10,21 +10,25 @@ function navigate(screen_name){
     eval(currentScreen.getAttribute("onVisible"));
 }
 
-function destroy(id){
+function destroy(id) {
     document.getElementById(id).remove();
 }
 
-function values(element, tag = "input"){
+function values(element, tag = "input") {
     return element.getElementsByTagName(tag);
 }
 
-function sqlquery(database, query){
+function exevent(type, init = {}) {
+    document.dispatchEvent(new CustomEvent(type, init));
+}
+
+function sqlquery(database, query) {
     url = "/database/exec/" + database;
     fetch(url, {
         method: "POST",
-        body: JSON.stringify({"final_command": query}),
-        headers: {"Content-type": "application/json; charset=UTF-8"}
+        body: JSON.stringify({ "final_command": query }),
+        headers: { "Content-type": "application/json; charset=UTF-8" }
     })
-    .then(response => console.log(response))
-    .catch(err => console.log(err));
+        .then(response => console.log(response))
+        .catch(err => console.log(err));
 }

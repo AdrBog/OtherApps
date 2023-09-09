@@ -62,42 +62,49 @@ interact(".grid")
         target.setAttribute('data-y', y)
     }
     },
-    modifiers: [
-    interact.modifiers.snap({
-        targets: [interact.snappers.grid({ x: snapx, y: snapy })],
-        range: Infinity,
-        relativePoints: [ { x: 0, y: 0 } ]
-    }),
-    // keep the edges inside the parent
-    interact.modifiers.restrictEdges({
-        outer: 'parent'
-    }),
-
-    // minimum size
-    interact.modifiers.restrictSize({
-        min: { width: 32, height: 32 }
-    })
-    ],
+    snapSize: {
+        targets: [
+          { x: 32 },
+          interact.createSnapGrid({ x: snapx, y: snapy }),
+        ],
+      },
 })
+
+interact(".grid")
 .draggable({
-    listeners: { move (event){
-        var target = event.target
-        var x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx
-        var y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy
-        target.style.transform = 'translate(' + x + 'px, ' + y + 'px)'
-        target.setAttribute('data-x', x)
-        target.setAttribute('data-y', y)
-    } },
-    modifiers: [
-        interact.modifiers.snap({
-            targets: [
-              interact.snappers.grid({ x: snapx, y: snapy })
-            ],
-            range: Infinity,
-            relativePoints: [ { x: 0, y: 0 } ]
-          }),
-        interact.modifiers.restrictRect({
-            restriction: 'parent',
-            endOnly: true
-    })
-]})
+    // the top left corner of the element will be (0, 0)
+    origin: 'parent',
+snap: {
+        // snap targets pay attention to the action's origin option
+    targets: [
+        interact.createSnapGrid({
+            x: snapx,
+            y: snapy,
+        })
+    ],
+    relativePoints: [
+        { x: 0, y: 0 }
+    ]
+},
+restrict: {
+        // restrictions *don't* pay attention to the action's origin option
+    // so using 'parent' for both origin and restrict.restriction works
+    restriction: 'parent',
+    elementRect: {top: 0, left: 0, bottom: 1, right: 1}
+},
+})
+.on('dragmove', function (event) {
+var target = event.target,
+        // keep the dragged position in the data-x/data-y attributes
+        x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx,
+        y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
+
+// translate the element
+target.style.webkitTransform =
+        target.style.transform =
+        'translate(' + x + 'px,' + y + 'px)';
+
+// update the posiion attributes
+target.setAttribute('data-x', x);
+target.setAttribute('data-y', y);
+});

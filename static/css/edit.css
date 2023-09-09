@@ -3,7 +3,11 @@ body{
     color: var(--text);
 }
 
-#virtual-screen input, #virtual-screen select, #virtual-screen textarea, #virtual-screen iframe{
+#virtual-screen{
+    border: 1px dotted #000;
+}
+
+#virtual-screen input, #virtual-screen select, #virtual-screen textarea, #virtual-screen iframe , #virtual-screen label{
     pointer-events:none;
 }
 

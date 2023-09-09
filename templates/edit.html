@@ -183,6 +183,8 @@
                                 </tr>
                             </table>
                         </div>
+                        <hr>
+                        <button style="padding: 0; font-size: 14px;" onclick="del(selected.getAttribute('id')); refresh_map();"><span style="font-family: aurulent-sans-mono; font-size: 14px;">󰩺 </span>Delete this item</button>
                     </div>
                 </div>
             </div>
@@ -195,7 +197,7 @@
     <script src="/static/js/src-min-noconflict/mode-html.js"></script>
     <script src="/static/js/sortable.min.js"></script>
     <script>
-        var screens, currentScreen;
+        var screens, currentScreen, screen_childrens;
         var currentId = 0;
         var buffer;
 
@@ -207,14 +209,13 @@
         var urltest = "/play/" + appname + "/test";
         var can_click = true;
         var xmlsave = "";
-        var xml = {{ xmlfile | safe }};
+        var xml = `{{ xmlfile | safe }}`;
         var selected;
         var textarea_selected;
         const valid_name = /^[a-zA-Z0-9_]{1,50}$/g;
 
         const editorWindow =        document.getElementById("editor-window");
         const virtualScreen =       document.getElementById("virtual-screen");
-        var screen_childrens =      virtualScreen.getElementsByTagName("div");
         var map =                   document.getElementById("control-map");
         
         const tableApp =            document.getElementById("table-app");
@@ -255,14 +256,6 @@
         const tableScreenChanged =  new Event("table-screen-changed");
         const tableButtonChanged =  new Event("table-button-changed");
 
-        document.addEventListener('keyup', (e) => {
-            if(selected.id != "screen")
-                if(e.key == "Delete")
-                    if (can_click){
-                        del(selected.getAttribute("id"));
-                    }
-                    refresh_map();
-        })
         map.addEventListener('click', (e) => {
             if (can_click){
                 infoName.classList.remove("error");
@@ -349,7 +342,7 @@
 
         function generateXML(){
             map_list = Array.from(document.querySelectorAll("[id^=map-screen-for-]"));
-            
+
             screen_list = new Array;
 
             for (let x = 0; x < map_list.length; x++)
@@ -358,7 +351,7 @@
             xmlsave = '';
             xmlsave += '<App DisplayName="' + infoAppName.value + '" DefaultScreen="' + infoDefaultScreen.value + '" Width="' + infoAppW.value + '" Height="' + infoAppH.value + '" OAVer="' + current_ver + '">';
             for (i = 0; i < screen_list.length; i++){
-                current_screen_childrens = screen_list[i].getElementsByTagName("div");
+                current_screen_childrens = screen_list[i].querySelectorAll(":scope > div");
                 xmlsave += '<Screen Name="' + screen_list[i].getAttribute("id") + '" Style="' + encodeURI(screen_list[i].getAttribute('style')) + '" OnVisible="' + encodeURI(screen_list[i].getAttribute('onVisible')) + '">';
                 for (x = 0; x < current_screen_childrens.length; x ++){
                     xmlsave += '<Children ' + 
@@ -400,13 +393,14 @@
                 body: JSON.stringify({
                     "id": "{{ id }}",
                     "xmldata": xmlsave,
-                    "screen" : 1
+                    "screen" : "{{ c }}"
                 }),
                 headers: {"Content-type": "application/json; charset=UTF-8"}
             })
             .then(response => response.json()) 
             .then( alert("App saved")) //json => console.log(json))
             .catch(err => console.log(err));
+            document.dispatchEvent(new Event("app-saved"));
         }
 
         function click_map(item){
@@ -421,7 +415,7 @@
         }
 
         function refresh_screens(){
-            screen_list = virtualScreen.getElementsByClassName("Screen");
+            screen_list = virtualScreen.querySelectorAll(":scope > div");
             currentDefaultScreen = infoDefaultScreen.value;
             infoDefaultScreen.innerHTML = "";
             for (i = 0; i < screen_list.length; i ++){
@@ -580,6 +574,7 @@
         }
         
         function refresh_map(){
+            screen_childrens = virtualScreen.querySelectorAll(":scope > div, :scope > div > div");
             map_childrens = map.getElementsByTagName("div");
             for (i = 0; i < screen_childrens.length; i++){
                 if (screen_childrens[i].getAttribute("class") == "Screen"){
@@ -591,7 +586,7 @@
                     }
                     current_map_childrens = document.getElementById("map-childrens-for-" + screen_id);
                     current_map_childrens_list = current_map_childrens.getElementsByTagName("div");
-                    current_screen_childrens = document.getElementById(screen_id).getElementsByTagName("div");
+                    current_screen_childrens = document.getElementById(screen_id).querySelectorAll(":scope > div");
 
                     if (current_map_childrens.getAttribute("expand") == "true"){
                         current_map_childrens.style.height = "auto";

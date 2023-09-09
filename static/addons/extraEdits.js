@@ -1,8 +1,28 @@
 // Use pre white-space
+document.getElementById("tr-info-bgcolor").insertAdjacentHTML("afterend",
+    "<tr>" +
+    "<td>Transparent</td>" + 
+    "<td><input type='checkbox' id='edit-info-transparent-screen'></td>" +
+    "</tr>"
+)
+
+// Use pre white-space
 document.getElementById("tr-info-text").insertAdjacentHTML("afterend",
     "<tr>" +
     "<td>Pre white-space</td>" + 
     "<td><input type='checkbox' id='edit-info-use-pre'></td>" +
+    "</tr>"
+)
+
+// Overflow
+document.getElementById("tr-info-text").insertAdjacentHTML("afterend",
+    "<tr>" +
+    "<td>Overflow</td>" + 
+    "<td><select id='edit-info-overflow'>" +
+    "<option value='unset'>Unset</option>" +
+    "<option value='hidden'>Hidden</option>" +
+    "<option value='scroll'>Scroll</option>" +
+    "</select>" +
     "</tr>"
 )
 
@@ -14,6 +34,7 @@ document.getElementById("tr-info-text").insertAdjacentHTML("afterend",
     "<option value='flex'>Flex</option>" +
     "<option value='grid'>Grid</option>" +
     "<option value='block'>Block</option>" +
+    "<option value='inline'>Inline</option>" +
     "</select>" +
     "</tr>"
 )
@@ -78,14 +99,17 @@ document.getElementById("tr-info-font-size").insertAdjacentHTML("afterend",
 document.addEventListener('item-clicked', () => {
     document.getElementById("edit-info-visible").value = selected.style.visibility;
     document.getElementById("edit-info-display").value = selected.style.display;
+    document.getElementById("edit-info-overflow").value = selected.style.overflow;
     document.getElementById("edit-info-font-family").value = selected.style.fontFamily;
     document.getElementById("edit-info-text-align").value = selected.style.justifyContent;
     document.getElementById("edit-info-use-pre").checked = selected.style.whiteSpace == "pre";
-    document.getElementById("edit-info-transparent-bg").checked = selected.style.backgroundColor == "transparent"
+    document.getElementById("edit-info-transparent-bg").checked = selected.style.backgroundColor == "transparent";
+    document.getElementById("edit-info-transparent-screen").checked = currentScreen.style.backgroundColor == "transparent"
 })
 
 document.addEventListener('table-text-changed', () => {
     selected.style.display = document.getElementById("edit-info-display").value;
+    selected.style.overflow = document.getElementById("edit-info-overflow").value;
     if(document.getElementById("edit-info-use-pre").checked){
         selected.style.whiteSpace = "pre";
     } else {
@@ -97,9 +121,15 @@ document.addEventListener('table-show-changed', () => {
     selected.style.visibility = document.getElementById("edit-info-visible").value;
 })
 
+document.addEventListener('table-screen-changed', () => {
+    if (document.getElementById("edit-info-transparent-screen").checked)
+        currentScreen.style.backgroundColor = "transparent";
+})
+
 document.addEventListener('table-decor-changed', () => {
     if (document.getElementById("edit-info-transparent-bg").checked)
         selected.style.backgroundColor = "transparent";
+
     selected.style.fontFamily = document.getElementById("edit-info-font-family").value;
     selected.style.justifyContent = document.getElementById("edit-info-text-align").value;
     selected.style.textAlign = document.getElementById("edit-info-text-align").value;
