@@ -2,11 +2,24 @@
     <link rel="stylesheet" href="/static/css/style.css">
 </head>
 <h2>Change-log</h2>
-<pre style="font-size: 16px;">
+<pre style="font-size: 16px; white-space: pre-wrap;">
+<b>v 0.3</b>
+<b>- Created the config folder</b>
+- Addons are now configurable in config/addons.yml
+    - File templates/plugins.html is deprecated
+- static/js/builtinFunctions.js:
+    - Function sqlquery() now works in async/await functions
+- Added "red" and "orange" themes in static/css/virtual-screen.css
+- Added new addons:
+    - static/addons/extraEditor.js: Adds a toolbar to your code editor
+    - static/addons/scaleApp.js: Now apps are scaled to fit screen size
+- New route "/database/raw/x/y" will return info about table y from x database, you can use it in your apps as an iframe to extract info
+- Fixed minor issues
+<hr>
 <b>v 0.24</b>
 - Made easier to add divs inside divs in your applications
 - Added components in Other Apps
-- Added new functions in static/js/builtinFunctions.js
+- Added new function in static/js/builtinFunctions.js:
     - Function exevent()
 - Added themes inside app
 - Added "unsaved changes" message before leaving page
@@ -29,7 +42,7 @@
 - Fixed minor issues
 <hr>
 <b>v 0.2</b>
-- Database manager added to Other Apps
+<b>- Database manager added to Other Apps</b>
 - Added new functions in static/js/builtinFunctions.js
 - Fixed minor issues
 <hr>

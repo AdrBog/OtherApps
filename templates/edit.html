@@ -191,18 +191,24 @@
         </div>
     </div>
     <script src="/static/js/interact.js"></script>
-    {% include 'plugins.html' %}
+    {% for addon in addons %}
+    <script src="{{addon}}"></script>
+    {% endfor %}
     <script src="/static/js/src-min-noconflict/ace.js"></script>
     <script src="/static/js/src-min-noconflict/mode-javascript.js"></script>
     <script src="/static/js/src-min-noconflict/mode-html.js"></script>
     <script src="/static/js/sortable.min.js"></script>
     <script>
-        var screens, currentScreen, screen_childrens;
-        var currentId = 0;
+        var screens;
+        var currentScreen;
+        var screen_childrens;
         var buffer;
+        var currentId = 0;
 
         var aceEditor = ace.edit("text-editor");
         aceEditor.session.setUseWrapMode(true);
+        aceEditor.setOption("showPrintMargin", false);
+        
         var appname = "{{ id }}";
         var current_ver = "{{ ver }}"
         var urlsave = "/save";

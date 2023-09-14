@@ -45,7 +45,7 @@ You need to have Python with virtualenv and Git installed
   cd OtherApps
   python -m venv venv
   source venv/bin/activate
-  pip install flask
+  pip install flask pyyaml
   python -m flask run
 ```
 

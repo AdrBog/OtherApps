@@ -39,6 +39,9 @@
     Deletes the database, this action cannot be undone. <br><br>
     <button class="delete wide" onclick="del()">Delete database</button>
     <br> <br>
+    {% for addon in addons %}
+    <script src="{{addon}}"></script>
+    {% endfor %}
     <script src="/static/js/src-min-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
     <script src="/static/js/src-min-noconflict/mode-javascript.js" type="text/javascript" charset="utf-8"></script>
     <script src="/static/js/src-min-noconflict/mode-html.js" type="text/javascript" charset="utf-8"></script>

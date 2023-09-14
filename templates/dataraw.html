@@ -1,0 +1,1 @@
+{% for row in table_data %}<div id="data_{{ row['id'] }}">{% for x in columns_names %}{{ row[x] }}|{% endfor %}</div>{% endfor %}

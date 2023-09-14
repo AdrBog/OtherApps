@@ -1,0 +1,37 @@
+# In this file you tell Other Apps which addons to include during the program execution.
+# Addons are simply javascript files that are included in the app
+
+# If you are using Other Apps < 0.3 ignore this file and use templates/plugins.html
+
+# Index:      Addons to be executed when you are in /
+# Editor:     Addons to be executed when you are in /edit
+# Play:       Addons to be executed when you are in /play
+# Embed:      Addons to be executed when you are in /embed
+# Datainfo:   Addons to be executed when you are in /database/info
+
+# /static/addons/extraToolbar.js      Extra toolbar in your app
+# /static/addons/extraInsert.js       More items to add in the Insert list
+# /static/addons/extraEditor.js       More options for your code editor
+# /static/addons/extraEdits.js        More options for your app items
+# /static/addons/keyboard.js          Add keyboard shortcuts in your editor
+# /static/addons/dblclick.js          Open code editor when you double click an item
+# /static/addons/unsave.js            Show "unsaved changes" dialog when you close the editor
+# /static/addons/scaleApp.js          Apps are scaled to fit screen size
+
+Index: []
+
+Editor:
+  - /static/addons/extraToolbar.js
+  - /static/addons/extraInsert.js
+  - /static/addons/extraEditor.js
+  - /static/addons/extraEdits.js
+  - /static/addons/keyboard.js
+  - /static/addons/dblclick.js
+  - /static/addons/unsave.js
+
+Play:
+  - /static/addons/scaleApp.js
+
+Embed: []
+
+Datainfo: []

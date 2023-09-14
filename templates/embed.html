@@ -8,9 +8,11 @@
 <body style="margin: 0;">
     <div id="virtual-screen" name="" style="position: relative; background-color: white;"></div>
     <script src="/static/js/builtinFunctions.js"></script>
+    {% for addon in addons %}
+    <script src="{{addon}}"></script>
+    {% endfor %}
     <script>
         var screen = document.getElementById("screen");
-        //var xmlUrl = {{ id }};
         var default_screen = "{{ s }}";
         var xml = `{{ xmlfile | safe }}`;
         var currentScreen;
@@ -40,7 +42,7 @@
         virtualScreen.setAttribute("name", app.getAttribute("DisplayName"));
         virtualScreen.style.width = app.getAttribute("Width") + 'px';
         virtualScreen.style.height = app.getAttribute("Height") + 'px';
-        Array.from(virtualScreen.getElementsByTagName("div")).forEach((item) => {
+        Array.from(virtualScreen.querySelectorAll("[id]")).forEach((item) => {
             eval("_" + item.getAttribute("id") + " = document.getElementById('" + item.getAttribute("id") + "')")
         });
         if (default_screen == "None"){

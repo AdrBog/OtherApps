@@ -75,6 +75,9 @@
             </div>
         </div>
     </div>
+    {% for addon in addons %}
+    <script src="{{addon}}"></script>
+    {% endfor %}
     <script>
         var urlsave = "/save";
         var forbiddenchars = /[`!@#$%^&*()+=\[\]{};':"\\|,.<>\/?~ ]/;

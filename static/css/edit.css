@@ -45,8 +45,15 @@ body{
     border: var(--map-border);
 }
 
-
 #virtual-screen{
     display:block;
     margin: auto auto;
+}
+
+#editor-window{
+    opacity: 0.5;
+}
+
+#editor-window:hover{
+    opacity: 1;
 }

@@ -26,6 +26,27 @@ document.getElementById("tr-info-text").insertAdjacentHTML("afterend",
     "</tr>"
 )
 
+// Align items
+document.getElementById("tr-info-text").insertAdjacentHTML("afterend",
+    "<tr>" +
+    "<td>Align Items</td>" + 
+    "<td><select id='edit-info-align-items'>" +
+    "<option value='center'>Center</option>" +
+    "<option value='baseline'>Baseline</option>" +
+    "<option value='end'>End</option>" +
+    "<option value='flex-end'>Flex-end</option>" +
+    "<option value='flex-start'>Flex-start</option>" +
+    "<option value='inherit'>Inherit</option>" +
+    "<option value='normal'>Normral</option>" +
+    "<option value='revert'>Revert</option>" +
+    "<option value='self-end'>Self-end</option>" +
+    "<option value='self-start'>Self-start</option>" +
+    "<option value='start'>Start</option>" +
+    "<option value='unset'>Unset</option>" +
+    "</select>" +
+    "</tr>"
+)
+
 // Display
 document.getElementById("tr-info-text").insertAdjacentHTML("afterend",
     "<tr>" +
@@ -99,6 +120,7 @@ document.getElementById("tr-info-font-size").insertAdjacentHTML("afterend",
 document.addEventListener('item-clicked', () => {
     document.getElementById("edit-info-visible").value = selected.style.visibility;
     document.getElementById("edit-info-display").value = selected.style.display;
+    document.getElementById("edit-info-align-items").value = selected.style.alignItems;
     document.getElementById("edit-info-overflow").value = selected.style.overflow;
     document.getElementById("edit-info-font-family").value = selected.style.fontFamily;
     document.getElementById("edit-info-text-align").value = selected.style.justifyContent;
@@ -110,6 +132,7 @@ document.addEventListener('item-clicked', () => {
 document.addEventListener('table-text-changed', () => {
     selected.style.display = document.getElementById("edit-info-display").value;
     selected.style.overflow = document.getElementById("edit-info-overflow").value;
+    selected.style.alignItems = document.getElementById("edit-info-align-items").value;
     if(document.getElementById("edit-info-use-pre").checked){
         selected.style.whiteSpace = "pre";
     } else {

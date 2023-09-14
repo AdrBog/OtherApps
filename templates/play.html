@@ -9,13 +9,18 @@
 <body>
     <div class="screen">
         <span id="display-name"></span>
-        <div class="app">
+        <div id="app" class="app">
             <iframe id="app-frame" src="{{ url_for('embed', id=id , screen=screen) }}" frameborder="0"></iframe>
         </div>
     </div>
+    {% for addon in addons %}
+    <script src="{{addon}}"></script>
+    {% endfor %}
     <script>
         const appFrame = document.getElementById("app-frame");
-        window.addEventListener('load', function () {
+        const app = document.getElementById("app");
+
+        window.addEventListener('load', () => {
             document.getElementById("display-name").innerHTML = document.getElementById('app-frame').contentWindow.document.getElementById("virtual-screen").getAttribute("name");
             appFrame.style.width = document.getElementById('app-frame').contentWindow.document.getElementById("virtual-screen").style.width;
             appFrame.style.height = document.getElementById('app-frame').contentWindow.document.getElementById("virtual-screen").style.height;

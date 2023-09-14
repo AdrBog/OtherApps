@@ -112,19 +112,6 @@ button:active{
     color: #000;
 }
 
-.app iframe {
-    display:block;
-    margin: 0 auto;
-}
-
-.app{
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: #505050;
-}
-
 .vertical-container{
     display: flex;
     height: 100%;

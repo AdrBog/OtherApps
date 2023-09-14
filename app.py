@@ -1,11 +1,18 @@
-import os, shutil, sqlite3, json
+import os, shutil, sqlite3, json, yaml
 from flask import Flask, render_template, request, jsonify, redirect, url_for
 from werkzeug.exceptions import abort
+from yaml.loader import SafeLoader
+
 
 app = Flask(__name__)
 projects_dir = "projects"
+config_dir = "config"
 skel_dir = "static/skel"
-version="0.24"
+version="0.3"
+
+def reload_addons():
+    with open(f'{config_dir}/addons.yml') as addon_file:
+        return yaml.load(addon_file, Loader=SafeLoader)
 
 def get_db_connection(id):
     conn = sqlite3.connect(f'templates/databases/{id}/database.db')
@@ -33,37 +40,43 @@ def get_columns_types(id, table):
     columnsQuery = conn.execute(f"pragma table_info('{table}')")
     columnInfos = columnsQuery.fetchall()
     columnTypes = [item[2] for item in columnInfos]
+    conn.close()
     return columnTypes
 
 @app.route('/')
 def index():
+    addons = reload_addons()
+    reload_addons()
     if not os.path.exists(f"{projects_dir}"):
         os.makedirs(f"{projects_dir}")
     if not os.path.exists(f"templates/databases"):
         os.makedirs(f"templates/databases")
     projects = os.listdir(f'{projects_dir}/')
-    return render_template('index.html', projects=projects, ver=version)
+    return render_template('index.html', projects=projects, ver=version, addons=addons["Index"])
 
 @app.route('/play/<id>/<screen>')
 def play(id, screen):
-    return render_template('play.html', id=id, screen=screen)
+    addons = reload_addons()
+    return render_template('play.html', id=id, screen=screen, addons=addons["Play"])
 
 @app.route('/embed/<id>/<screen>')
 def embed(id, screen):
+    addons = reload_addons()
     s = request.args.get('s', type = str)
     with open(f'{projects_dir}/{id}/{screen}.xml', 'r') as file:
         xml = file.read().replace('\n', '')
-    return render_template('embed.html', id=id, xmlfile=xml, s=s)
+    return render_template('embed.html', id=id, xmlfile=xml, s=s, addons=addons["Embed"])
 
 @app.route('/edit/<id>')
 def edit(id):
+    addons = reload_addons()
     c = request.args.get('c', default = '1', type = str)
     try:
         with open(f'{projects_dir}/{id}/{c}.xml', 'r') as file:
             xml = file.read().replace('\n', '')
     except:
         xml = '<App DisplayName="Component" DefaultScreen="Screen0" Width="800" Height="480" OAVer="0.24"><Screen Name="Screen0" Style="position:%20relative;%20width:%20100%25;%20height:%20100%25;%20overflow:%20hidden;background-color:%20rgb(255,%20255,%20255);" OnVisible=""></Screen></App>'
-    return render_template('edit.html', id=id, xmlfile=xml, ver=version, c=c)
+    return render_template('edit.html', id=id, xmlfile=xml, ver=version, c=c, addons=addons["Editor"])
 
 @app.route('/remove/<id>')
 def remove(id):
@@ -99,6 +112,7 @@ def database_menu():
 
 @app.route('/database/info/<id>')
 def database_info(id):
+    addons = reload_addons()
     path = os.path.abspath('templates/databases/' + id)
     with open(f'templates/databases/{id}/schema.sql', 'r') as file:
         schema = file.read().replace('\n', '\\n')
@@ -109,7 +123,14 @@ def database_info(id):
     tables = json.dumps(tables)
     conn.close()
     projects = os.listdir(f'{projects_dir}/')
-    return render_template('datainfo.html', id=id, path=path, schema=schema, tables=tables, projects=projects, ver=version)
+    return render_template('datainfo.html', id=id, path=path, schema=schema, tables=tables, projects=projects, ver=version, addons=addons["Datainfo"])
+
+@app.route('/database/raw/<id>/<table>')
+def database_data(id, table):
+    conn = get_db_connection(id)
+    table_data = conn.execute(f'SELECT * FROM {table}').fetchall()
+    conn.close()
+    return render_template(f'dataraw.html', id=id, table=table, columns_names=get_columns_names(id, table), table_data=table_data)
 
 @app.route('/database/list/<id>/<table>')
 def database_list(id, table):
