@@ -22,6 +22,13 @@ function exevent(type, init = {}) {
     document.dispatchEvent(new CustomEvent(type, init));
 }
 
+async function sqljson(database, table, filter = "") {
+    url = "/database/json/" + database + "/" + table + "?f=" + filter;
+    const res = await fetch(url);
+    const data = await res.json();
+    return data;
+}
+
 function sqlquery(database, query) {
     url = "/database/exec/" + database;
     return new Promise((resolve) => fetch(url, {

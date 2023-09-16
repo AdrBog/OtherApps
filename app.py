@@ -8,7 +8,7 @@ app = Flask(__name__)
 projects_dir = "projects"
 config_dir = "config"
 skel_dir = "static/skel"
-version="0.3"
+version="0.3.1"
 
 def reload_addons():
     with open(f'{config_dir}/addons.yml') as addon_file:
@@ -114,8 +114,6 @@ def database_menu():
 def database_info(id):
     addons = reload_addons()
     path = os.path.abspath('templates/databases/' + id)
-    with open(f'templates/databases/{id}/schema.sql', 'r') as file:
-        schema = file.read().replace('\n', '\\n')
     conn = sqlite3.connect(f'templates/databases/{id}/database.db')
     cursor = conn.cursor()
     cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
@@ -123,14 +121,28 @@ def database_info(id):
     tables = json.dumps(tables)
     conn.close()
     projects = os.listdir(f'{projects_dir}/')
-    return render_template('datainfo.html', id=id, path=path, schema=schema, tables=tables, projects=projects, ver=version, addons=addons["Datainfo"])
+    return render_template('datainfo.html', id=id, path=path, tables=tables, projects=projects, ver=version, addons=addons["Datainfo"])
 
-@app.route('/database/raw/<id>/<table>')
-def database_data(id, table):
+@app.route('/database/json/<id>/<table>', methods=('GET', 'POST'))
+def generate_json(id, table):
+    filters = request.args.get('f', type = str)
     conn = get_db_connection(id)
-    table_data = conn.execute(f'SELECT * FROM {table}').fetchall()
+    rows = conn.execute(f'SELECT * FROM {table} {filters}').fetchall()
     conn.close()
-    return render_template(f'dataraw.html', id=id, table=table, columns_names=get_columns_names(id, table), table_data=table_data)
+    data = {"columns_names" : [], "columns_types" : [], "items" : []}
+
+    for column in get_columns_names(id, table):
+        data["columns_names"].append(column)
+
+    for col_type in get_columns_types(id, table):
+        data["columns_types"].append(col_type)
+
+    for row in rows:
+        item = {"id" : row["id"]}
+        for column in row.keys():
+            item[column] = row[column]
+        data["items"].append(item)
+    return jsonify(data)
 
 @app.route('/database/list/<id>/<table>')
 def database_list(id, table):
@@ -154,7 +166,6 @@ def database_exec(id):
 def database_new(id):
     if not os.path.exists(f"templates/databases/{id}"):
         os.makedirs(f"templates/databases/{id}")
-    shutil.copyfile(f"{skel_dir}/schema.sql", f"templates/databases/{id}/schema.sql")
     shutil.copyfile(f"{skel_dir}/new.html", f"templates/databases/{id}/new.html")
     shutil.copyfile(f"{skel_dir}/edit.html", f"templates/databases/{id}/edit.html")
     shutil.copyfile(f"{skel_dir}/preview.html", f"templates/databases/{id}/preview.html")

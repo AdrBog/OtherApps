@@ -52,7 +52,7 @@
     </div>
     <div class="vertical-container">
         <div id="tool-bar" class="navbar">
-            <a class="primary" href="{{ url_for('index') }}">Other Apps</a>
+            <a class="home" href="{{ url_for('index') }}">Other Apps</a>
             <a href="#" onclick="save()">Save</a>
             <a href="#" onclick="test()">Test</a>
             <div class="dropdown">
@@ -198,6 +198,7 @@
     <script src="/static/js/src-min-noconflict/mode-javascript.js"></script>
     <script src="/static/js/src-min-noconflict/mode-html.js"></script>
     <script src="/static/js/sortable.min.js"></script>
+    <script src="/static/js/global.js"></script>
     <script>
         var screens;
         var currentScreen;
@@ -218,7 +219,6 @@
         var xml = `{{ xmlfile | safe }}`;
         var selected;
         var textarea_selected;
-        const valid_name = /^[a-zA-Z0-9_]{1,50}$/g;
 
         const editorWindow =        document.getElementById("editor-window");
         const virtualScreen =       document.getElementById("virtual-screen");

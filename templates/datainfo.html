@@ -4,37 +4,44 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        table{
+            width: 100%;
+            table-layout: fixed;
+        }
+        td {
+            overflow: hidden;
+        }
+        table, th, td {
+            border: 1px solid;
+        }
+    </style>
 </head>
 <body style="margin: 32px;">
     <span class="title">{{ id }} </span> <br>
     <hr>
+
     <span class="subtitle">List of tables</span> <br>
+    <button class="primary" style='padding:0;width:128px;' onclick="add_table();"> + Create table</button><br>
     <span id="schema"></span>
     <hr>
+
+    <span class="subtitle">Table Preview</span> <br>
+    <div id="table-preview">Select a table to preview</div>
+    <hr>
+
     <span class="subtitle">Execute SQLite query</span> <br>
-    Here you can edit a query to be executed in your database, you may lose data if used incorrectly. <br>
-    If you have just created the database, that database is empty, you have to run a query to create at least one table. <br> <br>
-    <div id="text-editor"></div> <br>
+    Here you can execute custom queries in your database. <br> <br>    <div id="text-editor"></div> <br>
     <button class="primary wide" onclick="execute(aceEditor.getValue())">Execute query</button>
     <hr>
-    <span id="frames" class="subtitle">iFrame previews</span><br>
-    Here you can view your database iframes before using them in your app, be sure to enter a table name first. You can edit the files using an external code editor. <br><br>
-    <label for="table-name">Table name:</label>
-    <input type="text" name="table-name" id="table-name">
-    <table style="table-layout: fixed; width: 200px;">
-        <tr>
-            <td><button onclick="databaseFrame.src = '/database/list/{{id}}/' + tableName.value;" >Gallery</button></td>
-            <td><button onclick="databaseFrame.src = '/database/new_item/{{id}}/' + tableName.value;">New form</button></td>
-        </tr>
-    </table>
-    <iframe id="database-frame" style="width: 100%; height: 400px; padding: 10px;" src="" frameborder="1"></iframe>
-    <hr>
+
     <span class="subtitle">Create app</span> <br>
     Quickly create an application based on this table. <br><br>
     <label for="table-app">Table name:</label>
     <input type="text" name="table-app" id="table-app"> <br> <br>
     <button class="primary wide" onclick="popup_table_name()">Create app</button>
     <hr>
+
     <span class="subtitle">Delete database</span> <br>
     Deletes the database, this action cannot be undone. <br><br>
     <button class="delete wide" onclick="del()">Delete database</button>
@@ -45,44 +52,109 @@
     <script src="/static/js/src-min-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
     <script src="/static/js/src-min-noconflict/mode-javascript.js" type="text/javascript" charset="utf-8"></script>
     <script src="/static/js/src-min-noconflict/mode-html.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/static/js/global.js"></script>
     <script>
         forbiddenchars = /[`!@#$%^&*()+=\[\]{};':"\\|,.<>\/?~ ]/;
         urlsave = "/database/exec/{{ id }}";
         const databaseFrame = document.getElementById("database-frame");
-        const tableName = document.getElementById("table-name");
+        const tablePreview = document.getElementById("table-preview");
         const tableApp = document.getElementById("table-app");
         aceEditor = ace.edit("text-editor");
         aceEditor.session.setUseWrapMode(true);
         aceEditor.session.setMode("ace/mode/sql");
-        aceEditor.setValue("{{ schema }}");
         tables = JSON.parse('{{ tables | safe }}'.replace(/'/g, '"'));
         apps = JSON.parse("{{ projects | safe }}".replace(/'/g, '"'));
-
+        
         if (tables.length == 0){
             document.getElementById("schema").innerHTML += "You have not created any table yet";
         }
 
         for (let x = 0; x < tables.length; x++) {
-            document.getElementById("schema").innerHTML += "<button onclick='goto(\"" + tables[x][0] + "\")'>" + tables[x][0] + "</button>";
-            
+            if (tables[x][0] != "sqlite_sequence")
+                document.getElementById("schema").innerHTML += "<button style='padding:0;min-width:128px;' onclick='goto(\"" + tables[x][0] + "\")'>" + tables[x][0] + "</button>";
         }
-        document.getElementById("schema").innerHTML += "<br><span style='font-size:14px; color: var(--text); opacity: 0.5;'>" + tables.length + " table/s in total</span>";
 
-        function goto(table){
+        async function execute(cmd){
+            await sql_execute("{{ id }}", cmd);
+            alert("Query executed!");
+        }
+
+        async function add_table(){
+            table_name = prompt("Enter new table name:"),
+            valid_name.lastIndex = 0;
+            if (valid_name.test(table_name)){
+                await sql_execute("{{ id }}", "CREATE TABLE " + table_name + " (\nid INTEGER PRIMARY KEY AUTOINCREMENT,\ncreated TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP);");
+                window.location.reload();
+            } else {
+                alert("This is not a valid name");
+            }
+        }
+
+        async function delete_table(table){
+            if(confirm("Are you sure you want to delete table \"" + table + "\"")){
+                await sql_execute("{{ id }}", "DROP TABLE " + table);
+                window.location.reload();
+            }
+        }
+
+        async function delete_column(table, column_name){
+            if (confirm("Are you sure you want to delete column \"" + column_name +"\"?")){
+                await sql_execute("{{ id }}", "ALTER TABLE " + table + " DROP COLUMN " + column_name + ";");
+                goto(table);
+            }
+        }
+
+        async function add_column(table){
+            column_name = prompt("Enter new column name");
+            valid_name.lastIndex = 0;
+
+            if (valid_name.test(column_name)){
+                column_type = prompt("Enter column type: NULL, INTEGER, REAL, TEXT, LONGTEXT, BLOB", "TEXT");
+                if(/^(NULL|INTEGER|REAL|TEXT|LONGTEXT|BLOB)$/.test(column_type)){
+                    await sql_execute("{{ id }}", "ALTER TABLE " + table + " ADD COLUMN " + column_name + " " + column_type + ";");
+                    goto(table);
+                } else {
+                    alert("This is not a valid type");
+                }
+            }else{
+                alert("This is not a valid name");
+            }    
+        }
+
+        async function goto(table){
             window.open("#frames", "_self");
-            tableName.value = table;
             tableApp.value = table;
-        }
 
-        function execute(final_command){
-            fetch(urlsave, {
-                method: "POST",
-                body: JSON.stringify({"final_command": final_command}),
-                headers: {"Content-type": "application/json; charset=UTF-8"}
+            tablePreview.innerHTML = "Loading preview...";
+
+            tableInfo = await fetch("/database/json/{{ id }}/" + table + "?f=LIMIT 10")
+            .then(res => res.json())
+            .then(data => {return data});
+
+            tableItems = tableInfo["items"];
+            tableColumns = tableInfo["columns_names"]
+
+            tablePreview.innerHTML = "<br>";
+
+            tablePreview.insertAdjacentHTML("afterbegin", ""+
+            "<button class='primary' style='padding:0;width:128px;' onclick='add_column(\"" + table + "\")'>+ Add column</button>" +
+            "<button class='delete' style='padding:0;width:128px;' onclick='delete_table(\"" + table + "\")'>- Delete table</button><br>"
+            );
+
+            tablePreview_table = tablePreview.appendChild(document.createElement("table"));
+            tablePreview_header = tablePreview_table.appendChild(document.createElement("tr"));
+            for (let column = 0; column < tableColumns.length; column ++){
+                tablePreview_header.innerHTML += "<th><div style='width:100%; display:flex;'><span style='width:100%;'>" + tableColumns[column] + "</span><button style='padding:0;' onclick='delete_column(\"" + table + "\",\"" + tableColumns[column] + "\")'>X</button></div></th>";
+            }
+
+            Array.from(tableItems).forEach(e => {
+                tablePreview_row = tablePreview_table.appendChild(document.createElement("tr"));
+                for (let column = 0; column < tableColumns.length; column ++){
+                    tablePreview_row.innerHTML += "<td>" + e[tableColumns[column]] + "</td>";
+                }
             })
-            .then(response => console.log(response))
-            .then(alert("Query executed. Refresh page if needed"))
-            .catch(err => console.log(err));
+
+            tablePreview.innerHTML += "<a href='/database/json/{{ id }}/" + table + "' target='_blank'>Check JSON</a>";
         }
 
         function popup_table_name(){

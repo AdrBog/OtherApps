@@ -5,7 +5,7 @@ document.getElementById("a-button").setAttribute("onclick", "extraInsert('button
 // This addon adds extra options to the insert button
 
 document.getElementById("tool-bar-insert").innerHTML += '<hr>' +
-    '<a href="#" onclick="extraInsert(\'database\')">Database</a>' +
+    '<a href="#" onclick="extraInsert(\'iframe\')">Frame</a>' +
     '<hr>' +
     '<a href="#" onclick="extraInsert(\'plus\')">Plus Icon</a>' +
     '<a href="#" onclick="extraInsert(\'refresh\')">Refresh Icon</a>' +
@@ -83,16 +83,12 @@ function extraInsert(item) {
             newitemElement.style.fontSize = "60px";
             rename(newitemID, "Home");
             break;
-        case "database":
-            database = prompt("Enter database name, look at database manager if you don't remember.");
-            table = prompt("Enter table name, look at database manager if you don't remember.");
-            if (!database || !table)
-                break;
+        case "iframe":
             newitemID = insert("label");
             newitemElement = document.getElementById(newitemID);
             newitemElement.style.width = "420px";
             newitemElement.style.height = "256px";
-            newitemElement.innerHTML = "<span style='display:flex; margin: 32px; flex: 1;'>\n\t<iframe src='/database/list/" + database + "/" + table + "' style='flex: 1;'></iframe>\n</span>";
+            newitemElement.innerHTML = "<div style='display:flex; flex: 1;'>\n\t<iframe src='' style='flex: 1;'></iframe>\n</div>";
             rename(newitemID, "Database");
             break;
         case "input":

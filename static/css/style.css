@@ -207,7 +207,6 @@ input, textarea{
 
 /* Navbar container */
 .navbar {
-    overflow: hidden;
     background-color: var(--toolbar-bg);
     color: var(--toolbar-fg);
     font-family: Arial;
@@ -221,10 +220,6 @@ input, textarea{
     text-align: center;
     padding: 14px 16px;
     text-decoration: none;
-}
-
-.navbar a.primary {
-    color: var(--primary-fg);
 }
   
 /* The dropdown container */
@@ -319,4 +314,8 @@ input, textarea{
 
 .wide{
     width: 300px;
+}
+
+.home{
+    background-color: var(--primary-bg);
 }
