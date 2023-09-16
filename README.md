@@ -30,7 +30,9 @@ Disclaimer! Other Apps is still under development. And it is focused for small b
 | App Editor | Code Editor | Gallery inside app |
 | -- | -- | -- |
 | ![Screenshot 1](https://raw.githubusercontent.com/OtherExit/OtherApps/main/res/sample01.png) | ![Screenshot 2](https://raw.githubusercontent.com/OtherExit/OtherApps/main/res/sample02.png) | ![Screenshot 3](https://raw.githubusercontent.com/OtherExit/OtherApps/main/res/sample03.png) |
+
 | Database Manager | App Player | Editing form |
+| -- | -- | -- |
 | ![Screenshot 4](https://raw.githubusercontent.com/OtherExit/OtherApps/main/res/sample06.png) | ![Screenshot 5](https://raw.githubusercontent.com/OtherExit/OtherApps/main/res/sample07.png) | ![Screenshot 6](https://raw.githubusercontent.com/OtherExit/OtherApps/main/res/sample08.png) |
 
 ## Themes
