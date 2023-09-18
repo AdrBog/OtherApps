@@ -7,3 +7,11 @@ function sql_execute(database, final_command){
         headers: { "Content-type": "application/json; charset=UTF-8" }
     }).then(resolve));
 }
+
+function fix_color_format(color){
+    rgb = color.substring(4, color.length-1).replace(/ /g, '').split(',');
+    r = Number(rgb[0]).toString(16);
+    g = Number(rgb[1]).toString(16);
+    b = Number(rgb[2]).toString(16);
+    return('#' + r + g + b);  
+}

@@ -203,19 +203,16 @@
         var screens;
         var currentScreen;
         var screen_childrens;
-        var buffer;
         var currentId = 0;
 
         var aceEditor = ace.edit("text-editor");
         aceEditor.session.setUseWrapMode(true);
         aceEditor.setOption("showPrintMargin", false);
         
-        var appname = "{{ id }}";
-        var current_ver = "{{ ver }}"
+        var current_ver = "{{ ver }}";
         var urlsave = "/save";
-        var urltest = "/play/" + appname + "/test";
+        var urltest = "/play/{{ id }}/test";
         var can_click = true;
-        var xmlsave = "";
         var xml = `{{ xmlfile | safe }}`;
         var selected;
         var textarea_selected;
@@ -338,14 +335,6 @@
             textarea_selected.dispatchEvent(new Event('input', {bubbles:true}));
         }); 
 
-        function rgb2hex(rgb){
-            rgb = rgb.substring(4, rgb.length-1).replace(/ /g, '').split(',');
-            r = Number(rgb[0]).toString(16);
-            g = Number(rgb[1]).toString(16);
-            b = Number(rgb[2]).toString(16);
-            return('#' + r + g + b);
-        }
-
         function generateXML(){
             map_list = Array.from(document.querySelectorAll("[id^=map-screen-for-]"));
 
@@ -354,58 +343,68 @@
             for (let x = 0; x < map_list.length; x++)
                 screen_list.push(document.getElementById(map_list[x].getAttribute("id").split("-").pop()));
             
-            xmlsave = '';
-            xmlsave += '<App DisplayName="' + infoAppName.value + '" DefaultScreen="' + infoDefaultScreen.value + '" Width="' + infoAppW.value + '" Height="' + infoAppH.value + '" OAVer="' + current_ver + '">';
+            var xmlDoc = document.implementation.createDocument(null, "App");
+            var xmlDocRoot = xmlDoc.getElementsByTagName("App")[0];
+
+            xmlDocRoot.setAttribute("DisplayName", infoAppName.value);
+            xmlDocRoot.setAttribute("DefaultScreen", infoDefaultScreen.value);
+            xmlDocRoot.setAttribute("Width", infoAppW.value);
+            xmlDocRoot.setAttribute("Height", infoAppH.value);
+            xmlDocRoot.setAttribute("OAVer", current_ver);
+
             for (i = 0; i < screen_list.length; i++){
+                
                 current_screen_childrens = screen_list[i].querySelectorAll(":scope > div");
-                xmlsave += '<Screen Name="' + screen_list[i].getAttribute("id") + '" Style="' + encodeURI(screen_list[i].getAttribute('style')) + '" OnVisible="' + encodeURI(screen_list[i].getAttribute('onVisible')) + '">';
+
+                var xmlDocScreen = xmlDoc.createElement("Screen");
+                xmlDocScreen.setAttribute("Name", screen_list[i].getAttribute("id"));
+                xmlDocScreen.setAttribute("Style", encodeURI(screen_list[i].getAttribute('style')));
+                xmlDocScreen.setAttribute("OnVisible", encodeURI(screen_list[i].getAttribute('onVisible')));
+        
                 for (x = 0; x < current_screen_childrens.length; x ++){
-                    xmlsave += '<Children ' + 
-                            'Type="' + current_screen_childrens[x].getAttribute('class').split(' ')[0] + '" ' +
-                            'Name="' + current_screen_childrens[x].getAttribute('id') + '" ' +
-                            'Text="' + encodeURI(current_screen_childrens[x].innerHTML) + '" ' +
-                            'X="' + current_screen_childrens[x].getAttribute('data-x') + '" ' +
-                            'Y="' + current_screen_childrens[x].getAttribute('data-y') + '" ' +
-                            'OnSelect="' + encodeURI(current_screen_childrens[x].getAttribute('onClickALT')) + '" ' +
-                            'Style="' + encodeURI(current_screen_childrens[x].getAttribute('style')) + '"/>';
+                    var xmlDocItem = xmlDoc.createElement("Children");
+                    
+                    xmlDocItem.setAttribute("Type", current_screen_childrens[x].getAttribute('class').split(' ')[0]);
+                    xmlDocItem.setAttribute("Name", current_screen_childrens[x].getAttribute('id'));
+                    xmlDocItem.setAttribute("Text", encodeURI(current_screen_childrens[x].innerHTML));
+                    xmlDocItem.setAttribute("X", current_screen_childrens[x].getAttribute('data-x'));
+                    xmlDocItem.setAttribute("Y", current_screen_childrens[x].getAttribute('data-y'));
+                    xmlDocItem.setAttribute("OnSelect", encodeURI(current_screen_childrens[x].getAttribute('onClickALT')));
+                    xmlDocItem.setAttribute("Style", encodeURI(current_screen_childrens[x].getAttribute('style')));
+                    
+                    xmlDocScreen.appendChild(xmlDocItem);
                 }
-                xmlsave += '</Screen>';
+                xmlDocRoot.appendChild(xmlDocScreen);
             }
-            xmlsave += '</App>';
+            return new XMLSerializer().serializeToString(xmlDoc);
         }
 
-        function test(){
-            generateXML();
-            fetch(urlsave, {
+        async function test(){
+            const res = await fetch(urlsave, {
                 method: "POST",
                 body: JSON.stringify({
                     "id": "{{ id }}",
-                    "xmldata": xmlsave,
+                    "xmldata": generateXML(),
                     "screen" : "test"
                 }),
                 headers: {"Content-type": "application/json; charset=UTF-8"}
             })
-            .then(response => response.json()) 
-            .then(json => console.log(json))
-            .catch(err => console.log(err));
-
+            const data = await res.json();
             window.open(urltest, '_blank').focus();
         }
 
-        function save() {
-            generateXML();
-            fetch(urlsave, {
+        async function save() {
+            const res = await fetch(urlsave, {
                 method: "POST",
                 body: JSON.stringify({
                     "id": "{{ id }}",
-                    "xmldata": xmlsave,
+                    "xmldata": generateXML(),
                     "screen" : "{{ c }}"
                 }),
                 headers: {"Content-type": "application/json; charset=UTF-8"}
             })
-            .then(response => response.json()) 
-            .then( alert("App saved")) //json => console.log(json))
-            .catch(err => console.log(err));
+            const data = await res.json();
+            alert("App saved");
             document.dispatchEvent(new Event("app-saved"));
         }
 
@@ -541,7 +540,7 @@
                 );
                 infoType.innerHTML = "Screen";
                 infoName.value = item.getAttribute("id");
-                infoBgColor.value = rgb2hex(item.style.backgroundColor);
+                infoBgColor.value = fix_color_format(item.style.backgroundColor);
                 infoOnVisible.value = item.getAttribute("onVisible");
             } else {
                 Array.from(screen_childrens).forEach(
@@ -562,8 +561,8 @@
                 infoW.value = item.style.width.replace(/\D/g,'');
                 infoH.value = item.style.height.replace(/\D/g,'');
                 infoZ.value = item.style.zIndex;
-                infoFill.value = rgb2hex(item.style.backgroundColor);
-                infoColor.value = rgb2hex(item.style.color);
+                infoFill.value = fix_color_format(item.style.backgroundColor);
+                infoColor.value = fix_color_format(item.style.color);
                 infoFontSize.value = item.style.fontSize.replace(/\D/g,'');
                 infoBorder.value = item.style.border;
                 infoBorderRadius.value = item.style.borderRadius.replace(/\D/g,''); 
