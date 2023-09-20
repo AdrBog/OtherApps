@@ -8,7 +8,7 @@ app = Flask(__name__)
 projects_dir = "projects"
 config_dir = "config"
 skel_dir = "static/skel"
-version="0.3.1"
+version = "0.3.2"
 
 def reload_addons():
     with open(f'{config_dir}/addons.yml') as addon_file:
@@ -129,13 +129,14 @@ def generate_json(id, table):
     conn = get_db_connection(id)
     rows = conn.execute(f'SELECT * FROM {table} {filters}').fetchall()
     conn.close()
-    data = {"columns_names" : [], "columns_types" : [], "items" : []}
+    data = {"columns_names" : [], "columns_types" : {}, "items" : []}
 
     for column in get_columns_names(id, table):
         data["columns_names"].append(column)
 
-    for col_type in get_columns_types(id, table):
-        data["columns_types"].append(col_type)
+    for x in range(len(get_columns_types(id, table))):
+        item = {get_columns_names(id, table)[x] : get_columns_types(id, table)[x]}
+        data["columns_types"].update(item) 
 
     for row in rows:
         item = {"id" : row["id"]}

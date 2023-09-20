@@ -88,7 +88,7 @@ function extraInsert(item) {
             newitemElement = document.getElementById(newitemID);
             newitemElement.style.width = "420px";
             newitemElement.style.height = "256px";
-            newitemElement.innerHTML = "<div style='display:flex; flex: 1;'>\n\t<iframe src='' style='flex: 1;'></iframe>\n</div>";
+            newitemElement.innerHTML = "<iframe src='' style='flex: 1;'></iframe>";
             rename(newitemID, "Database");
             break;
         case "input":
@@ -134,6 +134,5 @@ function extraInsert(item) {
             newitemElement.innerHTML = "Text: \n<select class='themed-blue'>\n\t<option value='A'>A</option>\n\t<option value='B'>B</option>\n\t<option value='C'>C</option>\n</select>";
             rename(newitemID, "Select");
             break;
-
     }
 }

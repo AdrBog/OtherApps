@@ -75,12 +75,12 @@
             </div>
         </div>
     </div>
+    <script src="/static/js/global.js"></script>
     {% for addon in addons %}
     <script src="{{addon}}"></script>
     {% endfor %}
     <script>
         var urlsave = "/save";
-        var forbiddenchars = /[`!@#$%^&*()+=\[\]{};':"\\|,.<>\/?~ ]/;
         const appId = document.getElementById("app-id");
 
         function delete_p(sid){
@@ -91,7 +91,8 @@
         }
 
         appId.addEventListener('input', () => {
-            if ( ! appId.value || forbiddenchars.test(appId.value) || document.getElementById(appId.value) != null){
+            valid_name.lastIndex = 0;
+            if ( ! valid_name.test(appId.value) || document.getElementById(appId.value) != null){
                 appId.classList.add("error");
             } else {
                 appId.classList.remove("error");
@@ -99,9 +100,10 @@
         })
 
         function check_save(){
+            valid_name.lastIndex = 0;
             if ( ! appId.value){
                 alert("Can't create this app\nIt doesn't have a name")
-            } else if (forbiddenchars.test(appId.value)){
+            } else if (! valid_name.test(appId.value)){
                 alert("Can't create this app\nIt contains special characters")
             } else if (document.getElementById(appId.value) != null){
                 alert("Can't create " + appId.value + "\nThis app already exists");
@@ -110,13 +112,19 @@
             }
         }
 
+        function generateDefaultApp(){
+            var app = generateXMLApp("My App", "Screen0", "800", "480", "{{ ver }}");
+            var appRoot = app.getElementsByTagName("App")[0];
+            appRoot.appendChild(generateXMLScreen(app, "Screen0"));
+            return new XMLSerializer().serializeToString(app);
+        }
+
         function save(){
-            xmldata = '<App DisplayName="My App" DefaultScreen="Screen0" Width="800" Height="480" OAVer="{{ ver }}"><Screen Name="Screen0" Style="position:%20relative;%20width:%20100%25;%20height:%20100%25;%20overflow:%20hidden;%20background-color:%20rgb(255,%20255,%20255);" OnVisible=""></Screen></App>';
             fetch(urlsave, {
                 method: "POST",
                 body: JSON.stringify({
                     "id": appId.value,
-                    "xmldata": xmldata,
+                    "xmldata": generateDefaultApp(),
                     "screen" : 1
                 }),
                 headers: {"Content-type": "application/json; charset=UTF-8"}

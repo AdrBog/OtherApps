@@ -53,8 +53,8 @@
     <div class="vertical-container">
         <div id="tool-bar" class="navbar">
             <a class="home" href="{{ url_for('index') }}">Other Apps</a>
-            <a href="#" onclick="save()">Save</a>
-            <a href="#" onclick="test()">Test</a>
+            <a href="#" onclick="save()" id="tool-bar-save">Save</a>
+            <a href="#" onclick="test()" id="tool-bar-test">Test</a>
             <div class="dropdown">
                 <a class="dropbtn">Insert</a>
                 <div id="tool-bar-insert" class="dropdown-content">
@@ -333,13 +333,13 @@
         aceEditor.on('input', function() {
             textarea_selected.value = aceEditor.getValue();
             textarea_selected.dispatchEvent(new Event('input', {bubbles:true}));
-        }); 
+        });
 
         function generateXML(){
             map_list = Array.from(document.querySelectorAll("[id^=map-screen-for-]"));
 
             screen_list = new Array;
-
+            
             for (let x = 0; x < map_list.length; x++)
                 screen_list.push(document.getElementById(map_list[x].getAttribute("id").split("-").pop()));
             
@@ -364,7 +364,7 @@
                 for (x = 0; x < current_screen_childrens.length; x ++){
                     var xmlDocItem = xmlDoc.createElement("Children");
                     
-                    xmlDocItem.setAttribute("Type", current_screen_childrens[x].getAttribute('class').split(' ')[0]);
+                    xmlDocItem.setAttribute("Type", current_screen_childrens[x].getAttribute('type'));
                     xmlDocItem.setAttribute("Name", current_screen_childrens[x].getAttribute('id'));
                     xmlDocItem.setAttribute("Text", encodeURI(current_screen_childrens[x].innerHTML));
                     xmlDocItem.setAttribute("X", current_screen_childrens[x].getAttribute('data-x'));
@@ -449,7 +449,7 @@
             while(document.getElementById(newid) != null){
                 newid = newid + "_1";
             }
-            if (element.getAttribute("class").startsWith ("Screen")){
+            if (element.getAttribute("type") == "Screen"){
                 document.getElementById("map-screen-for-" + oldid).setAttribute("id", "map-screen-for-" + newid);
                 document.getElementById("map-children-" + oldid).setAttribute("point", newid);
                 document.getElementById("map-children-" + oldid).innerHTML = "<span class='icon'>® </span>" + newid;
@@ -500,7 +500,7 @@
 
             selected = item;
 
-            switch(item.getAttribute("class").split(" ")[0]){
+            switch(item.getAttribute("type")){
                 case "Screen":
                     tableId.style.height = "auto";
                     tableText.style.height = "0";
@@ -527,7 +527,7 @@
                     break;
             }
 
-            if (item.getAttribute("class").startsWith("Screen") == true)
+            if (item.getAttribute("type") == "Screen")
             {
                 changeScreen(item);
                 Array.from(screen_childrens).forEach(
@@ -553,7 +553,7 @@
                 item.classList.add("selected");
                 item.classList.add("drag-resize");
                 document.getElementById("map-children-" + selected.getAttribute("id")).classList.add("map-selected");
-                infoType.innerHTML = item.getAttribute("class").split(" ")[0];
+                infoType.innerHTML = item.getAttribute("type");
                 infoName.value = item.getAttribute("id");
                 infoText.value = item.innerHTML;
                 infoX.value = item.getAttribute("data-x");
@@ -572,7 +572,7 @@
             document.dispatchEvent(new CustomEvent("item-clicked",{
                 "detail":{
                     "id": item.getAttribute("id"),
-                    "type": item.getAttribute("class").split(" ")[0],
+                    "type": item.getAttribute("type"),
                     "element": item
                 }
             }));
@@ -628,58 +628,86 @@
                     while(document.getElementById("Label" + currentId) != null){
                         currentId++;
                     }
-                    currentScreen.innerHTML += '<div class="Label" id="Label' + currentId + '" style="' +
-                                        'display: flex; position: absolute; overflow: hidden; user-select: none;' +
-                                        'transform: translate(64px, 64px);' +
-                                        'width: 160px; height: 64px;' +
-                                        'background-color: #fff;' +
-                                        'background-repeat: no-repeat;' +
-                                        'background-attachment: fixed;' +
-                                        'background-position: center;' +
-                                        'background-size: contain;' +
-                                        'font-size: 15px;' +
-                                        'visibility: visible;' +
-                                        'box-sizing: border-box"' +
-                                        'data-x="64" data-y="64">Text</div>';
+                    var label = document.createElement("div");
+                    label.innerHTML = "Text";
+                    label.setAttribute("class", "Label");
+                    label.setAttribute("type", "Label");
+                    label.setAttribute("id", "Label" + currentId);
+                    label.setAttribute("data-x", "64");
+                    label.setAttribute("data-y", "64");
+                    label.style.display = "flex";
+                    label.style.width = "160px";
+                    label.style.height = "64px";
+                    label.style.position = "absolute";
+                    label.style.transform = "translate(64px, 64px)";
+                    label.style.color = "#000";
+                    label.style.backgroundRepeat = "no-repeat";
+                    label.style.backgroundAttachment = "fixed";
+                    label.style.backgroundSize = "contain";
+                    label.style.fontSize = "15px";
+                    label.style.boxSizing = "border-box";
+                    label.style.userSelect = "none";
+                    currentScreen.appendChild(label);
                     refresh_map();
-                    document.dispatchEvent(new CustomEvent("item-created", {"detail":{"id": "Label" + currentId, "type": type}}));
-                    return "Label" + currentId;
+                    document.dispatchEvent(new CustomEvent("item-created", {"detail":{"id": label.getAttribute("id"), "type": type}}));
+                    return label.getAttribute("id");
                     break;
                 case "button":
                     while(document.getElementById("Button" + currentId) != null){
                         currentId++;
                     }
-                    currentScreen.innerHTML += '<div class="Button" id="Button' + currentId + '" style="' +
-                                        'display: flex; position: absolute; text-align: center; display: flex; justify-content: center; align-items: center; overflow: hidden; user-select: none;' +
-                                        'transform: translate(64px, 64px);' +
-                                        'width: 160px; height: 64px;' +
-                                        'background-color: rgb(56, 96, 178);' +
-                                        'background-repeat: no-repeat;' +
-                                        'background-attachment: fixed;' +
-                                        'background-position: center;' +
-                                        'background-size: contain;' +
-                                        'color: #fff;' +
-                                        'border: 2px solid rgba(0, 0, 0, 0.2);' +
-                                        'border-radius: 10px;' +
-                                        'font-size: 15px;' +
-                                        'visibility: visible;' +
-                                        'box-sizing: border-box"' +
-                                        'data-x="64" data-y="64" onClickALT="null">Button</div>';
+                    var button = document.createElement("div");
+                    button.innerHTML = "Button";
+                    button.setAttribute("class", "Button");
+                    button.setAttribute("type", "Button");
+                    button.setAttribute("id", "Button" + currentId);
+                    button.setAttribute("data-x", "64");
+                    button.setAttribute("data-y", "64");
+                    button.setAttribute("onClickALT", "null");
+                    button.style.display = "flex";
+                    button.style.width = "160px";
+                    button.style.height = "64px";
+                    button.style.justifyContent = "center";
+                    button.style.alignItems = "center";
+                    button.style.position = "absolute";
+                    button.style.transform = "translate(64px, 64px)";
+                    button.style.color = "#fff";
+                    button.style.backgroundColor = "rgb(56, 96, 178)";
+                    button.style.backgroundRepeat = "no-repeat";
+                    button.style.backgroundAttachment = "fixed";
+                    button.style.backgroundSize = "contain";
+                    button.style.border = "2px solid rgba(0, 0, 0, 0.2)";
+                    button.style.borderRadius = "10px";
+                    button.style.fontSize = "15px";
+                    button.style.boxSizing = "border-box";
+                    button.style.userSelect = "none";
+                    currentScreen.appendChild(button);
                     refresh_map();
-                    document.dispatchEvent(new CustomEvent("item-created", {"detail":{"id": "Button" + currentId, "type": type}}));
-                    return "Button" + currentId;
+                    document.dispatchEvent(new CustomEvent("item-created", {"detail":{"id": button.getAttribute("id"), "type": type}}));
+                    return button.getAttribute("id");
                     break;
                 
                 case "screen":
                     while(document.getElementById("Screen" + currentId) != null){
                             currentId++;
                     }
-                    virtualScreen.innerHTML += '<div screen class="Screen" name="Screen' + currentId + '" id="Screen' + currentId + '" style="position: relative; width: 100%; height: 100%; overflow: hidden; background-color: #fff;"></div>';
-                    currentScreen = document.getElementById("Screen" + currentId);
+                    var screen = document.createElement("div");
+                    screen.setAttribute("screen", "");
+                    screen.setAttribute("class", "Screen");
+                    screen.setAttribute("type", "Screen");
+                    screen.setAttribute("name", "Screen" + currentId);
+                    screen.setAttribute("id", "Screen" + currentId);
+                    screen.style.position = "relative";
+                    screen.style.width = "100%";
+                    screen.style.height = "100%";
+                    screen.style.overflow = "hidden";
+                    screen.style.backgroundColor = "#fff";
+                    virtualScreen.appendChild(screen);
+                    currentScreen = document.getElementById(screen.getAttribute("id"));
                     refresh_map();
-                    click(document.getElementById("Screen" + currentId));
-                    document.dispatchEvent(new CustomEvent("item-created", {"detail":{"id": "Screen" + currentId, "type": type}}));
-                    return "Screen" + currentId;
+                    click(document.getElementById(screen.getAttribute("id")));
+                    document.dispatchEvent(new CustomEvent("item-created", {"detail":{"id": screen.getAttribute("id"), "type": type}}));
+                    return screen.getAttribute("id");
                     break;
             
                 default:
@@ -687,41 +715,49 @@
             } 
         }
 
-        
-
-        var parser = new DOMParser();
-        var xmlDoc = parser.parseFromString(xml, "text/xml");
-        var app = xmlDoc.getElementsByTagName("App")[0];
-        if (app.getAttribute("OAVer") != current_ver){
-            alert("It seems that this app was created with an older version of Other Apps\nYou can still run and edit the app, but it MAY NOT work correctly.\nApp's version: " + app.getAttribute("OAVer") +"\nYour current OtherApp version: " + current_ver);
-        }
-        var childrens = xmlDoc.getElementsByTagName("Children");
-        var screens = xmlDoc.getElementsByTagName("Screen");
-        for (i = 0; i < screens.length; i++){
-            var screen_name = screens[i].getAttribute("Name");
-            virtualScreen.innerHTML += '<div screen class="Screen" name="' + screen_name + '" id="' + screen_name + '" style="' + decodeURI(screens[i].getAttribute("Style")) + '" onVisible="' + decodeURI(screens[i].getAttribute("OnVisible")).replace(/"/g, "&quot;") + '" ></div>';
-            var screen_element = document.getElementById(screen_name);
-            current_screen_childrens = screens[i].getElementsByTagName("Children");
-            for (x = 0; x < current_screen_childrens.length; x++) {
-                screen_element.innerHTML += '<div class="' + current_screen_childrens[x].getAttribute("Type") + ' drag-resize" ' +
-                                        'id="' + current_screen_childrens[x].getAttribute("Name") + '" ' +
-                                        'style="' + decodeURI(current_screen_childrens[x].getAttribute("Style")).replace(/"/g, "&quot;") + '" ' +
-                                        '" onClickALT="' + decodeURI(current_screen_childrens[x].getAttribute("OnSelect")).replace(/"/g, "&quot;") + '" ' +
-                                        'data-x="' + current_screen_childrens[x].getAttribute("X") + '" ' +
-                                        'data-y="' + current_screen_childrens[x].getAttribute("Y") + '" ' +
-                                        '>' + decodeURI(current_screen_childrens[x].getAttribute("Text")) +'</div>';        
+        function loadXML(){
+            var parser = new DOMParser();
+            var xmlDoc = parser.parseFromString(xml, "text/xml");
+            var app = xmlDoc.getElementsByTagName("App")[0];
+            if (app.getAttribute("OAVer") != current_ver){
+                alert("It seems that this app was created with an older version of Other Apps\nYou can still run and edit the app, but it MAY NOT work correctly.\nApp's version: " + app.getAttribute("OAVer") +"\nYour current OtherApp version: " + current_ver);
             }
-        }
+            var screens = xmlDoc.getElementsByTagName("Screen");
+            for (i = 0; i < screens.length; i++){
+                var screen = document.createElement("div");
+                screen.setAttribute("id", screens[i].getAttribute("Name"));
+                screen.setAttribute("name", screen.getAttribute("id"));
+                screen.setAttribute("screen", "");
+                screen.setAttribute("class", "Screen");
+                screen.setAttribute("type", "Screen");
+                screen.setAttribute("style", decodeURI(screens[i].getAttribute("Style")));
+                screen.setAttribute("onVisible", decodeURI(screens[i].getAttribute("OnVisible")));
+                virtualScreen.appendChild(screen);
+                current_screen_childrens = screens[i].getElementsByTagName("Children");
+                for (x = 0; x < current_screen_childrens.length; x++) {
+                    var children = document.createElement("div");
+                    children.setAttribute("class", current_screen_childrens[x].getAttribute("Type"));
+                    children.setAttribute("type", current_screen_childrens[x].getAttribute("Type"));
+                    children.setAttribute("id", current_screen_childrens[x].getAttribute("Name"));
+                    children.setAttribute("style", decodeURI(current_screen_childrens[x].getAttribute("Style")));
+                    children.setAttribute("onClickALT", decodeURI(current_screen_childrens[x].getAttribute("OnSelect")));
+                    children.setAttribute("data-x", current_screen_childrens[x].getAttribute("X"));
+                    children.setAttribute("data-y", current_screen_childrens[x].getAttribute("Y"));
+                    children.innerHTML = decodeURI(current_screen_childrens[x].getAttribute("Text"));
+                    screen.appendChild(children);
+                }
+            }
+            refresh_map();
+            click(document.getElementById(app.getAttribute("DefaultScreen")));
+            infoDefaultScreen.value = app.getAttribute("DefaultScreen");
+            infoAppName.value = app.getAttribute("DisplayName");
+            infoAppW.value = app.getAttribute("Width");
+            infoAppH.value = app.getAttribute("Height");
+            virtualScreen.style.width = infoAppW.value + 'px';
+            virtualScreen.style.minWidth = infoAppW.value + 'px';
+            virtualScreen.style.height = infoAppH.value + 'px';
 
-        refresh_map();
-        click(document.getElementById(app.getAttribute("DefaultScreen")));
-        infoDefaultScreen.value = app.getAttribute("DefaultScreen");
-        infoAppName.value = app.getAttribute("DisplayName");
-        infoAppW.value = app.getAttribute("Width");
-        infoAppH.value = app.getAttribute("Height");
-        virtualScreen.style.width = infoAppW.value + 'px';
-        virtualScreen.style.minWidth = infoAppW.value + 'px';
-        virtualScreen.style.height = infoAppH.value + 'px';
+        }
 
         interact('#nav-sidebar').resizable({
             edges: { left: false, right: true, bottom: false, top: false },
@@ -818,6 +854,8 @@
         new Sortable(document.getElementById("control-map"), {
             animation: 150,
         });
+
+        loadXML();
     </script>
 </body>
 </html>

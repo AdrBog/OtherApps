@@ -21,30 +21,41 @@
     <span class="title">{{ id }} </span> <br>
     <hr>
 
-    <span class="subtitle">List of tables</span> <br>
-    <button class="primary" style='padding:0;width:128px;' onclick="add_table();"> + Create table</button><br>
-    <span id="schema"></span>
-    <hr>
+    <div id="list-tables">
+        <span class="subtitle">List of tables</span> <br>
+        <button class="primary" style='padding:0;width:128px;' onclick="add_table();"> + Create table</button><br>
+        <span id="schema"></span>
+        <hr>
+    </div>
 
-    <span class="subtitle">Table Preview</span> <br>
-    <div id="table-preview">Select a table to preview</div>
-    <hr>
+    <div id="table-preview">
+        <span class="subtitle">Table Preview</span> <br>
+        <div id="table-preview">Select a table to preview</div>
+        <hr>
+    </div>
 
-    <span class="subtitle">Execute SQLite query</span> <br>
-    Here you can execute custom queries in your database. <br> <br>    <div id="text-editor"></div> <br>
-    <button class="primary wide" onclick="execute(aceEditor.getValue())">Execute query</button>
-    <hr>
+    <div id="execute-query">
+        <span class="subtitle">Execute SQLite query</span> <br>
+        Here you can execute custom queries in your database. <br> <br>    <div id="text-editor"></div> <br>
+        <button class="primary wide" onclick="execute(aceEditor.getValue())">Execute query</button>
+        <hr>
+    </div>
 
-    <span class="subtitle">Create app</span> <br>
-    Quickly create an application based on this table. <br><br>
-    <label for="table-app">Table name:</label>
-    <input type="text" name="table-app" id="table-app"> <br> <br>
-    <button class="primary wide" onclick="popup_table_name()">Create app</button>
-    <hr>
+    <div id="create-app">
+        <span class="subtitle">Create app</span> <br>
+        Quickly create an application based on this table. <br><br>
+        <label for="table-app">Table name:</label>
+        <input type="text" name="table-app" id="table-app"> <br> <br>
+        <button class="primary wide" onclick="popup_table_name()">Create app</button>
+        <hr>
+    </div>
 
-    <span class="subtitle">Delete database</span> <br>
-    Deletes the database, this action cannot be undone. <br><br>
-    <button class="delete wide" onclick="del()">Delete database</button>
+    <div id="delete-database">
+        <span class="subtitle">Delete database</span> <br>
+        Deletes the database, this action cannot be undone. <br><br>
+        <button class="delete wide" onclick="del()">Delete database</button>
+    </div>
+
     <br> <br>
     {% for addon in addons %}
     <script src="{{addon}}"></script>
@@ -54,7 +65,8 @@
     <script src="/static/js/src-min-noconflict/mode-html.js" type="text/javascript" charset="utf-8"></script>
     <script src="/static/js/global.js"></script>
     <script>
-        forbiddenchars = /[`!@#$%^&*()+=\[\]{};':"\\|,.<>\/?~ ]/;
+        const version = "{{ ver }}";
+        const database = "{{ id }}";
         urlsave = "/database/exec/{{ id }}";
         const databaseFrame = document.getElementById("database-frame");
         const tablePreview = document.getElementById("table-preview");
@@ -109,8 +121,8 @@
             valid_name.lastIndex = 0;
 
             if (valid_name.test(column_name)){
-                column_type = prompt("Enter column type: NULL, INTEGER, REAL, TEXT, LONGTEXT, BLOB", "TEXT");
-                if(/^(NULL|INTEGER|REAL|TEXT|LONGTEXT|BLOB)$/.test(column_type)){
+                column_type = prompt("Enter column type: NULL, INTEGER, REAL, TEXT, LONGTEXT, BLOB, TIMESTAMP", "TEXT");
+                if(/^(NULL|INTEGER|REAL|TEXT|LONGTEXT|BLOB|TIMESTAMP)$/.test(column_type)){
                     await sql_execute("{{ id }}", "ALTER TABLE " + table + " ADD COLUMN " + column_name + " " + column_type + ";");
                     goto(table);
                 } else {
@@ -158,11 +170,12 @@
         }
 
         function popup_table_name(){
+            valid_name.lastIndex = 0;
             table_name = prompt("Enter the name of your app. Make sure it doesn't exist");
             cancel = false;
             if ( ! table_name){
                 alert("Can't create this app\nIt doesn't have a name")
-            } else if (forbiddenchars.test(table_name)){
+            } else if (! valid_name.test(table_name)){
                 alert("Can't create this app\nIt contains special characters")
             } else {
                 for (let x = 0; x < apps.length; x++) {
