@@ -4,11 +4,15 @@
 
 # Other Apps
 
-[![GPL v3](https://img.shields.io/badge/License-GNU%20v3-blue)](https://www.gnu.org/licenses/gpl-3.0.en.html)
+[![GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue)](https://www.gnu.org/licenses/gpl-3.0.en.html)
 
 Lightweight Free and Open Source alternative to Microsoft's Power Apps written in Python and Flask.
 
-Other Apps works with Javascript and HTML (Instead of that strange language that Power Apps uses), this allows you to do everything you could do in javascript, without limitations.
+## Why use Other Apps instead of Power Apps
+0. **Other Apps is free and open source**, making it perfect for developers to customize the application to their own liking.
+1. **Other Apps makes 0 connections to the internet**, this makes it more private and secure.
+2. **Self-Hosting**
+3. **Easy setup**, Other Apps works  with pure javascript. No npm, nodejs, jsquery, etc needed.
 
 Disclaimer! Other Apps is still under development. And it is focused for small business/local networks. I do not recommend using it for large enterprises.
 
@@ -22,6 +26,7 @@ Disclaimer! Other Apps is still under development. And it is focused for small b
 -   [x] Unlimited database size
 -   [x] Unrestricted HTML embedding
 -   [x] Themes
+-   [x] Addons
 -   [ ] Documentation (Coming soon)
 
 
@@ -55,3 +60,6 @@ You need to have Python with virtualenv and Git installed
 
 ## Help
 If you need help, you can read the (incomplete) documentation or see the [examples](https://github.com/OtherExit/OtherApps-Examples)
+
+## The future of Other Apps
+Personally I am very happy with the result, I use Other Apps in a non-ironic way to help my father with his projects. I'm going to try to separate the database manager from Other Apps and create a new project, maybe Other Lists.
