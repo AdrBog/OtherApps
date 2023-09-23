@@ -1,8 +1,10 @@
 const valid_name = /^[a-zA-Z0-9_]{1,50}$/g;
 
 function generateXMLApp(display_name, default_screen, w, h, version){
-    var xmlDoc = document.implementation.createDocument(null, "App");
-    var xmlDocRoot = xmlDoc.getElementsByTagName("App")[0];
+    const xmlDoc = document.implementation.createDocument(null, "App");
+    const pi = xmlDoc.createProcessingInstruction('xml', 'version="1.0" encoding="UTF-8"');
+    const xmlDocRoot = xmlDoc.getElementsByTagName("App")[0];
+    xmlDoc.insertBefore(pi, xmlDoc.firstChild);
     xmlDocRoot.setAttribute("DisplayName", display_name);
     xmlDocRoot.setAttribute("DefaultScreen", default_screen);
     xmlDocRoot.setAttribute("Width", w);
@@ -15,10 +17,10 @@ function generateXMLScreen(xmldoc, name, on_visible = "", style = "_def"){
     if (style == "_def"){
         style = "position: relative; width: 100%; height: 100%; overflow: hidden; background-color: rgb(255, 255, 255);";
     }
-    var screen = xmldoc.createElement("Screen");
+    const screen = xmldoc.createElement("Screen");
     screen.setAttribute("Name", name);
-    screen.setAttribute("Style", encodeURI(style));
-    screen.setAttribute("OnVisible", encodeURI(on_visible));
+    screen.setAttribute("Style", encodeURI(style).replace(/%20/g, " "));
+    screen.setAttribute("OnVisible", encodeURI(on_visible).replace(/%20/g, " "));
     return screen;
 }
 
@@ -33,14 +35,14 @@ function generateXMLChildren(xmldoc, type, name, text, x = 64, y = 64, on_select
                 break;
         }
     }
-    var children = xmldoc.createElement("Children");
+    const children = xmldoc.createElement("Children");
     children.setAttribute("Type", type);
     children.setAttribute("Name", name);
-    children.setAttribute("Text", encodeURI(text));
+    children.setAttribute("Text", encodeURI(text).replace(/%20/g, " "));
     children.setAttribute("X", x);
     children.setAttribute("Y", y);
-    children.setAttribute("OnSelect", encodeURI(on_select));
-    children.setAttribute("Style", encodeURI(style));
+    children.setAttribute("OnSelect", encodeURI(on_select).replace(/%20/g, " "));
+    children.setAttribute("Style", encodeURI(style).replace(/%20/g, " "));
     return children;
 }
 

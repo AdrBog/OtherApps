@@ -200,9 +200,8 @@
     <script src="/static/js/sortable.min.js"></script>
     <script src="/static/js/global.js"></script>
     <script>
-        var screens;
         var currentScreen;
-        var screen_childrens;
+        var screenChildrens;
         var currentId = 0;
 
         var aceEditor = ace.edit("text-editor");
@@ -336,46 +335,22 @@
         });
 
         function generateXML(){
-            map_list = Array.from(document.querySelectorAll("[id^=map-screen-for-]"));
+            const xmlDoc = generateXMLApp(infoAppName.value, infoDefaultScreen.value, infoAppW.value, infoAppH.value, current_ver);
+            const xmlDocRoot = xmlDoc.getElementsByTagName("App")[0];
+            screenList = new Array;
 
-            screen_list = new Array;
-            
-            for (let x = 0; x < map_list.length; x++)
-                screen_list.push(document.getElementById(map_list[x].getAttribute("id").split("-").pop()));
-            
-            var xmlDoc = document.implementation.createDocument(null, "App");
-            var xmlDocRoot = xmlDoc.getElementsByTagName("App")[0];
+            for (const screen of document.querySelectorAll("[id^=map-screen-for-]"))
+                screenList.push(document.getElementById(screen.getAttribute("id").split("-").pop()));
 
-            xmlDocRoot.setAttribute("DisplayName", infoAppName.value);
-            xmlDocRoot.setAttribute("DefaultScreen", infoDefaultScreen.value);
-            xmlDocRoot.setAttribute("Width", infoAppW.value);
-            xmlDocRoot.setAttribute("Height", infoAppH.value);
-            xmlDocRoot.setAttribute("OAVer", current_ver);
-
-            for (i = 0; i < screen_list.length; i++){
-                
-                current_screen_childrens = screen_list[i].querySelectorAll(":scope > div");
-
-                var xmlDocScreen = xmlDoc.createElement("Screen");
-                xmlDocScreen.setAttribute("Name", screen_list[i].getAttribute("id"));
-                xmlDocScreen.setAttribute("Style", encodeURI(screen_list[i].getAttribute('style')));
-                xmlDocScreen.setAttribute("OnVisible", encodeURI(screen_list[i].getAttribute('onVisible')));
-        
-                for (x = 0; x < current_screen_childrens.length; x ++){
-                    var xmlDocItem = xmlDoc.createElement("Children");
-                    
-                    xmlDocItem.setAttribute("Type", current_screen_childrens[x].getAttribute('type'));
-                    xmlDocItem.setAttribute("Name", current_screen_childrens[x].getAttribute('id'));
-                    xmlDocItem.setAttribute("Text", encodeURI(current_screen_childrens[x].innerHTML));
-                    xmlDocItem.setAttribute("X", current_screen_childrens[x].getAttribute('data-x'));
-                    xmlDocItem.setAttribute("Y", current_screen_childrens[x].getAttribute('data-y'));
-                    xmlDocItem.setAttribute("OnSelect", encodeURI(current_screen_childrens[x].getAttribute('onClickALT')));
-                    xmlDocItem.setAttribute("Style", encodeURI(current_screen_childrens[x].getAttribute('style')));
-                    
+            for (const screen of screenList) {
+                const xmlDocScreen = generateXMLScreen(xmlDoc, screen.getAttribute("id"), screen.getAttribute('onVisible'), screen.getAttribute('style'));
+                Array.from(screen.querySelectorAll(":scope > div")).forEach((children) => {
+                    const xmlDocItem = generateXMLChildren(xmlDoc, children.getAttribute('type'), children.getAttribute("id"), children.innerHTML, children.getAttribute("data-x"), children.getAttribute("data-y"), children.getAttribute("onClickALT"), children.getAttribute("style"));
                     xmlDocScreen.appendChild(xmlDocItem);
-                }
+                })
                 xmlDocRoot.appendChild(xmlDocScreen);
             }
+
             return new XMLSerializer().serializeToString(xmlDoc);
         }
 
@@ -420,16 +395,16 @@
         }
 
         function refresh_screens(){
-            screen_list = virtualScreen.querySelectorAll(":scope > div");
+            const screenList = virtualScreen.querySelectorAll(":scope > div");
             currentDefaultScreen = infoDefaultScreen.value;
             infoDefaultScreen.innerHTML = "";
-            for (i = 0; i < screen_list.length; i ++){
-                if (screen_list[i].getAttribute("id") == currentDefaultScreen){
-                    infoDefaultScreen.innerHTML += '<option value="' + screen_list[i].getAttribute("id") + '"selected >' + screen_list[i].getAttribute("id") + '</option>'
+
+            for (const screen of screenList) {
+                if (screen.getAttribute("id") == currentDefaultScreen){
+                    infoDefaultScreen.innerHTML += '<option value="' + screen.getAttribute("id") + '"selected >' + screen.getAttribute("id") + '</option>'
                 } else {
-                    infoDefaultScreen.innerHTML += '<option value="' + screen_list[i].getAttribute("id") + '">' + screen_list[i].getAttribute("id") + '</option>'
+                    infoDefaultScreen.innerHTML += '<option value="' + screen.getAttribute("id") + '">' + screen.getAttribute("id") + '</option>'
                 }
-                
             }
         }
 
@@ -530,7 +505,7 @@
             if (item.getAttribute("type") == "Screen")
             {
                 changeScreen(item);
-                Array.from(screen_childrens).forEach(
+                Array.from(screenChildrens).forEach(
                     (el) => {
                         el.classList.remove("selected");
                         el.classList.remove("drag-resize");
@@ -543,7 +518,7 @@
                 infoBgColor.value = fix_color_format(item.style.backgroundColor);
                 infoOnVisible.value = item.getAttribute("onVisible");
             } else {
-                Array.from(screen_childrens).forEach(
+                Array.from(screenChildrens).forEach(
                     (el) => {
                         el.classList.remove("selected");
                         el.classList.remove("drag-resize");
@@ -579,11 +554,11 @@
         }
         
         function refresh_map(){
-            screen_childrens = virtualScreen.querySelectorAll(":scope > div, :scope > div > div");
-            map_childrens = map.getElementsByTagName("div");
-            for (i = 0; i < screen_childrens.length; i++){
-                if (screen_childrens[i].getAttribute("class") == "Screen"){
-                    screen_id = screen_childrens[i].getAttribute("id");
+            screenChildrens = virtualScreen.querySelectorAll(":scope > div, :scope > div > div");
+
+            for (i = 0; i < screenChildrens.length; i++){
+                if (screenChildrens[i].getAttribute("class") == "Screen"){
+                    screen_id = screenChildrens[i].getAttribute("id");
                     if (document.getElementById("map-screen-for-" + screen_id) == null){
                         map.innerHTML += '<div id="map-screen-for-' + screen_id + '" class="list-group-item"></div>';
                         document.getElementById("map-screen-for-" + screen_id).innerHTML += '<div class="map-screen" id="map-children-' + screen_id + '" point="' + screen_id + '"><span class="icon">® </span>' + screen_id + '</div>';
@@ -716,26 +691,28 @@
         }
 
         function loadXML(){
-            var parser = new DOMParser();
-            var xmlDoc = parser.parseFromString(xml, "text/xml");
-            var app = xmlDoc.getElementsByTagName("App")[0];
+            const parser = new DOMParser();
+            const xmlDoc = parser.parseFromString(xml, "text/xml");
+            const app = xmlDoc.getElementsByTagName("App")[0];
+            const screenList = xmlDoc.getElementsByTagName("Screen");
+
             if (app.getAttribute("OAVer") != current_ver){
                 alert("It seems that this app was created with an older version of Other Apps\nYou can still run and edit the app, but it MAY NOT work correctly.\nApp's version: " + app.getAttribute("OAVer") +"\nYour current OtherApp version: " + current_ver);
             }
-            var screens = xmlDoc.getElementsByTagName("Screen");
-            for (i = 0; i < screens.length; i++){
-                var screen = document.createElement("div");
-                screen.setAttribute("id", screens[i].getAttribute("Name"));
+            
+            for (const currentScreen of screenList) {
+                const screen = document.createElement("div");
+                screen.setAttribute("id", currentScreen.getAttribute("Name"));
                 screen.setAttribute("name", screen.getAttribute("id"));
                 screen.setAttribute("screen", "");
                 screen.setAttribute("class", "Screen");
                 screen.setAttribute("type", "Screen");
-                screen.setAttribute("style", decodeURI(screens[i].getAttribute("Style")));
-                screen.setAttribute("onVisible", decodeURI(screens[i].getAttribute("OnVisible")));
+                screen.setAttribute("style", decodeURI(currentScreen.getAttribute("Style")));
+                screen.setAttribute("onVisible", decodeURI(currentScreen.getAttribute("OnVisible")));
                 virtualScreen.appendChild(screen);
-                current_screen_childrens = screens[i].getElementsByTagName("Children");
+                current_screen_childrens = currentScreen.getElementsByTagName("Children");
                 for (x = 0; x < current_screen_childrens.length; x++) {
-                    var children = document.createElement("div");
+                    const children = document.createElement("div");
                     children.setAttribute("class", current_screen_childrens[x].getAttribute("Type"));
                     children.setAttribute("type", current_screen_childrens[x].getAttribute("Type"));
                     children.setAttribute("id", current_screen_childrens[x].getAttribute("Name"));
@@ -747,6 +724,7 @@
                     screen.appendChild(children);
                 }
             }
+
             refresh_map();
             click(document.getElementById(app.getAttribute("DefaultScreen")));
             infoDefaultScreen.value = app.getAttribute("DefaultScreen");
