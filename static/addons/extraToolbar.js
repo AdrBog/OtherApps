@@ -28,7 +28,7 @@ extraToolbar.addEventListener("input", () => {
 })
 
 document.addEventListener("item-clicked", (e) => {
-    Array.from(screen_childrens).forEach((el) => {el.classList.remove("grid");});
+    Array.from(screenChildrens).forEach((el) => {el.classList.remove("grid");});
     if(document.getElementById("snap_to_grid").checked){
         if (e.detail.element.getAttribute("screen") == null){
             selected.classList.remove("drag-resize");
