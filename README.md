@@ -34,17 +34,17 @@ Disclaimer! Other Apps is still under development. And it is focused for small b
 
 | App Editor | Code Editor | Gallery inside app |
 | -- | -- | -- |
-| ![Screenshot 1](https://raw.githubusercontent.com/OtherExit/OtherApps/main/res/sample01.png) | ![Screenshot 2](https://raw.githubusercontent.com/OtherExit/OtherApps/main/res/sample02.png) | ![Screenshot 3](https://raw.githubusercontent.com/OtherExit/OtherApps/main/res/sample03.png) |
+| ![Screenshot 1](https://raw.githubusercontent.com/AdrBog/OtherApps/main/res/sample01.png) | ![Screenshot 2](https://raw.githubusercontent.com/AdrBog/OtherApps/main/res/sample02.png) | ![Screenshot 3](https://raw.githubusercontent.com/AdrBog/OtherApps/main/res/sample03.png) |
 
 | Database Manager | App Player | Editing form |
 | -- | -- | -- |
-| ![Screenshot 4](https://raw.githubusercontent.com/OtherExit/OtherApps/main/res/sample06.png) | ![Screenshot 5](https://raw.githubusercontent.com/OtherExit/OtherApps/main/res/sample07.png) | ![Screenshot 6](https://raw.githubusercontent.com/OtherExit/OtherApps/main/res/sample08.png) |
+| ![Screenshot 4](https://raw.githubusercontent.com/OtherExit/AdrBog/main/res/sample06.png) | ![Screenshot 5](https://raw.githubusercontent.com/AdrBog/OtherApps/main/res/sample07.png) | ![Screenshot 6](https://raw.githubusercontent.com/AdrBog/OtherApps/main/res/sample08.png) |
 
 ## Themes
 
 | Light theme                                                                                  | Dark theme                                                                                   |
 | -------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- |
-| ![Screenshot 4](https://raw.githubusercontent.com/OtherExit/OtherApps/main/res/sample04.png) | ![Screenshot 5](https://raw.githubusercontent.com/OtherExit/OtherApps/main/res/sample05.png) |
+| ![Screenshot 4](https://raw.githubusercontent.com/AdrBog/OtherApps/main/res/sample04.png) | ![Screenshot 5](https://raw.githubusercontent.com/AdrBog/OtherApps/main/res/sample05.png) |
 
 ## Installation
 You need to have Python with virtualenv and Git installed
@@ -59,7 +59,7 @@ You need to have Python with virtualenv and Git installed
 ```
 
 ## Help
-If you need help, you can read the (incomplete) documentation or see the [examples](https://github.com/OtherExit/OtherApps-Examples)
+If you need help, you can read the (incomplete) documentation or see the [examples](https://github.com/AdrBog/OtherApps-Examples)
 
 ## The future of Other Apps
 Personally I am very happy with the result, I use Other Apps in a non-ironic way to help my father with his projects. I'm going to try to separate the database manager from Other Apps and create a new project, maybe Other Lists.
