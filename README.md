@@ -38,7 +38,7 @@ Disclaimer! Other Apps is still under development. And it is focused for small b
 
 | Database Manager | App Player | Editing form |
 | -- | -- | -- |
-| ![Screenshot 4](https://raw.githubusercontent.com/OtherExit/AdrBog/main/res/sample06.png) | ![Screenshot 5](https://raw.githubusercontent.com/AdrBog/OtherApps/main/res/sample07.png) | ![Screenshot 6](https://raw.githubusercontent.com/AdrBog/OtherApps/main/res/sample08.png) |
+| ![Screenshot 4](https://raw.githubusercontent.com/AdrBog/OtherApps/main/res/sample06.png) | ![Screenshot 5](https://raw.githubusercontent.com/AdrBog/OtherApps/main/res/sample07.png) | ![Screenshot 6](https://raw.githubusercontent.com/AdrBog/OtherApps/main/res/sample08.png) |
 
 ## Themes
 
