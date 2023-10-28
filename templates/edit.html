@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link rel="shortcut icon" href="/static/favicon.ico">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/edit.css') }}">
     <title>{{ id }} - Other Apps</title>
@@ -605,23 +606,15 @@
                     }
                     var label = document.createElement("div");
                     label.innerHTML = "Text";
-                    label.setAttribute("class", "Label");
+                    label.setAttribute("class", "Label Children");
                     label.setAttribute("type", "Label");
                     label.setAttribute("id", "Label" + currentId);
                     label.setAttribute("data-x", "64");
                     label.setAttribute("data-y", "64");
-                    label.style.display = "flex";
                     label.style.width = "160px";
                     label.style.height = "64px";
-                    label.style.position = "absolute";
                     label.style.transform = "translate(64px, 64px)";
                     label.style.color = "#000";
-                    label.style.backgroundRepeat = "no-repeat";
-                    label.style.backgroundAttachment = "fixed";
-                    label.style.backgroundSize = "contain";
-                    label.style.fontSize = "15px";
-                    label.style.boxSizing = "border-box";
-                    label.style.userSelect = "none";
                     currentScreen.appendChild(label);
                     refresh_map();
                     document.dispatchEvent(new CustomEvent("item-created", {"detail":{"id": label.getAttribute("id"), "type": type}}));
@@ -633,29 +626,17 @@
                     }
                     var button = document.createElement("div");
                     button.innerHTML = "Button";
-                    button.setAttribute("class", "Button");
+                    button.setAttribute("class", "Button Children");
                     button.setAttribute("type", "Button");
                     button.setAttribute("id", "Button" + currentId);
                     button.setAttribute("data-x", "64");
                     button.setAttribute("data-y", "64");
                     button.setAttribute("onClickALT", "null");
-                    button.style.display = "flex";
-                    button.style.width = "160px";
-                    button.style.height = "64px";
-                    button.style.justifyContent = "center";
-                    button.style.alignItems = "center";
-                    button.style.position = "absolute";
                     button.style.transform = "translate(64px, 64px)";
                     button.style.color = "#fff";
                     button.style.backgroundColor = "rgb(56, 96, 178)";
-                    button.style.backgroundRepeat = "no-repeat";
-                    button.style.backgroundAttachment = "fixed";
-                    button.style.backgroundSize = "contain";
                     button.style.border = "2px solid rgba(0, 0, 0, 0.2)";
                     button.style.borderRadius = "10px";
-                    button.style.fontSize = "15px";
-                    button.style.boxSizing = "border-box";
-                    button.style.userSelect = "none";
                     currentScreen.appendChild(button);
                     refresh_map();
                     document.dispatchEvent(new CustomEvent("item-created", {"detail":{"id": button.getAttribute("id"), "type": type}}));
@@ -672,11 +653,6 @@
                     screen.setAttribute("type", "Screen");
                     screen.setAttribute("name", "Screen" + currentId);
                     screen.setAttribute("id", "Screen" + currentId);
-                    screen.style.position = "relative";
-                    screen.style.width = "100%";
-                    screen.style.height = "100%";
-                    screen.style.overflow = "hidden";
-                    screen.style.backgroundColor = "#fff";
                     virtualScreen.appendChild(screen);
                     currentScreen = document.getElementById(screen.getAttribute("id"));
                     refresh_map();
@@ -713,7 +689,7 @@
                 current_screen_childrens = currentScreen.getElementsByTagName("Children");
                 for (x = 0; x < current_screen_childrens.length; x++) {
                     const children = document.createElement("div");
-                    children.setAttribute("class", current_screen_childrens[x].getAttribute("Type"));
+                    children.setAttribute("class", current_screen_childrens[x].getAttribute("Type") + " Children");
                     children.setAttribute("type", current_screen_childrens[x].getAttribute("Type"));
                     children.setAttribute("id", current_screen_childrens[x].getAttribute("Name"));
                     children.setAttribute("style", decodeURI(current_screen_childrens[x].getAttribute("Style")));

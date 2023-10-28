@@ -1,0 +1,16 @@
+{
+    "Index": [],
+    "Editor":[
+        "/static/addons/extraToolbar.js",
+        "/static/addons/extraInsert.js",
+        "/static/addons/extraEditor.js",
+        "/static/addons/extraEdits.js",
+        "/static/addons/keyboard.js",
+        "/static/addons/dblclick.js",
+        "/static/addons/unsave.js"
+    ],
+    "Play": [
+        "/static/addons/scaleApp.js"
+    ],
+    "Embed": []
+}

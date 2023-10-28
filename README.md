@@ -1,18 +1,20 @@
 <div align="center">
   <img src="./res/logo.svg">
+  <h1>Other Apps</h1>
+  <p>Lightweight Free and Open Source alternative to Microsoft's Power Apps written in Python and Flask.</p>
 </div>
+<hr>
 
-# Other Apps
+[![GPL v3](https://img.shields.io/badge/License-GNU%20v3-blue)](https://www.gnu.org/licenses/gpl-3.0.en.html)
 
-[![GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue)](https://www.gnu.org/licenses/gpl-3.0.en.html)
+Use Other Apps to create simple apps for small and resource-poor businesses
 
-Lightweight Free and Open Source alternative to Microsoft's Power Apps written in Python and Flask.
-
-## Why use Other Apps instead of Power Apps
+## Why Other Apps instead of Power Apps
 0. **Other Apps is free and open source**, making it perfect for developers to customize the application to their own liking.
-1. **Other Apps makes 0 connections to the internet**, this makes it more private and secure.
-2. **Self-Hosting**
-3. **Easy setup**, Other Apps works  with pure javascript. No npm, nodejs, jsquery, etc needed.
+1. **Other Apps makes 0 connections to the internet**, unless you tell it to make a connection of course.
+2. **Self-Hosting**, once you download Other Apps, it's yours to do whatever you want
+3. **No dependencies**, Other Apps works with pure javascript. No npm, nodejs, jsquery ... needed
+4. **IT'S FREE**
 
 Disclaimer! Other Apps is still under development. And it is focused for small business/local networks. I do not recommend using it for large enterprises.
 
@@ -22,44 +24,40 @@ Disclaimer! Other Apps is still under development. And it is focused for small b
 -   [x] No Tracking
 -   [x] Lightweight
 -   [x] No account needed
--   [x] SQLite databases
--   [x] Unlimited database size
 -   [x] Unrestricted HTML embedding
 -   [x] Themes
 -   [x] Addons
 -   [ ] Documentation (Coming soon)
 
+## Other Apps + Libre Lists
+Get more out of Other Apps with Libre Lists.
+
+### Libre Lists features
+-   [x] SQLite databases
+-   [x] Unlimited database size
+
+Download [Libre Lists](https://github.com/AdrBog/LibreLists)
+
+Read the [documentation](docs/Libre%20Lists%20Connection.md) to learn how to connect Other Apps with Libre Lists
 
 ## Screenshots
 
-| App Editor | Code Editor | Gallery inside app |
-| -- | -- | -- |
-| ![Screenshot 1](https://raw.githubusercontent.com/AdrBog/OtherApps/main/res/sample01.png) | ![Screenshot 2](https://raw.githubusercontent.com/AdrBog/OtherApps/main/res/sample02.png) | ![Screenshot 3](https://raw.githubusercontent.com/AdrBog/OtherApps/main/res/sample03.png) |
-
-| Database Manager | App Player | Editing form |
-| -- | -- | -- |
-| ![Screenshot 4](https://raw.githubusercontent.com/AdrBog/OtherApps/main/res/sample06.png) | ![Screenshot 5](https://raw.githubusercontent.com/AdrBog/OtherApps/main/res/sample07.png) | ![Screenshot 6](https://raw.githubusercontent.com/AdrBog/OtherApps/main/res/sample08.png) |
-
-## Themes
-
-| Light theme                                                                                  | Dark theme                                                                                   |
-| -------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- |
-| ![Screenshot 4](https://raw.githubusercontent.com/AdrBog/OtherApps/main/res/sample04.png) | ![Screenshot 5](https://raw.githubusercontent.com/AdrBog/OtherApps/main/res/sample05.png) |
+![Screenshot 1](res/sample01.png)
+![Screenshot 2](res/sample02.png)
+![Screenshot 4](res/sample03.png) 
+![Screenshot 5](res/sample04.png)
 
 ## Installation
 You need to have Python with virtualenv and Git installed
 
 ```bash
-  git clone https://github.com/OtherExit/OtherApps.git
-  cd OtherApps
-  python -m venv venv
-  source venv/bin/activate
-  pip install flask pyyaml
-  python -m flask run
+git clone https://github.com/AdrBog/OtherApps.git
+cd OtherApps
+python -m venv venv
+source venv/bin/activate
+pip install flask flask-cors
+python -m flask run -p 5000
 ```
 
 ## Help
-If you need help, you can read the (incomplete) documentation or see the [examples](https://github.com/AdrBog/OtherApps-Examples)
-
-## The future of Other Apps
-Personally I am very happy with the result, I use Other Apps in a non-ironic way to help my father with his projects. I'm going to try to separate the database manager from Other Apps and create a new project, maybe Other Lists.
+If you need help, you can read the (incomplete) documentation or see the [examples](https://github.com/OtherExit/OtherApps-Examples)

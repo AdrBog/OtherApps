@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="/static/favicon.ico">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <title>Other Apps | Home</title>
     <style>
@@ -51,7 +52,6 @@
         <div id="tool-bar" class="navbar">
             <a class="home" href="{{ url_for('index') }}">Other Apps</a>
             <a href="#" onclick="document.getElementById('newapp-window').style.visibility = 'visible'">New App</a>
-            <a href="{{ url_for('database_menu') }}" target="_blank">Database manager</a>
             <a href="#" onclick="document.getElementById('about-window').style.visibility = 'visible'">About</a>
         </div>
         <div class="vertical-container">

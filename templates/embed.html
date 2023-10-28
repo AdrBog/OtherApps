@@ -7,7 +7,9 @@
 </head>
 <body style="margin: 0;">
     <div id="virtual-screen" name="" style="position: relative; background-color: white;"></div>
+    <script src="/static/js/global.js"></script>
     <script src="/static/js/builtinFunctions.js"></script>
+    <script src="/static/js/LibreLists.js"></script>
     {% for addon in addons %}
     <script src="{{addon}}"></script>
     {% endfor %}
@@ -30,7 +32,7 @@
             var screen_element = document.getElementById(screen_name);
             current_screen_childrens = screens[i].getElementsByTagName("Children");
             for (x = 0; x < current_screen_childrens.length; x++) {
-                screen_element.innerHTML += '<div class="' + current_screen_childrens[x].getAttribute("Type") + ' resize-drag" ' +
+                screen_element.innerHTML += '<div class="' + current_screen_childrens[x].getAttribute("Type") + ' Children" ' +
                                         'id="' + current_screen_childrens[x].getAttribute("Name") + '" ' +
                                         'style="' + decodeURI(current_screen_childrens[x].getAttribute("Style")).replace(/"/g, "&quot;") + '" ' +
                                         '" onClick="' + decodeURI(current_screen_childrens[x].getAttribute("OnSelect")).replace(/"/g, "&quot;") + '" ' +

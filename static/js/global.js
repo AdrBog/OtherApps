@@ -5,6 +5,8 @@ function generateXMLApp(display_name, default_screen, w, h, version){
     const pi = xmlDoc.createProcessingInstruction('xml', 'version="1.0" encoding="UTF-8"');
     const xmlDocRoot = xmlDoc.getElementsByTagName("App")[0];
     xmlDoc.insertBefore(pi, xmlDoc.firstChild);
+    xmlDocRoot.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
+    xmlDocRoot.setAttribute("xsi:noNamespaceSchemaLocation", "app.xsd");
     xmlDocRoot.setAttribute("DisplayName", display_name);
     xmlDocRoot.setAttribute("DefaultScreen", default_screen);
     xmlDocRoot.setAttribute("Width", w);
@@ -60,4 +62,10 @@ function fix_color_format(color){
     g = Number(rgb[1]).toString(16);
     b = Number(rgb[2]).toString(16);
     return('#' + r + g + b);  
+}
+
+async function getConfig(attributeName){
+    const res = await fetch("/json/config");
+    const data = await res.json();
+    return data[attributeName];
 }

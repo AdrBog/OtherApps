@@ -23,17 +23,31 @@ function exevent(type, init = {}) {
 }
 
 async function sqljson(database, table, filter = "") {
-    url = "/database/json/" + database + "/" + table + "?f=" + filter;
-    const res = await fetch(url);
+    url = await getConfig("Libre_Lists_host") + "/json/table/" + database + "/" + table + "?f=" + filter;
+    const res = await fetch(url, {
+        mode:  'cors',
+        headers: {
+            "Content-type": "application/json; charset=UTF-8",
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods" : "GET, POST, OPTIONS"
+        }
+    });
     const data = await res.json();
     return data;
 }
 
-function sqlquery(database, query) {
-    url = "/database/exec/" + database;
-    return new Promise((resolve) => fetch(url, {
+async function sqlquery(database, query) {
+    url = await getConfig("Libre_Lists_host") + "/exec/" + database;
+    const res = await fetch(url, {
+        mode:  'cors',
         method: "POST",
-        body: JSON.stringify({ "final_command": query }),
-        headers: { "Content-type": "application/json; charset=UTF-8" }
-    }).then(resolve));
+        body: JSON.stringify({ "query": query }),
+        headers: {
+            "Content-type": "application/json; charset=UTF-8",
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods" : "GET, POST, OPTIONS"
+        }
+    });
+    const data = await res.json();
+    return data;
 }

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <!-- Simple types -->
+    <xs:simpleType name="childrenType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="Label" />
+            <xs:enumeration value="Button" />
+        </xs:restriction>
+    </xs:simpleType>
+
+    <!-- Complex types -->
+    <xs:complexType name="typeChildren">
+        <xs:attribute name="Type" type="childrenType" use="required" />
+        <xs:attribute name="Name" use="required" />
+        <xs:attribute name="Text" use="required" />
+        <xs:attribute name="X" type="xs:integer" use="optional" default="0" />
+        <xs:attribute name="Y" type="xs:integer" use="optional" default="0" />
+        <xs:attribute name="OnSelect" use="optional" default="" />
+        <xs:attribute name="Style" use="optional" default="" />
+    </xs:complexType>
+
+
+    <xs:complexType name="typeScreen">
+        <xs:sequence>
+            <xs:element name="Children" type="typeChildren" minOccurs="0" maxOccurs="unbounded" />
+        </xs:sequence>
+        <xs:attribute name="Name" use="required" />
+        <xs:attribute name="Style" use="required" />
+        <xs:attribute name="OnVisible" use="optional" default="" />
+    </xs:complexType>
+
+
+    <xs:complexType name="typeApp">
+        <xs:sequence>
+            <xs:element name="Screen" type="typeScreen" maxOccurs="unbounded" />
+        </xs:sequence>
+        <xs:attribute name="DisplayName" use="required" />
+        <xs:attribute name="DefaultScreen" use="required" />
+        <xs:attribute name="Width" type="xs:integer" use="optional" default="800" />
+        <xs:attribute name="Height" type="xs:integer" use="optional" default="480" />
+        <xs:attribute name="OAVer" use="optional" default="0.4.0" />
+    </xs:complexType>
+
+
+    <!-- Root -->
+    <xs:element name="App" type="typeApp" >
+        <xs:key name="screenNames">
+            <xs:selector xpath="Screen" />
+            <xs:field xpath="@Name" />
+        </xs:key>
+
+        <xs:keyref name="defaultScreen" refer="screenNames">
+            <xs:selector xpath="." />
+            <xs:field xpath="@DefaultScreen" />
+        </xs:keyref>
+
+        <xs:key name="childrenNames">
+            <xs:selector xpath="Screen/Children" />
+            <xs:field xpath="@Name" />
+        </xs:key>
+    </xs:element>
+</xs:schema>
