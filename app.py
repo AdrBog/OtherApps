@@ -2,6 +2,7 @@ import os, shutil, sqlite3, json
 from flask import Flask, render_template, request, jsonify, redirect, url_for
 from flask_cors import CORS, cross_origin
 from werkzeug.exceptions import abort
+from xmlschema import XMLSchema, etree_tostring
 
 app = Flask(__name__)
 CORS(app)
@@ -14,6 +15,11 @@ VERSION = "0.4.0"
 def reload_addons():
     with open(f"{CONFIG_DIR}/{ADDONS_FILE}") as f:
         return json.load(f)
+
+def loadXML(xml, xsd):
+    schema = XMLSchema(xsd)
+    data = schema.decode(xml)
+    return data
 
 @app.route('/')
 def index():
@@ -41,12 +47,15 @@ def embed(id, screen):
 def edit(id):
     addons = reload_addons()
     c = request.args.get('c', default = '1', type = str)
-    try:
-        with open(f'{PROJECTS_DIR}/{id}/{c}.xml', 'r') as file:
-            xml = file.read().replace('\n', '')
-    except:
-        xml = '<App DisplayName="Component" DefaultScreen="Screen0" Width="800" Height="480" OAVer="0.24"><Screen Name="Screen0" Style="position:%20relative;%20width:%20100%25;%20height:%20100%25;%20overflow:%20hidden;background-color:%20rgb(255,%20255,%20255);" OnVisible=""></Screen></App>'
-    return render_template('edit.html', id=id, xmlfile=xml, ver=VERSION, c=c, addons=addons["Editor"])
+    return render_template('edit.html', id=id, ver=VERSION, c=c, addons=addons["Editor"])
+
+@app.route('/appdata/<id>')
+def appdata(id):
+    c = request.args.get('c', default = '1', type = str)
+    if not os.path.exists(f"{PROJECTS_DIR}/{id}/{c}.xml"):
+        with open(f"{PROJECTS_DIR}/{id}/{c}.xml", "w") as component:
+            component.write(f'<?xml version="1.0" encoding="UTF-8"?><App xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="app.xsd" DisplayName="My Component" DefaultScreen="Component" OAVer="´{VERSION}"><Screen Name="Component" /></App>')
+    return jsonify(loadXML(f"{PROJECTS_DIR}/{id}/{c}.xml", f"{PROJECTS_DIR}/{id}/app.xsd"))
 
 @app.route('/remove/<id>')
 def remove(id):

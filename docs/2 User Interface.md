@@ -18,11 +18,10 @@ A window will appear in which you can enter the name of the application, make su
 
 Once you click on "Create", a folder will be created in the "projects_dir" directory. That is why I recommend not to use spaces or special characters.
 
-The page will refresh and your application will appear in the list, the folder will also appear in your "projects_dir" directory.
-<div align="center">
-  <img src="imgs/img3.png">
-  <img src="imgs/img4.png">
-</div>
+The page will refresh and your application will appear in the list, the folder will also appear in your "PROJECTS_DIR" directory.
+
+Read [this article](Manage%20Projects.md) for more info
+
 
 ## 2.2 Player
 To play the application, click on the link with the name of your project.

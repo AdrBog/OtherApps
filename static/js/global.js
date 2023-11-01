@@ -15,10 +15,7 @@ function generateXMLApp(display_name, default_screen, w, h, version){
     return xmlDoc;
 }
 
-function generateXMLScreen(xmldoc, name, on_visible = "", style = "_def"){
-    if (style == "_def"){
-        style = "position: relative; width: 100%; height: 100%; overflow: hidden; background-color: rgb(255, 255, 255);";
-    }
+function generateXMLScreen(xmldoc, name, on_visible = "", style = "background-color: rgb(255, 255, 255);"){
     const screen = xmldoc.createElement("Screen");
     screen.setAttribute("Name", name);
     screen.setAttribute("Style", encodeURI(style).replace(/%20/g, " "));
@@ -46,6 +43,12 @@ function generateXMLChildren(xmldoc, type, name, text, x = 64, y = 64, on_select
     children.setAttribute("OnSelect", encodeURI(on_select).replace(/%20/g, " "));
     children.setAttribute("Style", encodeURI(style).replace(/%20/g, " "));
     return children;
+}
+
+async function getAppData(id, c = "1"){
+    const res = await fetch("/appdata/" + id + "?c=" + c)
+    const data = await res.json();
+    return data;
 }
 
 function sql_execute(database, final_command){

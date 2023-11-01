@@ -55,7 +55,7 @@ git clone https://github.com/AdrBog/OtherApps.git
 cd OtherApps
 python -m venv venv
 source venv/bin/activate
-pip install flask flask-cors
+pip install flask flask-cors xmlschema
 python -m flask run -p 5000
 ```
 

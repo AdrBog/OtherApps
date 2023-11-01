@@ -213,7 +213,6 @@
         var urlsave = "/save";
         var urltest = "/play/{{ id }}/test";
         var can_click = true;
-        var xml = `{{ xmlfile | safe }}`;
         var selected;
         var textarea_selected;
 
@@ -276,7 +275,7 @@
             virtualScreen.style.width = infoAppW.value + 'px';
             virtualScreen.style.minWidth = infoAppW.value + 'px';
             virtualScreen.style.height = infoAppH.value + 'px';
-        })
+        });
         tableId.addEventListener('input', () => {
             old_name = selected.getAttribute("id");
             valid_name.lastIndex = 0;
@@ -288,11 +287,11 @@
             }
             refresh_map();
             document.dispatchEvent(tableIdChanged);
-        })
+        });
         tableText.addEventListener('input', () => {
             selected.innerHTML = infoText.value;
             document.dispatchEvent(tableTextChanged);
-        })
+        });
         tableShow.addEventListener('input', () => {
             selected.setAttribute("data-x", infoX.value);
             selected.setAttribute("data-y", infoY.value);
@@ -301,7 +300,7 @@
             selected.style.height = infoH.value + 'px';
             selected.style.zIndex = infoZ.value;
             document.dispatchEvent(tableShowChanged);
-        })
+        });
         tableDecor.addEventListener('input', () => {
             selected.style.backgroundColor = infoFill.value;
             selected.style.color = infoColor.value;
@@ -310,16 +309,16 @@
             selected.style.borderRadius = infoBorderRadius.value + 'px';
             selected.style.backgroundImage = infoBgImage.value;
             document.dispatchEvent(tableDecorChanged);
-        })
+        });
         tableScreen.addEventListener('input', () => {
             currentScreen.style.backgroundColor = infoBgColor.value;
             selected.setAttribute("onVisible", infoOnVisible.value);
             document.dispatchEvent(tableScreenChanged);
-        })
+        });
         tableButton.addEventListener('input', () => {
             selected.setAttribute("onClickALT", infoOnClick.value);
             document.dispatchEvent(tableButtonChanged);
-        })
+        });
         document.querySelectorAll('textarea').forEach(item => {
             item.addEventListener('dblclick', (e) => {
                 textarea_selected = item;
@@ -441,14 +440,18 @@
         
         function del(id){
             element = document.getElementById(id);
-            if (element.getAttribute('class').split(' ')[0] == "Screen"){
+            if (element.getAttribute('type') == "Screen"){
+                if (virtualScreen.querySelectorAll("[type='Screen']").length <= 1){
+                    alert("There must be at least one screen");
+                    return;
+                }
                 if (confirm("Are you sure you want to delete " + element.getAttribute("Id") + "?")) {
                     document.getElementById("map-screen-for-" + currentScreen.getAttribute("id")).remove();
                     document.getElementById(currentScreen.getAttribute("id")).remove();
                     document.dispatchEvent(new CustomEvent("item-deleted", {
                         "detail": {
                             "id": id,
-                            "type": element.getAttribute('class').split(' ')[0],
+                            "type": element.getAttribute('type'),
                             "element": element
                         }
                     }));
@@ -459,7 +462,7 @@
                 document.dispatchEvent(new CustomEvent("item-deleted", {
                     "detail": {
                         "id": id,
-                        "type": element.getAttribute('class').split(' ')[0],
+                        "type": element.getAttribute('type'),
                         "element": element
                     }
                 }));
@@ -470,7 +473,7 @@
             if (item.parentElement != virtualScreen){
                 while(!item.parentElement.getAttribute("class"))
                     item = item.parentElement;
-                while(item.parentElement.getAttribute("class").split(" ")[0] != "Screen")
+                while(item.parentElement.getAttribute("type") != "Screen")
                     item = item.parentElement;
             }
 
@@ -653,6 +656,7 @@
                     screen.setAttribute("type", "Screen");
                     screen.setAttribute("name", "Screen" + currentId);
                     screen.setAttribute("id", "Screen" + currentId);
+                    screen.style.backgroundColor = "rgb(255, 255, 255)";
                     virtualScreen.appendChild(screen);
                     currentScreen = document.getElementById(screen.getAttribute("id"));
                     refresh_map();
@@ -666,51 +670,45 @@
             } 
         }
 
-        function loadXML(){
-            const parser = new DOMParser();
-            const xmlDoc = parser.parseFromString(xml, "text/xml");
-            const app = xmlDoc.getElementsByTagName("App")[0];
-            const screenList = xmlDoc.getElementsByTagName("Screen");
+        async function loadXML(){
+            appData = await getAppData("{{id}}", "{{c}}");
 
-            if (app.getAttribute("OAVer") != current_ver){
-                alert("It seems that this app was created with an older version of Other Apps\nYou can still run and edit the app, but it MAY NOT work correctly.\nApp's version: " + app.getAttribute("OAVer") +"\nYour current OtherApp version: " + current_ver);
-            }
-            
-            for (const currentScreen of screenList) {
-                const screen = document.createElement("div");
-                screen.setAttribute("id", currentScreen.getAttribute("Name"));
-                screen.setAttribute("name", screen.getAttribute("id"));
-                screen.setAttribute("screen", "");
-                screen.setAttribute("class", "Screen");
-                screen.setAttribute("type", "Screen");
-                screen.setAttribute("style", decodeURI(currentScreen.getAttribute("Style")));
-                screen.setAttribute("onVisible", decodeURI(currentScreen.getAttribute("OnVisible")));
-                virtualScreen.appendChild(screen);
-                current_screen_childrens = currentScreen.getElementsByTagName("Children");
-                for (x = 0; x < current_screen_childrens.length; x++) {
-                    const children = document.createElement("div");
-                    children.setAttribute("class", current_screen_childrens[x].getAttribute("Type") + " Children");
-                    children.setAttribute("type", current_screen_childrens[x].getAttribute("Type"));
-                    children.setAttribute("id", current_screen_childrens[x].getAttribute("Name"));
-                    children.setAttribute("style", decodeURI(current_screen_childrens[x].getAttribute("Style")));
-                    children.setAttribute("onClickALT", decodeURI(current_screen_childrens[x].getAttribute("OnSelect")));
-                    children.setAttribute("data-x", current_screen_childrens[x].getAttribute("X"));
-                    children.setAttribute("data-y", current_screen_childrens[x].getAttribute("Y"));
-                    children.innerHTML = decodeURI(current_screen_childrens[x].getAttribute("Text"));
-                    screen.appendChild(children);
+            if (appData["@OAVer"] != current_ver)
+                alert("It seems that this app was created with an older version of Other Apps\nYou can still run and edit the app, but it MAY NOT work correctly.\nApp's version: " + appData["@OAVer"] +"\nYour current OtherApp version: " + current_ver);
+
+            for (const screen of appData["Screen"]) {
+                const screenDiv = document.createElement("div");
+                const childrenList = (("Children" in screen)) ? screen["Children"] : [];
+                screenDiv.setAttribute("id", screen["@Name"]);
+                screenDiv.setAttribute("name", screen["@Name"]);
+                screenDiv.setAttribute("screen", "");
+                screenDiv.setAttribute("class", "Screen");
+                screenDiv.setAttribute("type", "Screen");
+                screenDiv.setAttribute("style", decodeURI(screen["@Style"]));
+                screenDiv.setAttribute("onVisible", decodeURI(screen["@OnVisible"]));
+                virtualScreen.appendChild(screenDiv);
+                for (const children of childrenList) {
+                    const childrenDiv = document.createElement("div");
+                    childrenDiv.setAttribute("class", children["@Type"] + " Children");
+                    childrenDiv.setAttribute("type", children["@Type"]);
+                    childrenDiv.setAttribute("id", children["@Name"]);
+                    childrenDiv.setAttribute("style", decodeURI(children["@Style"]));
+                    childrenDiv.setAttribute("onClickALT", decodeURI(children["@OnSelect"]));
+                    childrenDiv.setAttribute("data-x", children["@X"]);
+                    childrenDiv.setAttribute("data-y", children["@Y"]);
+                    childrenDiv.innerHTML = decodeURI(children["@Text"]);
+                    screenDiv.appendChild(childrenDiv);
                 }
             }
-
             refresh_map();
-            click(document.getElementById(app.getAttribute("DefaultScreen")));
-            infoDefaultScreen.value = app.getAttribute("DefaultScreen");
-            infoAppName.value = app.getAttribute("DisplayName");
-            infoAppW.value = app.getAttribute("Width");
-            infoAppH.value = app.getAttribute("Height");
+            click(document.getElementById(appData["@DefaultScreen"]));
+            infoDefaultScreen.value = appData["@DefaultScreen"];
+            infoAppName.value = appData["@DisplayName"];
+            infoAppW.value = appData["@Width"];
+            infoAppH.value = appData["@Height"];
             virtualScreen.style.width = infoAppW.value + 'px';
             virtualScreen.style.minWidth = infoAppW.value + 'px';
             virtualScreen.style.height = infoAppH.value + 'px';
-
         }
 
         interact('#nav-sidebar').resizable({

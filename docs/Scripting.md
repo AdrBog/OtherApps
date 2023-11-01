@@ -34,7 +34,7 @@ _Button0 == document.getElementById("Button0") // => true
 ## Built-in functions
 Built in functions are functions that don't exist in pure Javascript, they only work in OtherApps.
 
-Here's a list of all the current built in functions we have in OtherApps
+Here's a list of some of the current built-in functions we have in OtherApps
 
 | Function      | Variables | Function
 |---|---|---|

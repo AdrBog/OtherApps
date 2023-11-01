@@ -89,7 +89,8 @@ function extraInsert(item) {
             newitemElement.style.width = "420px";
             newitemElement.style.height = "256px";
             newitemElement.innerHTML = "<iframe src='' style='flex: 1;'></iframe>";
-            rename(newitemID, "Database");
+            newitemElement.style.backgroundColor = "transparent";
+            rename(newitemID, "Frame");
             break;
         case "input":
             newitemID = insert("label");
