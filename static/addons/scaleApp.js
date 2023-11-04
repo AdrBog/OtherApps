@@ -5,26 +5,11 @@ function resize_app(){
     targetHeight = app.offsetHeight;
 
     scale = app.scrollHeight / targetHeight;
-    //document.getElementById("display-name").innerHTML = targetWidth + " / " + appWidth + " = " + targetWidth / appWidth;
-    //document.getElementById("display-name").innerHTML += " " + targetHeight + " / " + appHeight + " = " + targetHeight / appHeight;
-    if (targetWidth < appWidth){
-        scale = targetWidth / appWidth;
-    } else {
-        scale = targetHeight / appHeight;
-    }
-
+    
+    scale = (targetWidth < appWidth) ? scale = targetWidth / appWidth : scale = targetHeight / appHeight;
+    
     appFrame.style.transform = "scale(" + scale + ")";
 }
 
-window.addEventListener('load', () => {
-    document.getElementById("display-name").innerHTML = document.getElementById('app-frame').contentWindow.document.getElementById("virtual-screen").getAttribute("name");
-    appFrame.style.width = document.getElementById('app-frame').contentWindow.document.getElementById("virtual-screen").style.width;
-    appFrame.style.height = document.getElementById('app-frame').contentWindow.document.getElementById("virtual-screen").style.height;
-
-    resize_app();
-
-})
-
-window.addEventListener('resize', () => {
-    resize_app();
-})
+document.addEventListener('app-loaded', () => {resize_app();})
+window.addEventListener('resize', () => {resize_app();})

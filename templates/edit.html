@@ -278,13 +278,13 @@
         });
         tableId.addEventListener('input', () => {
             old_name = selected.getAttribute("id");
-            valid_name.lastIndex = 0;
             infoName.classList.remove("error");
-            if(document.getElementById(infoName.value) != null || !valid_name.test(infoName.value)){
+
+            if(document.getElementById(infoName.value) != null || ! isValid(infoName.value))
                 infoName.classList.add("error");
-            } else {
+            else
                 rename(old_name, infoName.value);
-            }
+            
             refresh_map();
             document.dispatchEvent(tableIdChanged);
         });
@@ -806,7 +806,7 @@
         new Sortable(document.getElementById("control-map"), {
             animation: 150,
         });
-
+        
         loadXML();
     </script>
 </body>

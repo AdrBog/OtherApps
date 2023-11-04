@@ -1,58 +1,80 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-</head>
-<body style="margin: 0;">
-    <div id="virtual-screen" name="" style="position: relative; background-color: white;"></div>
-    <script src="/static/js/global.js"></script>
-    <script src="/static/js/builtinFunctions.js"></script>
-    <script src="/static/js/LibreLists.js"></script>
-    {% for addon in addons %}
-    <script src="{{addon}}"></script>
-    {% endfor %}
-    <script>
-        var screen = document.getElementById("screen");
-        var default_screen = "{{ s }}";
-        var xml = `{{ xmlfile | safe }}`;
-        var currentScreen;
+    <head>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    </head>
+    <body style="margin: 0;">
+        <div id="virtual-screen" name="" style="position: relative; background-color: white;"></div>
+        <script src="/static/js/global.js"></script>
+        <script src="/static/js/builtinFunctions.js"></script>
+        <script src="/static/js/LibreLists.js"></script>
+        {% for addon in addons %}
+            <script src="{{ addon }}"></script>
+        {% endfor %}
+        <script>
+            var screen = document.getElementById("screen");
+            var defaultScreen = "{{ s }}";
+            var currentScreen;
+            const virtualScreen = document.getElementById("virtual-screen");
 
-        const virtualScreen =       document.getElementById("virtual-screen");
+            async function loadXML() {
+                const appData = await getAppData("{{ id }}", "{{ screen }}");
 
-        var parser = new DOMParser();
-        var xmlDoc = parser.parseFromString(xml, "text/xml");
-        var app = xmlDoc.getElementsByTagName("App")[0];
-        var childrens = xmlDoc.getElementsByTagName("Children");
-        var screens = xmlDoc.getElementsByTagName("Screen");
-        for (i = 0; i < screens.length; i++){
-            var screen_name = screens[i].getAttribute("Name");
-            virtualScreen.innerHTML += '<div class="Screen" name="' + screen_name + '" id="' + screen_name + '" style="' + decodeURI(screens[i].getAttribute("Style")) +'" onVisible="' + decodeURI(screens[i].getAttribute("OnVisible")).replace(/"/g, "&quot;") + '"></div>';
-            var screen_element = document.getElementById(screen_name);
-            current_screen_childrens = screens[i].getElementsByTagName("Children");
-            for (x = 0; x < current_screen_childrens.length; x++) {
-                screen_element.innerHTML += '<div class="' + current_screen_childrens[x].getAttribute("Type") + ' Children" ' +
-                                        'id="' + current_screen_childrens[x].getAttribute("Name") + '" ' +
-                                        'style="' + decodeURI(current_screen_childrens[x].getAttribute("Style")).replace(/"/g, "&quot;") + '" ' +
-                                        '" onClick="' + decodeURI(current_screen_childrens[x].getAttribute("OnSelect")).replace(/"/g, "&quot;") + '" ' +
-                                        'data-x="' + current_screen_childrens[x].getAttribute("X") + '" ' +
-                                        'data-y="' + current_screen_childrens[x].getAttribute("Y") + '" ' +
-                                        '>' + decodeURI(current_screen_childrens[x].getAttribute("Text")) +'</div>';        
+                for (const screen of appData["Screen"]) {
+                    const screenDiv = document.createElement("div");
+                    const childrenList = (("Children" in screen)) ? screen["Children"] : [];
+                    screenDiv.setAttribute("id", screen["@Name"]);
+                    screenDiv.setAttribute("name", screen["@Name"]);
+                    screenDiv.setAttribute("screen", "");
+                    screenDiv.setAttribute("class", "Screen");
+                    screenDiv.setAttribute("type", "Screen");
+                    screenDiv.setAttribute("style", decodeURI(screen["@Style"]));
+                    screenDiv.setAttribute("onVisible", decodeURI(screen["@OnVisible"]));
+                    virtualScreen.appendChild(screenDiv);
+                    for (const children of childrenList) {
+                        const childrenDiv = document.createElement("div");
+                        childrenDiv.setAttribute("class", children["@Type"] + " Children");
+                        childrenDiv.setAttribute("type", children["@Type"]);
+                        childrenDiv.setAttribute("id", children["@Name"]);
+                        childrenDiv.setAttribute("style", decodeURI(children["@Style"]));
+                        childrenDiv.setAttribute("onClick", decodeURI(children["@OnSelect"]));
+                        childrenDiv.setAttribute("data-x", children["@X"]);
+                        childrenDiv.setAttribute("data-y", children["@Y"]);
+                        childrenDiv.innerHTML = decodeURI(children["@Text"]);
+                        screenDiv.appendChild(childrenDiv);
+                    }
+                }
+                virtualScreen.setAttribute("name", appData["@DisplayName"]);
+                virtualScreen.style.width = appData["@Width"] + 'px';
+                virtualScreen.style.height = appData["@Height"] + 'px';
+
+                for (const item of virtualScreen.querySelectorAll("[id]")) {
+                    try {
+                        eval("_" + validateName(item.getAttribute("id")) + " = document.getElementById('" + item.getAttribute("id") + "')")
+                    } catch (error) {
+                        break;
+                    }
+                }
+
+                if (! defaultScreen) 
+                    navigate(document.getElementById(appData["@DefaultScreen"]));
+                 else 
+                    navigate(document.getElementById(defaultScreen));
+                
+
+                document.dispatchEvent(new CustomEvent("app-loaded", {
+                    "detail": {
+                        "DisplayName": appData["@DisplayName"],
+                        "Width": appData["@Width"],
+                        "Height": appData["@Height"],
+                        "OAVer": appData["@OAVer"]
+                    }
+                }));
             }
-        }
-        virtualScreen.setAttribute("name", app.getAttribute("DisplayName"));
-        virtualScreen.style.width = app.getAttribute("Width") + 'px';
-        virtualScreen.style.height = app.getAttribute("Height") + 'px';
-        Array.from(virtualScreen.querySelectorAll("[id]")).forEach((item) => {
-            eval("_" + item.getAttribute("id") + " = document.getElementById('" + item.getAttribute("id") + "')")
-        });
-        if (default_screen == "None"){
-            navigate(app.getAttribute("DefaultScreen"));
-        } else {
-            navigator(default_screen);
-        }
-        
-    </script>
-</body>
+
+            loadXML();
+        </script>
+    </body>
 </html>

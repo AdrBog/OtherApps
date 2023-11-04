@@ -11,22 +11,41 @@
 <body>
     <div class="screen">
         <span id="display-name"></span>
-        <div id="app" class="app">
-            <iframe id="app-frame" src="{{ url_for('embed', id=id , screen=screen) }}" frameborder="0"></iframe>
-        </div>
+        <div id="app" class="app"></div>
     </div>
+    <script src="/static/js/global.js"></script>
     {% for addon in addons %}
     <script src="{{addon}}"></script>
     {% endfor %}
     <script>
-        const appFrame = document.getElementById("app-frame");
+        const id = "{{id}}";
         const app = document.getElementById("app");
+        const displayName = document.getElementById("display-name");
+        const appFrame = document.createElement("iframe");
+        
+        async function loadApp(){
+            const appData = await getAppData("{{id}}", "{{ screen }}");
+            appFrame.style.width = appData["@Width"] + "px";
+            appFrame.style.height = appData["@Height"] + "px";
+            appFrame.setAttribute("id", "app-frame");
+            displayName.innerText = appData["@DisplayName"];
+            document.title = appData["@DisplayName"];
 
-        window.addEventListener('load', () => {
-            document.getElementById("display-name").innerHTML = document.getElementById('app-frame').contentWindow.document.getElementById("virtual-screen").getAttribute("name");
-            appFrame.style.width = document.getElementById('app-frame').contentWindow.document.getElementById("virtual-screen").style.width;
-            appFrame.style.height = document.getElementById('app-frame').contentWindow.document.getElementById("virtual-screen").style.height;
-        })
+            appFrame.setAttribute("src", "{{ url_for('embed', id=id , screen=screen) }}");
+            appFrame.setAttribute("frameborder", 0);
+
+            app.appendChild(appFrame);
+            document.dispatchEvent(new CustomEvent("app-loaded", {
+                "detail":{
+                    "DisplayName": appData["@DisplayName"],
+                    "Width": appData["@Width"],
+                    "Height": appData["@Height"],
+                    "OAVer": appData["@OAVer"]
+                }
+            }));
+        }
+
+        loadApp();
     </script>
 </body>
 </html>

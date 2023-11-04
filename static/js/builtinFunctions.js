@@ -1,9 +1,9 @@
-function navigate(screen_name) {
-    currentScreen = document.getElementById(screen_name);
+function navigate(screen) {
+    currentScreen = screen;
 
     Array.from(virtualScreen.getElementsByClassName("Screen")).forEach(
-        (el) => {
-            el.style.height = "0";
+        (e) => {
+            e.style.height = "0";
         }
     )
     currentScreen.style.height = "100%";
@@ -11,7 +11,7 @@ function navigate(screen_name) {
 }
 
 function destroy(id) {
-    document.getElementById(id).remove();
+    id.remove();
 }
 
 function values(element, tag = "input") {

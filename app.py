@@ -10,7 +10,7 @@ PROJECTS_DIR = "projects"
 CONFIG_DIR = "config"
 CONFIG_FILE = "config.json"
 ADDONS_FILE = "addons.json"
-VERSION = "0.4.0"
+VERSION = "0.4.1"
 
 def reload_addons():
     with open(f"{CONFIG_DIR}/{ADDONS_FILE}") as f:
@@ -39,9 +39,7 @@ def play(id, screen):
 def embed(id, screen):
     addons = reload_addons()
     s = request.args.get('s', type = str)
-    with open(f'{PROJECTS_DIR}/{id}/{screen}.xml', 'r') as file:
-        xml = file.read().replace('\n', '')
-    return render_template('embed.html', id=id, xmlfile=xml, s=s, addons=addons["Embed"])
+    return render_template('embed.html', id=id, screen=screen, addons=addons["Embed"])
 
 @app.route('/edit/<id>')
 def edit(id):

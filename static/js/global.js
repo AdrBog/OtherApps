@@ -1,4 +1,5 @@
-const valid_name = /^[a-zA-Z0-9_]{1,50}$/g;
+const VALID_NAME = /^[a-zA-Z0-9_]{1,50}$/g;
+const VALID_CHARS = /[a-zA-Z0-9_]/g;
 
 function generateXMLApp(display_name, default_screen, w, h, version){
     const xmlDoc = document.implementation.createDocument(null, "App");
@@ -71,4 +72,13 @@ async function getConfig(attributeName){
     const res = await fetch("/json/config");
     const data = await res.json();
     return data[attributeName];
+}
+
+function validateName(name){
+    return name.match(VALID_CHARS).join("")
+}
+
+function isValid(text){
+    VALID_NAME.lastIndex = 0;
+    return VALID_NAME.test(text);
 }

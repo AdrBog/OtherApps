@@ -91,8 +91,7 @@
         }
 
         appId.addEventListener('input', () => {
-            valid_name.lastIndex = 0;
-            if ( ! valid_name.test(appId.value) || document.getElementById(appId.value) != null){
+            if ( ! isValid(appId.value) || document.getElementById(appId.value) != null){
                 appId.classList.add("error");
             } else {
                 appId.classList.remove("error");
@@ -100,10 +99,9 @@
         })
 
         function check_save(){
-            valid_name.lastIndex = 0;
             if ( ! appId.value){
                 alert("Can't create this app\nIt doesn't have a name")
-            } else if (! valid_name.test(appId.value)){
+            } else if (! isValid(appId.value)){
                 alert("Can't create this app\nIt contains special characters")
             } else if (document.getElementById(appId.value) != null){
                 alert("Can't create " + appId.value + "\nThis app already exists");
