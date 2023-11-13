@@ -14,34 +14,6 @@
     </style>
 </head>
 <body>
-    <div class="window" id="settings-window" style="width: 30%; visibility: hidden;">
-        <div class="horizontal-container space-between">
-            <span style="font-size: 24px;">App Settings</span>
-            <button onclick="document.getElementById('settings-window').style.visibility = 'hidden';">X</button>
-        </div>
-        <div class="form-table" id="table-app">
-            <table>
-                <tr id="tr-info-app-name">
-                    <td>Display Name</td>
-                    <td><input type="text" id="edit-info-app-name"></td>
-                </tr>
-                <tr id="tr-info-app-w-h">
-                    <td>Screen Size (W / H)</td>
-                    <td>
-                        <table>
-                            <td><input type="number" id="edit-info-app-w" min="0"></td>
-                            <td><input type="number" id="edit-info-app-h" min="0"></td>
-                        </table>
-                    </td>
-                </tr>
-                <tr id="tr-info-default-screen">
-                    <td>Default Screen</td>
-                    <td><select id="edit-info-default-screen">
-                    </select></td>
-                </tr>
-            </table>
-        </div>
-    </div>
     <div class="window" id="editor-window" style="visibility: hidden;">
         <div class="horizontal-container space-between">
             <div>
@@ -64,7 +36,7 @@
                     <a id="a-button" href="#" onclick="insert('button');">Button</a>
                 </div>
             </div>
-            <a href="#" onclick="document.getElementById('settings-window').style.visibility = 'visible'">App Settings</a>
+            <a href="#" onclick="appConfig()">App Settings</a>
         </div>
         <div id="editor">
             <div class="horizontal-container space-between">
@@ -200,10 +172,13 @@
     <script src="/static/js/src-min-noconflict/mode-html.js"></script>
     <script src="/static/js/sortable.min.js"></script>
     <script src="/static/js/global.js"></script>
+    <script src="/static/js/pops.js"></script>
     <script>
+        const POP = new Pops();
         var currentScreen;
         var screenChildrens;
         var currentId = 0;
+        var config = {};
 
         var aceEditor = ace.edit("text-editor");
         aceEditor.session.setUseWrapMode(true);
@@ -228,10 +203,6 @@
         const tableScreen =         document.getElementById("table-screen");
         const tableButton =         document.getElementById("table-button");
 
-        const infoAppName =         document.getElementById("edit-info-app-name");
-        const infoAppW =            document.getElementById("edit-info-app-w");
-        const infoAppH =            document.getElementById("edit-info-app-h");
-        const infoDefaultScreen =   document.getElementById("edit-info-default-screen");
         const infoType =            document.getElementById("info-type");
         const infoName =            document.getElementById("edit-info-name");
         const infoText =            document.getElementById("edit-info-text");
@@ -270,11 +241,6 @@
                 infoName.classList.remove("error");
                 click(e.target);
             }
-        });
-        tableApp.addEventListener('input', () => {
-            virtualScreen.style.width = infoAppW.value + 'px';
-            virtualScreen.style.minWidth = infoAppW.value + 'px';
-            virtualScreen.style.height = infoAppH.value + 'px';
         });
         tableId.addEventListener('input', () => {
             old_name = selected.getAttribute("id");
@@ -335,7 +301,7 @@
         });
 
         function generateXML(){
-            const xmlDoc = generateXMLApp(infoAppName.value, infoDefaultScreen.value, infoAppW.value, infoAppH.value, current_ver);
+            const xmlDoc = generateXMLApp(config["DisplayName"], config["DefaultScreen"], config["Width"], config["Height"], current_ver);
             const xmlDocRoot = xmlDoc.getElementsByTagName("App")[0];
             screenList = new Array;
 
@@ -383,6 +349,21 @@
             document.dispatchEvent(new Event("app-saved"));
         }
 
+        async function appConfig(){
+            const data = await POP.appConfig(config, [...virtualScreen.querySelectorAll("[screen]")].map(item => item.id));
+            if (data["Return"] == 0){
+                for (const c in config)
+                    config[c] = data["Properties"][c];
+                applyConfig();
+            }
+        }
+
+        function applyConfig(){
+            virtualScreen.style.width = config["Width"] + 'px';
+            virtualScreen.style.minWidth = config["Width"]  + 'px';
+            virtualScreen.style.height = config["Height"]  + 'px';
+        }
+
         function click_map(item){
             if (item.getAttribute("class").split(' ')[0] == "map-screen"){
                 if (document.getElementById("map-childrens-for-" + item.getAttribute("point")).getAttribute("expand") == "true"){
@@ -396,16 +377,7 @@
 
         function refresh_screens(){
             const screenList = virtualScreen.querySelectorAll(":scope > div");
-            currentDefaultScreen = infoDefaultScreen.value;
-            infoDefaultScreen.innerHTML = "";
-
-            for (const screen of screenList) {
-                if (screen.getAttribute("id") == currentDefaultScreen){
-                    infoDefaultScreen.innerHTML += '<option value="' + screen.getAttribute("id") + '"selected >' + screen.getAttribute("id") + '</option>'
-                } else {
-                    infoDefaultScreen.innerHTML += '<option value="' + screen.getAttribute("id") + '">' + screen.getAttribute("id") + '</option>'
-                }
-            }
+            currentDefaultScreen = config["DefaultScreen"];
         }
 
         function changeScreen(screen_name){
@@ -701,14 +673,12 @@
                 }
             }
             refresh_map();
+            config["DisplayName"] = appData["@DisplayName"];
+            config["DefaultScreen"] = appData["@DefaultScreen"];
+            config["Width"] = appData["@Width"];
+            config["Height"] = appData["@Height"];
             click(document.getElementById(appData["@DefaultScreen"]));
-            infoDefaultScreen.value = appData["@DefaultScreen"];
-            infoAppName.value = appData["@DisplayName"];
-            infoAppW.value = appData["@Width"];
-            infoAppH.value = appData["@Height"];
-            virtualScreen.style.width = infoAppW.value + 'px';
-            virtualScreen.style.minWidth = infoAppW.value + 'px';
-            virtualScreen.style.height = infoAppH.value + 'px';
+            applyConfig();
         }
 
         interact('#nav-sidebar').resizable({

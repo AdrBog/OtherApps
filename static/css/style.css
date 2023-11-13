@@ -1,6 +1,7 @@
 @import url("themes/light.css");
 @import url("webkit.css");
 @import url("virtual-screen.css");
+@import url("pops.css");
 @font-face {
     font-family: 'icon-worksregular';
     src: url('/static/fonts/icon-works-webfont.ttf') format('truetype');

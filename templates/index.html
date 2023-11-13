@@ -14,45 +14,11 @@
     </style>
 </head>
 <body>
-    <div class="window" id="about-window" style="width: 50%; visibility: hidden;">
-        <div class="horizontal-container space-between">
-            <span style="font-size: 24px;">About version {{ ver }}</span>
-            <button onclick="document.getElementById('about-window').style.visibility = 'hidden';">X</button>
-        </div>
-        <button onclick="document.getElementById('about-page1').style.height = '400px'; document.getElementById('about-page2').style.height = '0'; document.getElementById('about-page3').style.height = '0';">About</button>
-        <button onclick="document.getElementById('about-page1').style.height = '0'; document.getElementById('about-page2').style.height = '400px' ; document.getElementById('about-page3').style.height = '0';">Third-party scripts</button>
-        <button onclick="document.getElementById('about-page1').style.height = '0'; document.getElementById('about-page2').style.height = '0' ; document.getElementById('about-page3').style.height = '400px';">Change-log</button><br>
-        <hr>
-        <div style="position: relative; height: 400px;">
-            <iframe id="about-page1" src="/static/about/about.html" frameborder="0" style="position: absolute; height: 400px; width: 100%; overflow: hidden;"></iframe>
-            <iframe id="about-page2" src="/static/about/third-party.html" frameborder="0" style="position: absolute; height: 0; width: 100%; overflow: hidden;"></iframe>
-            <iframe id="about-page3" src="/static/about/changelog.html" frameborder="0" style="position: absolute; height: 0; width: 100%; overflow: hidden;"></iframe>
-
-        </div>
-    </div>
-    <div class="window" id="newapp-window" style="width: 30%; visibility: hidden;">
-        <div class="horizontal-container space-between">
-            <span style="font-size: 24px;">New App</span>
-            <button onclick="document.getElementById('newapp-window').style.visibility = 'hidden';">X</button>
-        </div>
-        <div class="form-table">
-            <table>
-                <tr>
-                    <td>App Name</td>
-                    <td><input type="text" id="app-id"></td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td><button class="primary" onclick="check_save()">Create</button></td>
-                </tr>
-            </table>
-        </div>
-    </div>
     <div class="vertical-container">
         <div id="tool-bar" class="navbar">
             <a class="home" href="{{ url_for('index') }}">Other Apps</a>
-            <a href="#" onclick="document.getElementById('newapp-window').style.visibility = 'visible'">New App</a>
-            <a href="#" onclick="document.getElementById('about-window').style.visibility = 'visible'">About</a>
+            <a href="#" onclick="saveDialog()">New App</a>
+            <a href="#" onclick="about()">About</a>
         </div>
         <div class="vertical-container">
             <div id="app-list">
@@ -76,38 +42,32 @@
         </div>
     </div>
     <script src="/static/js/global.js"></script>
+    <script src="/static/js/pops.js"></script>
     {% for addon in addons %}
     <script src="{{addon}}"></script>
     {% endfor %}
     <script>
-        var urlsave = "/save";
-        const appId = document.getElementById("app-id");
+        const POP = new Pops();
 
-        function delete_p(sid){
-            if(confirm("Are you sure you want to delete " + sid + "?")){
-                window.location = "/remove/" + sid;
-                alert(sid + " has been removed");
+        async function delete_p(id){
+            if(await POP.confirm("Are you sure you want to delete " + id + "?")){
+                await POP.alert(id + " has been removed");
+                window.location = "/remove/" + id;
             }
         }
 
-        appId.addEventListener('input', () => {
-            if ( ! isValid(appId.value) || document.getElementById(appId.value) != null){
-                appId.classList.add("error");
-            } else {
-                appId.classList.remove("error");
-            }
-        })
+        async function about(){
+            await POP.about("{{ ver }}");
+        }
 
-        function check_save(){
-            if ( ! appId.value){
-                alert("Can't create this app\nIt doesn't have a name")
-            } else if (! isValid(appId.value)){
-                alert("Can't create this app\nIt contains special characters")
-            } else if (document.getElementById(appId.value) != null){
-                alert("Can't create " + appId.value + "\nThis app already exists");
-            } else {
-                save();
-            }
+        async function saveDialog(){
+            const name = await POP.prompt("Enter app name");
+            if (!isValid(name))
+                await POP.alert("Can't create this app\nNot a valid name");
+            else if (document.getElementById(name) != null)
+                await POP.alert("Can't create " + name + "\nThis app already exists");
+            else if (name)
+                save(name);
         }
 
         function generateDefaultApp(){
@@ -117,19 +77,17 @@
             return new XMLSerializer().serializeToString(app);
         }
 
-        function save(){
-            fetch(urlsave, {
+        async function save(id){
+            const data = fetch("/save", {
                 method: "POST",
                 body: JSON.stringify({
-                    "id": appId.value,
+                    "id": id,
                     "xmldata": generateDefaultApp(),
                     "screen" : 1
                 }),
                 headers: {"Content-type": "application/json; charset=UTF-8"}
-            })
-            .then(response => console.log(response)) 
-            .then(alert("App " + appId.value + " created"))
-            .catch(err => console.log(err));
+            });
+            await POP.alert("App " + id + " created");
             location.reload();
         }
     </script>
