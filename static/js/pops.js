@@ -220,12 +220,12 @@ class Pops {
      * @param {*} screens 
      * @returns 
      */
-    async appConfig(config, screens){
+    async compConfig(config, screens){
         const select = document.createElement("select");
 
         for (const screen of screens) {
             const option = document.createElement("option");
-            if (config["DefaultScreen"] == screen)
+            if (config["defaultscreen"] == screen)
                 option.setAttribute("selected", true);
             option.setAttribute("value", screen);
             option.innerText = screen;
@@ -235,7 +235,7 @@ class Pops {
         return await this.custom([
             {
                 "Element": "span",
-                "InnerText": "App settings\n",
+                "InnerText": "Settings\n",
                 "Attributes":{
                     "Style": "font-size:20px;"
                 }
@@ -248,8 +248,8 @@ class Pops {
             {
                 "Element" : "Input",
                 "Attributes": {
-                    "Property": "DisplayName",
-                    "Value": config["DisplayName"]
+                    "Property": "displayname",
+                    "Value": config["displayname"]
                 }
             },
             {"Element": "hr"},
@@ -260,9 +260,9 @@ class Pops {
             {
                 "Element": "div",
                 "InnerHTML": "" +
-                    "<input type='number' property='Width' value='" + config["Width"] + "'/>" + 
+                    "<input type='number' property='width' value='" + config["width"] + "'/>" + 
                     "<span style='margin: 0px 16px 0px 16px;'> x </span>" + 
-                    "<input type='number' property='Height' value='" + config["Height"] + "'/>"
+                    "<input type='number' property='height' value='" + config["height"] + "'/>"
             },
             {"Element": "hr"},
             {
@@ -273,7 +273,7 @@ class Pops {
                 "Element" : "Select",
                 "InnerHTML": select.innerHTML,
                 "Attributes": {
-                    "Property": "DefaultScreen"
+                    "Property": "defaultscreen"
                 }
             },
             {

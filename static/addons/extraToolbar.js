@@ -16,26 +16,26 @@ extraToolbar.innerHTML += "" +
     "<label for='snap_to_grid' style='padding-right:8px;'>Snap to grid</label>";
 
 extraToolbar.addEventListener("input", () => {
-    if (selected.getAttribute("screen") == null){
+    if (selectedItem.getAttribute("screen") == null){
         if (document.getElementById("snap_to_grid").checked){
-            selected.classList.remove("drag-resize");
-            selected.classList.add("grid");
+            selectedItem.classList.remove("drag-resize");
+            selectedItem.classList.add("grid");
         } else {
-            selected.classList.remove("grid");
-            selected.classList.add("drag-resize");
+            selectedItem.classList.remove("grid");
+            selectedItem.classList.add("drag-resize");
         }
     }
 })
 
 document.addEventListener("item-clicked", (e) => {
-    Array.from(screenChildrens).forEach((el) => {el.classList.remove("grid");});
+    Array.from(getAllItems(virtualScreen)).forEach((el) => {el.classList.remove("grid");});
     if(document.getElementById("snap_to_grid").checked){
-        if (e.detail.element.getAttribute("screen") == null){
-            selected.classList.remove("drag-resize");
-            selected.classList.add("grid");
+        if (e.detail.item.getAttribute("screen") == null){
+            selectedItem.classList.remove("drag-resize");
+            selectedItem.classList.add("grid");
         }
     } else {
-        selected.classList.remove("grid");
+        selectedItem.classList.remove("grid");
     }
 })
 
@@ -45,8 +45,8 @@ interact(".grid")
     listeners: {
     move (event) {
         var target = event.target
-        var x = (parseFloat(target.getAttribute('data-x')) || 0)
-        var y = (parseFloat(target.getAttribute('data-y')) || 0)
+        var x = (parseFloat(target.getAttribute('x')) || 0)
+        var y = (parseFloat(target.getAttribute('y')) || 0)
 
         // update the element's style
         target.style.width = event.rect.width+ 'px'
@@ -58,8 +58,8 @@ interact(".grid")
 
         target.style.transform = 'translate(' + x + 'px,' + y + 'px)'
 
-        target.setAttribute('data-x', x)
-        target.setAttribute('data-y', y)
+        target.setAttribute('x', x)
+        target.setAttribute('y', y)
     }
     },
     snapSize: {
@@ -95,9 +95,9 @@ restrict: {
 })
 .on('dragmove', function (event) {
 var target = event.target,
-        // keep the dragged position in the data-x/data-y attributes
-        x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx,
-        y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
+        // keep the dragged position in the x/y attributes
+        x = (parseFloat(target.getAttribute('x')) || 0) + event.dx,
+        y = (parseFloat(target.getAttribute('y')) || 0) + event.dy;
 
 // translate the element
 target.style.webkitTransform =
@@ -105,6 +105,6 @@ target.style.webkitTransform =
         'translate(' + x + 'px,' + y + 'px)';
 
 // update the posiion attributes
-target.setAttribute('data-x', x);
-target.setAttribute('data-y', y);
+target.setAttribute('x', x);
+target.setAttribute('y', y);
 });

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
     <meta charset="UTF-8">
     <link rel="shortcut icon" href="/static/favicon.ico">
@@ -19,7 +19,7 @@
             <div>
                 <span id="editor-title" style="font-size: 24px;">Code editor</span>
             </div>
-            <button onclick="document.getElementById('editor-window').style.visibility = 'hidden'; can_click = true;">X</button>
+            <button onclick="document.getElementById('editor-window').style.visibility = 'hidden'; canClick = true;">X</button>
         </div>
         <div id="text-editor"></div>
     </div>
@@ -31,12 +31,12 @@
             <div class="dropdown">
                 <a class="dropbtn">Insert</a>
                 <div id="tool-bar-insert" class="dropdown-content">
-                    <a id="a-screen" href="#" onclick="insert('screen');">Screen</a>
-                    <a id="a-label" href="#" onclick="insert('label');">Label</a>
-                    <a id="a-button" href="#" onclick="insert('button');">Button</a>
+                    <a id="a-screen" href="#" onclick="editorInsertItem('screen');">Screen</a>
+                    <a id="a-label" href="#" onclick="editorInsertItem('label');">Label</a>
+                    <a id="a-button" href="#" onclick="editorInsertItem('button');">Button</a>
                 </div>
             </div>
-            <a href="#" onclick="appConfig()">App Settings</a>
+            <a href="#" onclick="displayConfig()">Settings</a>
         </div>
         <div id="editor">
             <div class="horizontal-container space-between">
@@ -157,7 +157,7 @@
                             </table>
                         </div>
                         <hr>
-                        <button style="padding: 0; font-size: 14px;" onclick="del(selected.getAttribute('id')); refresh_map();"><span style="font-family: aurulent-sans-mono; font-size: 14px;">󰩺 </span>Delete this item</button>
+                        <button style="padding: 0; font-size: 14px;" onclick="editorDeleteItem(selectedItem)"><span style="font-family: aurulent-sans-mono; font-size: 14px;">󰩺 </span>Delete this item</button>
                     </div>
                 </div>
             </div>
@@ -176,20 +176,17 @@
     <script>
         const POP = new Pops();
         var currentScreen;
-        var screenChildrens;
-        var currentId = 0;
-        var config = {};
+        var compConfig = {};
 
         var aceEditor = ace.edit("text-editor");
         aceEditor.session.setUseWrapMode(true);
         aceEditor.setOption("showPrintMargin", false);
         
-        var current_ver = "{{ ver }}";
-        var urlsave = "/save";
-        var urltest = "/play/{{ id }}/test";
-        var can_click = true;
-        var selected;
-        var textarea_selected;
+        var currentVer = "{{ ver }}";
+        var urlTest = "/play/{{ id }}/test";
+        var canClick = true;
+        var selectedItem;
+        var textarea_selectedItem;
 
         const editorWindow =        document.getElementById("editor-window");
         const virtualScreen =       document.getElementById("virtual-screen");
@@ -230,88 +227,93 @@
         const tableButtonChanged =  new Event("table-button-changed");
 
         map.addEventListener('click', (e) => {
-            if (can_click){
+            if (canClick){
                 infoName.classList.remove("error");
-                click(document.getElementById(e.target.getAttribute("point")));
+                clickItem(document.getElementById(e.target.getAttribute("point")));
             }     
         });
-        map.addEventListener('dblclick', (e) => click_map(e.target));
+        map.addEventListener('dblclick', (e) => clickMap(e.target));
         virtualScreen.addEventListener('click', (e) => {
-            if (can_click){
+            if (canClick){
                 infoName.classList.remove("error");
-                click(e.target);
+                clickItem(e.target);
             }
         });
         tableId.addEventListener('input', () => {
-            old_name = selected.getAttribute("id");
+            old_name = selectedItem.getAttribute("id");
             infoName.classList.remove("error");
 
             if(document.getElementById(infoName.value) != null || ! isValid(infoName.value))
                 infoName.classList.add("error");
             else
-                rename(old_name, infoName.value);
+                editorRenameItem(selectedItem, infoName.value);
             
-            refresh_map();
+            refreshMap();
             document.dispatchEvent(tableIdChanged);
         });
         tableText.addEventListener('input', () => {
-            selected.innerHTML = infoText.value;
+            selectedItem.innerHTML = infoText.value;
             document.dispatchEvent(tableTextChanged);
         });
         tableShow.addEventListener('input', () => {
-            selected.setAttribute("data-x", infoX.value);
-            selected.setAttribute("data-y", infoY.value);
-            selected.style.transform = 'translate(' + infoX.value +'px, '+ infoY.value + 'px)';
-            selected.style.width = infoW.value + 'px';
-            selected.style.height = infoH.value + 'px';
-            selected.style.zIndex = infoZ.value;
+            selectedItem.setAttribute("x", infoX.value);
+            selectedItem.setAttribute("y", infoY.value);
+            selectedItem.style.transform = 'translate(' + infoX.value +'px, '+ infoY.value + 'px)';
+            selectedItem.style.width = infoW.value + 'px';
+            selectedItem.style.height = infoH.value + 'px';
+            selectedItem.style.zIndex = infoZ.value;
             document.dispatchEvent(tableShowChanged);
         });
         tableDecor.addEventListener('input', () => {
-            selected.style.backgroundColor = infoFill.value;
-            selected.style.color = infoColor.value;
-            selected.style.fontSize = infoFontSize.value + 'px';
-            selected.style.border = infoBorder.value;
-            selected.style.borderRadius = infoBorderRadius.value + 'px';
-            selected.style.backgroundImage = infoBgImage.value;
+            selectedItem.style.backgroundColor = infoFill.value;
+            selectedItem.style.color = infoColor.value;
+            selectedItem.style.fontSize = infoFontSize.value + 'px';
+            selectedItem.style.border = infoBorder.value;
+            selectedItem.style.borderRadius = infoBorderRadius.value + 'px';
+            selectedItem.style.backgroundImage = infoBgImage.value;
             document.dispatchEvent(tableDecorChanged);
         });
         tableScreen.addEventListener('input', () => {
             currentScreen.style.backgroundColor = infoBgColor.value;
-            selected.setAttribute("onVisible", infoOnVisible.value);
+            selectedItem.setAttribute("onVisible", infoOnVisible.value);
             document.dispatchEvent(tableScreenChanged);
         });
         tableButton.addEventListener('input', () => {
-            selected.setAttribute("onClickALT", infoOnClick.value);
+            selectedItem.setAttribute("OnSelect", infoOnClick.value);
             document.dispatchEvent(tableButtonChanged);
         });
         document.querySelectorAll('textarea').forEach(item => {
             item.addEventListener('dblclick', (e) => {
-                textarea_selected = item;
-                document.getElementById("editor-title").innerHTML = selected.getAttribute("id") + ' ' + textarea_selected.getAttribute("placeholder");
-                aceEditor.setValue(textarea_selected.value);
-                aceEditor.session.setMode("ace/mode/" + textarea_selected.getAttribute("mode"));
+                textarea_selectedItem = item;
+                document.getElementById("editor-title").innerHTML = selectedItem.getAttribute("id") + ' ' + textarea_selectedItem.getAttribute("placeholder");
+                aceEditor.setValue(textarea_selectedItem.value);
+                aceEditor.session.setMode("ace/mode/" + textarea_selectedItem.getAttribute("mode"));
                 editorWindow.style.visibility = 'visible';
-                can_click = false;
+                canClick = false;
             })
         })
         aceEditor.on('input', function() {
-            textarea_selected.value = aceEditor.getValue();
-            textarea_selected.dispatchEvent(new Event('input', {bubbles:true}));
+            textarea_selectedItem.value = aceEditor.getValue();
+            textarea_selectedItem.dispatchEvent(new Event('input', {bubbles:true}));
         });
 
         function generateXML(){
-            const xmlDoc = generateXMLApp(config["DisplayName"], config["DefaultScreen"], config["Width"], config["Height"], current_ver);
-            const xmlDocRoot = xmlDoc.getElementsByTagName("App")[0];
-            screenList = new Array;
+            let screenList = new Array;
+            compConfig["OAVer"] = currentVer;
+            
+            if (document.getElementById(compConfig["defaultscreen"]) == null)
+                compConfig["defaultscreen"] = virtualScreen.querySelector("[screen]").id;
+
+            const xmlDoc = generateXMLComponent(compConfig);
+            const xmlDocRoot = xmlDoc.getElementsByTagName("Component")[0];
 
             for (const screen of document.querySelectorAll("[id^=map-screen-for-]"))
                 screenList.push(document.getElementById(screen.getAttribute("id").split("-").pop()));
 
             for (const screen of screenList) {
-                const xmlDocScreen = generateXMLScreen(xmlDoc, screen.getAttribute("id"), screen.getAttribute('onVisible'), screen.getAttribute('style'));
-                Array.from(screen.querySelectorAll(":scope > div")).forEach((children) => {
-                    const xmlDocItem = generateXMLChildren(xmlDoc, children.getAttribute('type'), children.getAttribute("id"), children.innerHTML, children.getAttribute("data-x"), children.getAttribute("data-y"), children.getAttribute("onClickALT"), children.getAttribute("style"));
+                const xmlDocScreen = generateXMLScreen(xmlDoc, getItemConfig(screen));
+                Array.from(getAllChildrens(screen)).forEach((children) => {
+                    const xmlDocItem = generateXMLChildren(xmlDoc, getItemConfig(children));
                     xmlDocScreen.appendChild(xmlDocItem);
                 })
                 xmlDocRoot.appendChild(xmlDocScreen);
@@ -321,63 +323,40 @@
         }
 
         async function test(){
-            const res = await fetch(urlsave, {
-                method: "POST",
-                body: JSON.stringify({
-                    "id": "{{ id }}",
-                    "xmldata": generateXML(),
-                    "screen" : "test"
-                }),
-                headers: {"Content-type": "application/json; charset=UTF-8"}
-            })
-            const data = await res.json();
-            window.open(urltest, '_blank').focus();
+            await saveComponent("{{ id }}", generateXML(), "test");
+            window.open(urlTest, '_blank').focus();
         }
 
         async function save() {
-            const res = await fetch(urlsave, {
-                method: "POST",
-                body: JSON.stringify({
-                    "id": "{{ id }}",
-                    "xmldata": generateXML(),
-                    "screen" : "{{ c }}"
-                }),
-                headers: {"Content-type": "application/json; charset=UTF-8"}
-            })
-            const data = await res.json();
+            await saveComponent("{{ id }}", generateXML(), "{{ c }}");
             alert("App saved");
             document.dispatchEvent(new Event("app-saved"));
         }
 
-        async function appConfig(){
-            const data = await POP.appConfig(config, [...virtualScreen.querySelectorAll("[screen]")].map(item => item.id));
+        async function displayConfig(){
+            const data = await POP.compConfig(compConfig, [...virtualScreen.querySelectorAll("[screen]")].map(item => item.id));
             if (data["Return"] == 0){
-                for (const c in config)
-                    config[c] = data["Properties"][c];
+                for (const c in compConfig)
+                    compConfig[c] = data["Properties"][c];
                 applyConfig();
             }
         }
 
         function applyConfig(){
-            virtualScreen.style.width = config["Width"] + 'px';
-            virtualScreen.style.minWidth = config["Width"]  + 'px';
-            virtualScreen.style.height = config["Height"]  + 'px';
+            virtualScreen.style.width = compConfig["width"] + 'px';
+            virtualScreen.style.minWidth = compConfig["width"]  + 'px';
+            virtualScreen.style.height = compConfig["height"]  + 'px';
         }
 
-        function click_map(item){
+        function clickMap(item){
             if (item.getAttribute("class").split(' ')[0] == "map-screen"){
-                if (document.getElementById("map-childrens-for-" + item.getAttribute("point")).getAttribute("expand") == "true"){
-                    document.getElementById("map-childrens-for-" + item.getAttribute("point")).setAttribute("expand", "false");
+                if (document.getElementById("map-children-list-for-" + item.getAttribute("point")).getAttribute("expand") == "true"){
+                    document.getElementById("map-children-list-for-" + item.getAttribute("point")).setAttribute("expand", "false");
                 } else {
-                    document.getElementById("map-childrens-for-" + item.getAttribute("point")).setAttribute("expand", "true")
+                    document.getElementById("map-children-list-for-" + item.getAttribute("point")).setAttribute("expand", "true")
                 }
-                refresh_map();
+                refreshMap();
             }
-        }
-
-        function refresh_screens(){
-            const screenList = virtualScreen.querySelectorAll(":scope > div");
-            currentDefaultScreen = config["DefaultScreen"];
         }
 
         function changeScreen(screen_name){
@@ -391,57 +370,43 @@
             currentScreen.style.height = "100%";
         }
 
-        function rename(oldid, newid) {
-            element = document.getElementById(oldid);
-            while(document.getElementById(newid) != null){
+        function editorRenameItem(item, newid) {
+            oldid = item.id;
+            while(document.getElementById(newid) != null)
                 newid = newid + "_1";
-            }
-            if (element.getAttribute("type") == "Screen"){
+            if (item.getAttribute("type") == "Screen"){
                 document.getElementById("map-screen-for-" + oldid).setAttribute("id", "map-screen-for-" + newid);
-                document.getElementById("map-children-" + oldid).setAttribute("point", newid);
-                document.getElementById("map-children-" + oldid).innerHTML = "<span class='icon'>® </span>" + newid;
-                document.getElementById("map-children-" + oldid).setAttribute("id", "map-children-" + newid);
-                document.getElementById("map-childrens-for-" + oldid).setAttribute("id", "map-childrens-for-" + newid);
-                element.setAttribute("id", newid);
-            } else {
-                element.setAttribute("id", newid);
+                document.getElementById("map-item-" + oldid).setAttribute("point", newid);
+                document.getElementById("map-item-" + oldid).innerHTML = "<span class='icon'>® </span>" + newid;
+                document.getElementById("map-item-" + oldid).setAttribute("id", "map-item-" + newid);
+                document.getElementById("map-children-list-for-" + oldid).setAttribute("id", "map-children-list-for-" + newid);
             }
-            refresh_map();
-            return newid;
+            item.setAttribute("id", newid);
+            refreshMap();
+            clickItem(item);
+            return item;
         }
         
-        function del(id){
-            element = document.getElementById(id);
-            if (element.getAttribute('type') == "Screen"){
+        function editorDeleteItem(item){
+            if (item.getAttribute('type') == "Screen"){
                 if (virtualScreen.querySelectorAll("[type='Screen']").length <= 1){
                     alert("There must be at least one screen");
                     return;
                 }
-                if (confirm("Are you sure you want to delete " + element.getAttribute("Id") + "?")) {
-                    document.getElementById("map-screen-for-" + currentScreen.getAttribute("id")).remove();
-                    document.getElementById(currentScreen.getAttribute("id")).remove();
-                    document.dispatchEvent(new CustomEvent("item-deleted", {
-                        "detail": {
-                            "id": id,
-                            "type": element.getAttribute('type'),
-                            "element": element
-                        }
-                    }));
+                if (confirm("Are you sure you want to delete " + item.id + "?")) {
+                    document.getElementById("map-screen-for-" + currentScreen.id).remove();
+                    document.getElementById(currentScreen.id).remove();
+                    clickItem(virtualScreen.querySelector("[screen]"));
                 }
             }else{
-                element.remove();
-                click(document.getElementById(currentScreen.getAttribute("id")));
-                document.dispatchEvent(new CustomEvent("item-deleted", {
-                    "detail": {
-                        "id": id,
-                        "type": element.getAttribute('type'),
-                        "element": element
-                    }
-                }));
+                item.remove();
+                clickItem(document.getElementById(currentScreen.id));
             }
+            refreshMap();
+            document.dispatchEvent(new CustomEvent("item-deleted", {"detail": {"item" : item}}));
         }
 
-        function click(item) {
+        function clickItem(item) {
             if (item.parentElement != virtualScreen){
                 while(!item.parentElement.getAttribute("class"))
                     item = item.parentElement;
@@ -449,7 +414,7 @@
                     item = item.parentElement;
             }
 
-            selected = item;
+            selectedItem = item;
 
             switch(item.getAttribute("type")){
                 case "Screen":
@@ -481,203 +446,143 @@
             if (item.getAttribute("type") == "Screen")
             {
                 changeScreen(item);
-                Array.from(screenChildrens).forEach(
+                Array.from(getAllItems(virtualScreen)).forEach(
                     (el) => {
-                        el.classList.remove("selected");
-                        el.classList.remove("drag-resize");
-                        document.getElementById("map-children-" + el.getAttribute("id")).classList.remove("map-selected");
-                        document.getElementById("map-children-" + selected.getAttribute("id")).classList.add("map-selected");
+                        el.classList.remove("selectedItem" , "drag-resize");
+                        document.getElementById("map-item-" + el.getAttribute("id")).classList.remove("map-selected");
+                        document.getElementById("map-item-" + selectedItem.getAttribute("id")).classList.add("map-selected");
                     }
                 );
                 infoType.innerHTML = "Screen";
                 infoName.value = item.getAttribute("id");
-                infoBgColor.value = fix_color_format(item.style.backgroundColor);
+                infoBgColor.value = rgbToHex(item.style.backgroundColor);
                 infoOnVisible.value = item.getAttribute("onVisible");
             } else {
-                Array.from(screenChildrens).forEach(
+                changeScreen(item.parentElement);
+                Array.from(getAllItems(virtualScreen)).forEach(
                     (el) => {
-                        el.classList.remove("selected");
-                        el.classList.remove("drag-resize");
-                        document.getElementById("map-children-" + el.getAttribute("id")).classList.remove("map-selected");
+                        el.classList.remove("selectedItem" , "drag-resize");
+                        document.getElementById("map-item-" + el.getAttribute("id")).classList.remove("map-selected");
                     }
                 );
-                item.classList.add("selected");
+                item.classList.add("selectedItem");
                 item.classList.add("drag-resize");
-                document.getElementById("map-children-" + selected.getAttribute("id")).classList.add("map-selected");
+                document.getElementById("map-item-" + selectedItem.getAttribute("id")).classList.add("map-selected");
                 infoType.innerHTML = item.getAttribute("type");
                 infoName.value = item.getAttribute("id");
                 infoText.value = item.innerHTML;
-                infoX.value = item.getAttribute("data-x");
-                infoY.value = item.getAttribute("data-y");
+                infoX.value = item.getAttribute("x");
+                infoY.value = item.getAttribute("y");
                 infoW.value = item.style.width.replace(/\D/g,'');
                 infoH.value = item.style.height.replace(/\D/g,'');
                 infoZ.value = item.style.zIndex;
-                infoFill.value = fix_color_format(item.style.backgroundColor);
-                infoColor.value = fix_color_format(item.style.color);
+                infoFill.value = rgbToHex(item.style.backgroundColor);
+                infoColor.value = rgbToHex(item.style.color);
                 infoFontSize.value = item.style.fontSize.replace(/\D/g,'');
                 infoBorder.value = item.style.border;
                 infoBorderRadius.value = item.style.borderRadius.replace(/\D/g,''); 
                 infoBgImage.value = getComputedStyle(item).backgroundImage;
-                infoOnClick.value = item.getAttribute("onClickALT");
+                infoOnClick.value = item.getAttribute("OnSelect");
             }
-            document.dispatchEvent(new CustomEvent("item-clicked",{
-                "detail":{
-                    "id": item.getAttribute("id"),
-                    "type": item.getAttribute("type"),
-                    "element": item
-                }
-            }));
+            document.dispatchEvent(new CustomEvent("item-clicked",{"detail":{"item": item}}));
         }
         
-        function refresh_map(){
-            screenChildrens = virtualScreen.querySelectorAll(":scope > div, :scope > div > div");
+        function addScreenInMap(map, screenId){
+            const mapDiv = document.createElement("div");
+            const mapScreen = document.createElement("div");
+            const mapChildrens = document.createElement("div");
 
-            for (i = 0; i < screenChildrens.length; i++){
-                if (screenChildrens[i].getAttribute("class") == "Screen"){
-                    screen_id = screenChildrens[i].getAttribute("id");
-                    if (document.getElementById("map-screen-for-" + screen_id) == null){
-                        map.innerHTML += '<div id="map-screen-for-' + screen_id + '" class="list-group-item"></div>';
-                        document.getElementById("map-screen-for-" + screen_id).innerHTML += '<div class="map-screen" id="map-children-' + screen_id + '" point="' + screen_id + '"><span class="icon">® </span>' + screen_id + '</div>';
-                        document.getElementById("map-screen-for-" + screen_id).innerHTML += '<div id="map-childrens-for-' + screen_id + '" expand="true" style="overflow: hidden;"></div>';
-                    }
-                    current_map_childrens = document.getElementById("map-childrens-for-" + screen_id);
-                    current_map_childrens_list = current_map_childrens.getElementsByTagName("div");
-                    current_screen_childrens = document.getElementById(screen_id).querySelectorAll(":scope > div");
+            mapDiv.id = "map-screen-for-" + screenId;
+            mapDiv.classList.add("list-group-item");
 
-                    if (current_map_childrens.getAttribute("expand") == "true"){
-                        current_map_childrens.style.height = "auto";
-                    } else {
-                        current_map_childrens.style.height = "0";
-                    }
+            mapScreen.id = "map-item-" + screenId;
+            mapScreen.classList.add("map-screen");
+            mapScreen.setAttribute("point", screenId);
+            mapScreen.innerHTML = "<span class='icon'>® </span>" + screenId;
 
-                    for (x = 0; x < current_screen_childrens.length; x++){
-                        if (document.getElementById("map-children-" + current_screen_childrens[x].getAttribute("id")) == null){
-                            switch(current_screen_childrens[x].getAttribute("class").split(" ")[0]){
-                                case "Button":
-                                    print_icon = "0 ";
-                                    break;
-                                case "Label":
-                                    print_icon = "S  ";
-                                    break;
-                            }
-                            current_map_childrens.innerHTML += '<div class="map-children" id="map-children-'+ current_screen_childrens[x].getAttribute("id") +'" point="'+ current_screen_childrens[x].getAttribute("id") +'"><span class="icon">' + print_icon + '</span>'+ current_screen_childrens[x].getAttribute("id") +'</div>';
-                        }          
-                        
-                    }
-                    for (x = 0; x < current_map_childrens_list.length; x++){
-                        if(document.getElementById(current_map_childrens_list[x].getAttribute("point")) == null)
-                            current_map_childrens_list[x].remove();
+            mapChildrens.id = "map-children-list-for-" + screenId;
+            mapChildrens.setAttribute("expand", true);
+            mapChildrens.style.overflow = "hidden";
+
+            mapDiv.append(mapScreen, mapChildrens);
+            map.appendChild(mapDiv);
+        }
+
+        function addChildrenInMap(map, list, children){
+            const mapChildren = document.createElement("div");
+            mapChildren.classList.add("map-children");
+            mapChildren.id = "map-item-" + children.id;
+            mapChildren.setAttribute("point", children.id);
+            switch(children.getAttribute("type")){
+                case "Button":
+                    mapChildren.innerHTML = "<span class='icon'>0 </span>" + children.id;
+                    break;
+                case "Label":
+                    mapChildren.innerHTML = "<span class='icon'>0 </span>" + children.id;
+                    break;
+            }
+            list.appendChild(mapChildren);
+        }
+
+        function refreshMap(){
+            for (const item of getAllItems(virtualScreen)){
+                if (item.getAttribute("type") == "Screen"){
+                    let screenId = item.id;
+                    if (document.getElementById("map-screen-for-" + screenId) == null)
+                        addScreenInMap(map, screenId);
+                    
+                    let mapChildrenList = document.getElementById("map-children-list-for-" + screenId);
+                    mapChildrenList.style.height = (mapChildrenList.getAttribute("expand") == "true") ? "auto" : "0";
+
+                    for (const children of getAllChildrens(item))
+                        if (document.getElementById("map-item-" + children.id) == null)
+                            addChildrenInMap(map, mapChildrenList, children);
+
+                    for (const mapChildren of mapChildrenList.getElementsByTagName("div")){
+                        if(document.getElementById(mapChildren.getAttribute("point")) == null)
+                            mapChildren.remove();
                     }
                 }
             }
-            refresh_screens();
         }
 
-        function insert(type){
+        function editorInsertItem(type){
+            let newItem;
             switch (type) {
                 case "label":
-                    while(document.getElementById("Label" + currentId) != null){
-                        currentId++;
-                    }
-                    var label = document.createElement("div");
-                    label.innerHTML = "Text";
-                    label.setAttribute("class", "Label Children");
-                    label.setAttribute("type", "Label");
-                    label.setAttribute("id", "Label" + currentId);
-                    label.setAttribute("data-x", "64");
-                    label.setAttribute("data-y", "64");
-                    label.style.width = "160px";
-                    label.style.height = "64px";
-                    label.style.transform = "translate(64px, 64px)";
-                    label.style.color = "#000";
-                    currentScreen.appendChild(label);
-                    refresh_map();
-                    document.dispatchEvent(new CustomEvent("item-created", {"detail":{"id": label.getAttribute("id"), "type": type}}));
-                    return label.getAttribute("id");
+                    newItem = insertChildren(currentScreen, DEFAULT_LABEL_CONFIG, true);
                     break;
                 case "button":
-                    while(document.getElementById("Button" + currentId) != null){
-                        currentId++;
-                    }
-                    var button = document.createElement("div");
-                    button.innerHTML = "Button";
-                    button.setAttribute("class", "Button Children");
-                    button.setAttribute("type", "Button");
-                    button.setAttribute("id", "Button" + currentId);
-                    button.setAttribute("data-x", "64");
-                    button.setAttribute("data-y", "64");
-                    button.setAttribute("onClickALT", "null");
-                    button.style.transform = "translate(64px, 64px)";
-                    button.style.color = "#fff";
-                    button.style.backgroundColor = "rgb(56, 96, 178)";
-                    button.style.border = "2px solid rgba(0, 0, 0, 0.2)";
-                    button.style.borderRadius = "10px";
-                    currentScreen.appendChild(button);
-                    refresh_map();
-                    document.dispatchEvent(new CustomEvent("item-created", {"detail":{"id": button.getAttribute("id"), "type": type}}));
-                    return button.getAttribute("id");
+                    newItem = insertChildren(currentScreen, DEFAULT_BUTTON_CONFIG, true);
                     break;
-                
                 case "screen":
-                    while(document.getElementById("Screen" + currentId) != null){
-                            currentId++;
-                    }
-                    var screen = document.createElement("div");
-                    screen.setAttribute("screen", "");
-                    screen.setAttribute("class", "Screen");
-                    screen.setAttribute("type", "Screen");
-                    screen.setAttribute("name", "Screen" + currentId);
-                    screen.setAttribute("id", "Screen" + currentId);
-                    screen.style.backgroundColor = "rgb(255, 255, 255)";
-                    virtualScreen.appendChild(screen);
-                    currentScreen = document.getElementById(screen.getAttribute("id"));
-                    refresh_map();
-                    click(document.getElementById(screen.getAttribute("id")));
-                    document.dispatchEvent(new CustomEvent("item-created", {"detail":{"id": screen.getAttribute("id"), "type": type}}));
-                    return screen.getAttribute("id");
+                    newItem = insertScreen(virtualScreen, DEFAULT_SCREEN_CONFIG, true);
+                    currentScreen = newItem;
                     break;
-            
                 default:
                     break;
-            } 
+            }
+            refreshMap();
+            clickItem(newItem);
+            document.dispatchEvent(new CustomEvent("item-created", {"detail":{"item": newItem}}));
+            return newItem;
         }
 
         async function loadXML(){
-            appData = await getAppData("{{id}}", "{{c}}");
+            let appData = await getCompData("{{id}}", "{{c}}");
 
-            if (appData["@OAVer"] != current_ver)
-                alert("It seems that this app was created with an older version of Other Apps\nYou can still run and edit the app, but it MAY NOT work correctly.\nApp's version: " + appData["@OAVer"] +"\nYour current OtherApp version: " + current_ver);
+            if (appData["@OAVer"] != currentVer)
+                alert("It seems that this app was created with an older version of Other Apps\nYou can still run and edit the app, but it MAY NOT work correctly.\nApp's version: " + appData["@OAVer"] +"\nYour current OtherApp version: " + currentVer);
 
-            for (const screen of appData["Screen"]) {
-                const screenDiv = document.createElement("div");
-                const childrenList = (("Children" in screen)) ? screen["Children"] : [];
-                screenDiv.setAttribute("id", screen["@Name"]);
-                screenDiv.setAttribute("name", screen["@Name"]);
-                screenDiv.setAttribute("screen", "");
-                screenDiv.setAttribute("class", "Screen");
-                screenDiv.setAttribute("type", "Screen");
-                screenDiv.setAttribute("style", decodeURI(screen["@Style"]));
-                screenDiv.setAttribute("onVisible", decodeURI(screen["@OnVisible"]));
-                virtualScreen.appendChild(screenDiv);
-                for (const children of childrenList) {
-                    const childrenDiv = document.createElement("div");
-                    childrenDiv.setAttribute("class", children["@Type"] + " Children");
-                    childrenDiv.setAttribute("type", children["@Type"]);
-                    childrenDiv.setAttribute("id", children["@Name"]);
-                    childrenDiv.setAttribute("style", decodeURI(children["@Style"]));
-                    childrenDiv.setAttribute("onClickALT", decodeURI(children["@OnSelect"]));
-                    childrenDiv.setAttribute("data-x", children["@X"]);
-                    childrenDiv.setAttribute("data-y", children["@Y"]);
-                    childrenDiv.innerHTML = decodeURI(children["@Text"]);
-                    screenDiv.appendChild(childrenDiv);
-                }
-            }
-            refresh_map();
-            config["DisplayName"] = appData["@DisplayName"];
-            config["DefaultScreen"] = appData["@DefaultScreen"];
-            config["Width"] = appData["@Width"];
-            config["Height"] = appData["@Height"];
-            click(document.getElementById(appData["@DefaultScreen"]));
+            generateApp(virtualScreen, appData, true);
+
+            refreshMap();
+
+            for (const prop in appData)
+                if(prop.startsWith("@") && !/@xmlns:xsi|@xsi:noNamespaceSchemaLocation/.test(prop))
+                    compConfig[prop.substring(1)] = appData[prop];
+
+            clickItem(document.getElementById(appData["@defaultscreen"]));
             applyConfig();
         }
 
@@ -717,8 +622,8 @@
             listeners: {
             move (event) {
                 var target = event.target
-                var x = (parseFloat(target.getAttribute('data-x')) || 0)
-                var y = (parseFloat(target.getAttribute('data-y')) || 0)
+                var x = (parseFloat(target.getAttribute('x')) || 0)
+                var y = (parseFloat(target.getAttribute('y')) || 0)
 
                 // update the element's style
                 target.style.width = event.rect.width + 'px'
@@ -730,8 +635,8 @@
 
                 target.style.transform = 'translate(' + x + 'px,' + y + 'px)'
 
-                target.setAttribute('data-x', x)
-                target.setAttribute('data-y', y)
+                target.setAttribute('x', x)
+                target.setAttribute('y', y)
             }
             },
             modifiers: [
@@ -758,16 +663,16 @@
 
         function dragMoveListener (event) {
             var target = event.target
-            // keep the dragged position in the data-x/data-y attributes
-            var x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx
-            var y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy
+            // keep the dragged position in the x/y attributes
+            var x = (parseFloat(target.getAttribute('x')) || 0) + event.dx
+            var y = (parseFloat(target.getAttribute('y')) || 0) + event.dy
 
             // translate the element
             target.style.transform = 'translate(' + x + 'px, ' + y + 'px)'
 
             // update the posiion attributes
-            target.setAttribute('data-x', x)
-            target.setAttribute('data-y', y)
+            target.setAttribute('x', x)
+            target.setAttribute('y', y)
             }
 
         // this function is used later in the resizing and gesture demos

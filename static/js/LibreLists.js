@@ -6,7 +6,7 @@ class LibreListsConnection{
     }
 
     async collect(filter = ""){
-        const res = await fetch(await getConfig("Libre_Lists_host") + "/json/table/" + this.database + "/" + this.tableName + "?f=" + filter,
+        const res = await fetch(await getOAConfig("Libre_Lists_host") + "/json/table/" + this.database + "/" + this.tableName + "?f=" + filter,
         {
             mode:  'cors',
             headers: {
@@ -30,7 +30,7 @@ class LibreListsConnection{
     }
 
     async SQLite(query){
-        const res = await fetch(await getConfig("Libre_Lists_host") + "/exec/" + this.database, 
+        const res = await fetch(await getOAConfig("Libre_Lists_host") + "/exec/" + this.database, 
         {
             mode:  'cors',
             method: "POST",

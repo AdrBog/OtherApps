@@ -20,7 +20,7 @@ These addons comes with Other Apps, so they are stored in the repository.
 | **unsave.js** | Show "unsaved changes" dialog when you close the editor |
 | **scaleApp.js** | Apps are scaled to fit screen size |
 
-## Add your own addons
+## Addons config file
 
 The list of extensions to be executed is stored in **config/addons.json**
 
@@ -54,3 +54,6 @@ Depending on where you add the extension, it will run in one path or another.
 | **Embed** | /embed |
 
 Note that you can't save an addon wherever you want, make sure the addon is (at least) in the **static** folder
+
+##
+Click this link to learn [how to create your own addons](Create_your_own_Addons.md)

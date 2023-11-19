@@ -23,7 +23,7 @@ function exevent(type, init = {}) {
 }
 
 async function sqljson(database, table, filter = "") {
-    url = await getConfig("Libre_Lists_host") + "/json/table/" + database + "/" + table + "?f=" + filter;
+    url = await getOAConfig("Libre_Lists_host") + "/json/table/" + database + "/" + table + "?f=" + filter;
     const res = await fetch(url, {
         mode:  'cors',
         headers: {
@@ -37,7 +37,7 @@ async function sqljson(database, table, filter = "") {
 }
 
 async function sqlquery(database, query) {
-    url = await getConfig("Libre_Lists_host") + "/exec/" + database;
+    url = await getOAConfig("Libre_Lists_host") + "/exec/" + database;
     const res = await fetch(url, {
         mode:  'cors',
         method: "POST",

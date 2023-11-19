@@ -1,6 +1,8 @@
-// This addon lets you add keyboard shortcuts to OtherApps
+/**
+ * This addon allows you to configure keyboard shortcuts for the Other Apps application editor. 
+ */
 
-var pasteinfo = Array(8);
+var clipboard;
 
 document.addEventListener('keydown', e => {
     switch (e.target.tagName.toLowerCase()) {
@@ -8,20 +10,19 @@ document.addEventListener('keydown', e => {
         case 'textarea':
             break;
         default:
+            // Hide code editor
             if (e.key === "Escape"){
                 e.preventDefault();
                 Array.from(document.getElementsByClassName("window")).forEach((win) => {
                     win.style.visibility = 'hidden';
                 })
-                can_click = true;
+                canClick = true;
             }
 
             // Delete
             if(e.key == "Delete"){
-                if (can_click){
-                    del(selected.getAttribute("id"));
-                }
-                refresh_map();
+                if (canClick)
+                    editorDeleteItem(selectedItem);
             }    
 
             // Save
@@ -39,60 +40,50 @@ document.addEventListener('keydown', e => {
             // Rename items
             if (e.key == 'F2') {
                 e.preventDefault();
-                valid_name.lastIndex = 0;
-                newName = prompt("Rename " + selected.getAttribute("id"), selected.getAttribute("id"));
-                if (valid_name.test(newName)){
-                    rename(selected.getAttribute("id"), newName);
+                newName = prompt("Rename " + selectedItem.getAttribute("id"), selectedItem.getAttribute("id"));
+                if (isValid(newName)){
+                    editorRenameItem(selectedItem, newName);
                 } else {
                     alert(newName + " is not a valid name");
-                }
-                    
+                }   
             }
 
             // Cut
             if (e.ctrlKey && e.key === 'x') {
-                if (can_click && selected.getAttribute("class").split(" ", 1)[0].toLowerCase() != "screen"){
-                    pasteinfo = [
-                        selected.getAttribute("id"),
-                        selected.innerHTML,
-                        selected.getAttribute("class").split(" ", 1)[0],
-                        selected.getAttribute("class").split(" ", 1)[0].toLowerCase(),
-                        selected.getAttribute("style"),
-                        selected.getAttribute("data-x"),
-                        selected.getAttribute("data-y"),
-                        selected.getAttribute("onclickalt"),
-                    ];
-                    del(selected.getAttribute("id"));
+                if (canClick){
+                    clipboard = selectedItem.cloneNode(true);
+                    editorDeleteItem(selectedItem);
                 }
             }
 
             // Copy
             if (e.ctrlKey && e.key === 'c') {
-                if (can_click)
-                    pasteinfo = [
-                        selected.getAttribute("id"),
-                        selected.innerHTML,
-                        selected.getAttribute("class").split(" ", 1)[0],
-                        selected.getAttribute("class").split(" ", 1)[0].toLowerCase(),
-                        selected.getAttribute("style"),
-                        selected.getAttribute("data-x"),
-                        selected.getAttribute("data-y"),
-                        selected.getAttribute("onclickalt"),
-                    ];
+                if (canClick)
+                    clipboard = selectedItem.cloneNode(true);
+
             }
 
             // Paste
             if (e.ctrlKey && e.key === 'v') {
-                if (pasteinfo[3] != "screen" && can_click){
-                    new_item = insert(pasteinfo[3]);
-                    new_element = document.getElementById(new_item);
-                    new_element.setAttribute("style", pasteinfo[4]);
-                    new_element.setAttribute("data-x", pasteinfo[5]);
-                    new_element.setAttribute("data-y", pasteinfo[6]);
-                    new_element.setAttribute("onclickalt", pasteinfo[7]);
-                    new_element.innerHTML = pasteinfo[1];
-                    new_id = rename(new_item, pasteinfo[0]);
-                    click(document.getElementById(new_id));
+                if (clipboard && canClick){
+                    if (clipboard.getAttribute("type") != "Screen"){
+                        let cloneItem = clipboard.cloneNode(true);
+                        renameItem(virtualScreen, cloneItem, cloneItem.id);
+                        currentScreen.append(cloneItem);
+                        refreshMap();
+                        clickItem(cloneItem);
+                    } else {
+                        let cloneItem = clipboard.cloneNode();
+                        renameItem(virtualScreen, cloneItem, cloneItem.id);
+                        for (const children of clipboard.childNodes){
+                            const cloneChildren = children.cloneNode(true);
+                            renameItem(virtualScreen, cloneChildren, cloneChildren.id);
+                            cloneItem.append(cloneChildren);
+                        }
+                        virtualScreen.append(cloneItem);
+                        refreshMap();
+                        clickItem(cloneItem);
+                    }
                 }
             }
         }

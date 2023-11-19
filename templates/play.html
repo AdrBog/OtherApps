@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -22,27 +22,26 @@
         const app = document.getElementById("app");
         const displayName = document.getElementById("display-name");
         const appFrame = document.createElement("iframe");
+        var compConfig = {};
         
         async function loadApp(){
-            const appData = await getAppData("{{id}}", "{{ screen }}");
-            appFrame.style.width = appData["@Width"] + "px";
-            appFrame.style.height = appData["@Height"] + "px";
-            appFrame.setAttribute("id", "app-frame");
-            displayName.innerText = appData["@DisplayName"];
-            document.title = appData["@DisplayName"];
+            const appData = await getCompData("{{id}}", "{{ component }}");
+            
+            for (const prop in appData)
+                if(prop.startsWith("@") && !/@xmlns:xsi|@xsi:noNamespaceSchemaLocation/.test(prop))
+                    compConfig[prop.substring(1)] = appData[prop];
 
-            appFrame.setAttribute("src", "{{ url_for('embed', id=id , screen=screen) }}");
+            appFrame.style.width = compConfig["width"] + "px";
+            appFrame.style.height = compConfig["height"] + "px";
+            appFrame.setAttribute("id", "app-frame");
+            displayName.innerText = compConfig["displayname"];
+            document.title = compConfig["displayname"];
+
+            appFrame.setAttribute("src", "{{ url_for('embed', id=id , component=component) }}");
             appFrame.setAttribute("frameborder", 0);
 
             app.appendChild(appFrame);
-            document.dispatchEvent(new CustomEvent("app-loaded", {
-                "detail":{
-                    "DisplayName": appData["@DisplayName"],
-                    "Width": appData["@Width"],
-                    "Height": appData["@Height"],
-                    "OAVer": appData["@OAVer"]
-                }
-            }));
+            document.dispatchEvent(new CustomEvent("app-loaded", {"config": compConfig}));
         }
 
         loadApp();

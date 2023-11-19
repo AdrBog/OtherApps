@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
     <head>
         <meta charset="UTF-8">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
@@ -17,38 +17,21 @@
             var screen = document.getElementById("screen");
             var defaultScreen = "{{ s }}";
             var currentScreen;
+            var compConfig = {};
             const virtualScreen = document.getElementById("virtual-screen");
 
             async function loadXML() {
-                const appData = await getAppData("{{ id }}", "{{ screen }}");
+                const appData = await getCompData("{{ id }}", "{{ component }}");
 
-                for (const screen of appData["Screen"]) {
-                    const screenDiv = document.createElement("div");
-                    const childrenList = (("Children" in screen)) ? screen["Children"] : [];
-                    screenDiv.setAttribute("id", screen["@Name"]);
-                    screenDiv.setAttribute("name", screen["@Name"]);
-                    screenDiv.setAttribute("screen", "");
-                    screenDiv.setAttribute("class", "Screen");
-                    screenDiv.setAttribute("type", "Screen");
-                    screenDiv.setAttribute("style", decodeURI(screen["@Style"]));
-                    screenDiv.setAttribute("onVisible", decodeURI(screen["@OnVisible"]));
-                    virtualScreen.appendChild(screenDiv);
-                    for (const children of childrenList) {
-                        const childrenDiv = document.createElement("div");
-                        childrenDiv.setAttribute("class", children["@Type"] + " Children");
-                        childrenDiv.setAttribute("type", children["@Type"]);
-                        childrenDiv.setAttribute("id", children["@Name"]);
-                        childrenDiv.setAttribute("style", decodeURI(children["@Style"]));
-                        childrenDiv.setAttribute("onClick", decodeURI(children["@OnSelect"]));
-                        childrenDiv.setAttribute("data-x", children["@X"]);
-                        childrenDiv.setAttribute("data-y", children["@Y"]);
-                        childrenDiv.innerHTML = decodeURI(children["@Text"]);
-                        screenDiv.appendChild(childrenDiv);
-                    }
-                }
-                virtualScreen.setAttribute("name", appData["@DisplayName"]);
-                virtualScreen.style.width = appData["@Width"] + 'px';
-                virtualScreen.style.height = appData["@Height"] + 'px';
+                generateApp(virtualScreen, appData);
+
+                for (const prop in appData)
+                    if(prop.startsWith("@") && !/@xmlns:xsi|@xsi:noNamespaceSchemaLocation/.test(prop))
+                        compConfig[prop.substring(1)] = appData[prop];
+
+                virtualScreen.setAttribute("name", compConfig["displayname"]);
+                virtualScreen.style.width = compConfig["width"] + 'px';
+                virtualScreen.style.height = compConfig["height"] + 'px';
 
                 for (const item of virtualScreen.querySelectorAll("[id]")) {
                     try {
@@ -59,19 +42,12 @@
                 }
 
                 if (! defaultScreen) 
-                    navigate(document.getElementById(appData["@DefaultScreen"]));
-                 else 
+                    navigate(document.getElementById(compConfig["defaultscreen"]));
+                else 
                     navigate(document.getElementById(defaultScreen));
                 
 
-                document.dispatchEvent(new CustomEvent("app-loaded", {
-                    "detail": {
-                        "DisplayName": appData["@DisplayName"],
-                        "Width": appData["@Width"],
-                        "Height": appData["@Height"],
-                        "OAVer": appData["@OAVer"]
-                    }
-                }));
+                document.dispatchEvent(new CustomEvent("app-loaded", {"config": compConfig}));
             }
 
             loadXML();

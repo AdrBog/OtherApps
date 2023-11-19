@@ -27,7 +27,7 @@ Disclaimer! Other Apps is still under development. And it is focused for small b
 -   [x] Unrestricted HTML embedding
 -   [x] Themes
 -   [x] Addons
--   [ ] Documentation (Coming soon)
+-   [x] Documentation
 
 ## Other Apps + Libre Lists
 Get more out of Other Apps with Libre Lists.
@@ -60,4 +60,4 @@ python -m flask run -p 5000
 ```
 
 ## Help
-If you need help, you can read the (incomplete) documentation or see the [examples](https://github.com/OtherExit/OtherApps-Examples)
+If you need help, you can read the [documentation](https://github.com/AdrBog/OtherApps/tree/main/docs) or see the [examples](https://github.com/OtherExit/OtherApps-Examples)

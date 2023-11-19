@@ -21,19 +21,16 @@ document.getElementById("tool-bar-insert").innerHTML += '<hr>' +
 function extraInsert(item) {
     switch (item) {
         case "label":
-            newitemID = insert("label");
-            newitemElement = document.getElementById(newitemID);
+            newitemElement = editorInsertItem("label");
             newitemElement.style.backgroundColor = "transparent";
             newitemElement.style.whiteSpace = "pre";
             break;
         case "button":
-            newitemID = insert("button");
-            newitemElement = document.getElementById(newitemID);
+            newitemElement = editorInsertItem("button");
             newitemElement.style.whiteSpace = "pre";
             break;
         case "plus":
-            newitemID = insert("button");
-            newitemElement = document.getElementById(newitemID);
+            newitemElement = editorInsertItem("button");
             newitemElement.innerHTML = "󰐕";
             newitemElement.style.backgroundColor = "transparent";
             newitemElement.style.color = "#000";
@@ -42,11 +39,10 @@ function extraInsert(item) {
             newitemElement.style.height = "64px";
             newitemElement.style.fontFamily = "aurulent-sans-mono";
             newitemElement.style.fontSize = "60px";
-            rename(newitemID, "Plus");
+            editorRenameItem(newitemElement, "Plus");
             break;
         case "refresh":
-            newitemID = insert("button");
-            newitemElement = document.getElementById(newitemID);
+            newitemElement = editorInsertItem("button");
             newitemElement.innerHTML = "󰑐";
             newitemElement.style.backgroundColor = "transparent";
             newitemElement.style.color = "#000";
@@ -55,11 +51,10 @@ function extraInsert(item) {
             newitemElement.style.height = "64px";
             newitemElement.style.fontFamily = "aurulent-sans-mono";
             newitemElement.style.fontSize = "60px";
-            rename(newitemID, "Refresh");
+            editorRenameItem(newitemElement, "Refresh");
             break;
         case "back":
-            newitemID = insert("button");
-            newitemElement = document.getElementById(newitemID);
+            newitemElement = editorInsertItem("button");
             newitemElement.innerHTML = "󰁍";
             newitemElement.style.backgroundColor = "transparent";
             newitemElement.style.color = "#000";
@@ -68,11 +63,10 @@ function extraInsert(item) {
             newitemElement.style.height = "64px";
             newitemElement.style.fontFamily = "aurulent-sans-mono";
             newitemElement.style.fontSize = "60px";
-            rename(newitemID, "Back");
+            editorRenameItem(newitemElement, "Back");
             break;
         case "home":
-            newitemID = insert("button");
-            newitemElement = document.getElementById(newitemID);
+            newitemElement = editorInsertItem("button");
             newitemElement.innerHTML = "";
             newitemElement.style.backgroundColor = "transparent";
             newitemElement.style.color = "#000";
@@ -81,59 +75,55 @@ function extraInsert(item) {
             newitemElement.style.height = "64px";
             newitemElement.style.fontFamily = "aurulent-sans-mono";
             newitemElement.style.fontSize = "60px";
-            rename(newitemID, "Home");
+            editorRenameItem(newitemElement, "Home");
             break;
         case "iframe":
-            newitemID = insert("label");
-            newitemElement = document.getElementById(newitemID);
+            newitemElement = editorInsertItem("label");
             newitemElement.style.width = "420px";
             newitemElement.style.height = "256px";
             newitemElement.innerHTML = "<iframe src='' style='flex: 1;'></iframe>";
             newitemElement.style.backgroundColor = "transparent";
-            rename(newitemID, "Frame");
+            editorRenameItem(newitemElement, "Frame");
             break;
         case "input":
-            newitemID = insert("label");
-            newitemElement = document.getElementById(newitemID);
+            newitemElement = editorInsertItem("label");
             newitemElement.style.width = "256px";
             newitemElement.style.height = "64px";
             newitemElement.style.display = "grid";
             newitemElement.style.overflow = "unset";
             newitemElement.style.backgroundColor = "transparent";
             newitemElement.innerHTML = "Text: <input type='text' class='themed-blue'>";
-            rename(newitemID, "Input");
+            editorRenameItem(newitemElement, "Input");
             break;
         case "checkbox":
-            newitemID = insert("label");
-            newitemElement = document.getElementById(newitemID);
+            newitemElement = editorInsertItem("label");
             newitemElement.style.width = "128px";
             newitemElement.style.height = "64px";
             newitemElement.style.display = "block";
             newitemElement.style.overflow = "unset";
             newitemElement.style.backgroundColor = "transparent";
             newitemElement.innerHTML = "<input type='checkbox' class='themed-blue'> Checkbox";
-            rename(newitemID, "Checkbox");
+            editorRenameItem(newitemElement, "Checkbox");
             break;
         case "radio":
-            newitemID = insert("label");
-            newitemElement = document.getElementById(newitemID);
+            newitemElement = editorInsertItem("label");
             newitemElement.style.width = "128px";
             newitemElement.style.height = "128px";
             newitemElement.style.display = "block";
             newitemElement.style.overflow = "unset";
             newitemElement.style.backgroundColor = "transparent";
             newitemElement.innerHTML = "<input type='radio' name='radio-sample' class='themed-blue'>\n<span style='vertical-align: middle;'>Option 1</span><br>\n<input type='radio' name='radio-sample' class='themed-blue'>\n<span style='vertical-align: middle;'>Option 2</span>";
-            rename(newitemID, "Radio");
+            editorRenameItem(newitemElement, "Radio");
             break;
         case "select":
-            newitemID = insert("label");
-            newitemElement = document.getElementById(newitemID);
+            newitemElement = editorInsertItem("label");
             newitemElement.style.width = "256px";
             newitemElement.style.height = "64px";
             newitemElement.style.display = "grid";
             newitemElement.style.backgroundColor = "transparent";
             newitemElement.innerHTML = "Text: \n<select class='themed-blue'>\n\t<option value='A'>A</option>\n\t<option value='B'>B</option>\n\t<option value='C'>C</option>\n</select>";
-            rename(newitemID, "Select");
+            editorRenameItem(newitemElement, "Select");
             break;
     }
+    clickItem(newitemElement);
 }

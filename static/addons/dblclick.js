@@ -1,17 +1,17 @@
 function openEditor(textarea){
-    textarea_selected = textarea;
-    document.getElementById("editor-title").innerHTML = selected.getAttribute("id") + ' ' + textarea_selected.getAttribute("placeholder");
-    aceEditor.setValue(textarea_selected.value);
-    aceEditor.session.setMode("ace/mode/" + textarea_selected.getAttribute("mode"));
+    textarea_selectedItem = textarea;
+    document.getElementById("editor-title").innerHTML = selectedItem.getAttribute("id") + ' ' + textarea_selectedItem.getAttribute("placeholder");
+    aceEditor.setValue(textarea_selectedItem.value);
+    aceEditor.session.setMode("ace/mode/" + textarea_selectedItem.getAttribute("mode"));
     aceEditor.focus();
     aceEditor.navigateFileStart();
     editorWindow.style.visibility = 'visible';
-    can_click = false;
+    canClick = false;
 }
 
 document.getElementById("virtual-screen").addEventListener('dblclick', (e) => {
-    if (can_click)
-        switch(selected.getAttribute("class").split(" ")[0]){
+    if (canClick)
+        switch(selectedItem.getAttribute("type")){
             case "Label":
                 openEditor(document.getElementById("edit-info-text"));
                 break;

@@ -118,30 +118,30 @@ document.getElementById("tr-info-font-size").insertAdjacentHTML("afterend",
 
 
 document.addEventListener('item-clicked', () => {
-    document.getElementById("edit-info-visible").value = selected.style.visibility;
-    document.getElementById("edit-info-display").value = selected.style.display;
-    document.getElementById("edit-info-align-items").value = selected.style.alignItems;
-    document.getElementById("edit-info-overflow").value = selected.style.overflow;
-    document.getElementById("edit-info-font-family").value = selected.style.fontFamily;
-    document.getElementById("edit-info-text-align").value = selected.style.justifyContent;
-    document.getElementById("edit-info-use-pre").checked = selected.style.whiteSpace == "pre";
-    document.getElementById("edit-info-transparent-bg").checked = selected.style.backgroundColor == "transparent";
+    document.getElementById("edit-info-visible").value = selectedItem.style.visibility;
+    document.getElementById("edit-info-display").value = selectedItem.style.display;
+    document.getElementById("edit-info-align-items").value = selectedItem.style.alignItems;
+    document.getElementById("edit-info-overflow").value = selectedItem.style.overflow;
+    document.getElementById("edit-info-font-family").value = selectedItem.style.fontFamily;
+    document.getElementById("edit-info-text-align").value = selectedItem.style.justifyContent;
+    document.getElementById("edit-info-use-pre").checked = selectedItem.style.whiteSpace == "pre";
+    document.getElementById("edit-info-transparent-bg").checked = selectedItem.style.backgroundColor == "transparent";
     document.getElementById("edit-info-transparent-screen").checked = currentScreen.style.backgroundColor == "transparent"
 })
 
 document.addEventListener('table-text-changed', () => {
-    selected.style.display = document.getElementById("edit-info-display").value;
-    selected.style.overflow = document.getElementById("edit-info-overflow").value;
-    selected.style.alignItems = document.getElementById("edit-info-align-items").value;
+    selectedItem.style.display = document.getElementById("edit-info-display").value;
+    selectedItem.style.overflow = document.getElementById("edit-info-overflow").value;
+    selectedItem.style.alignItems = document.getElementById("edit-info-align-items").value;
     if(document.getElementById("edit-info-use-pre").checked){
-        selected.style.whiteSpace = "pre";
+        selectedItem.style.whiteSpace = "pre";
     } else {
-        selected.style.whiteSpace = null;
+        selectedItem.style.whiteSpace = null;
     }
 })
 
 document.addEventListener('table-show-changed', () => {
-    selected.style.visibility = document.getElementById("edit-info-visible").value;
+    selectedItem.style.visibility = document.getElementById("edit-info-visible").value;
 })
 
 document.addEventListener('table-screen-changed', () => {
@@ -151,9 +151,9 @@ document.addEventListener('table-screen-changed', () => {
 
 document.addEventListener('table-decor-changed', () => {
     if (document.getElementById("edit-info-transparent-bg").checked)
-        selected.style.backgroundColor = "transparent";
+        selectedItem.style.backgroundColor = "transparent";
 
-    selected.style.fontFamily = document.getElementById("edit-info-font-family").value;
-    selected.style.justifyContent = document.getElementById("edit-info-text-align").value;
-    selected.style.textAlign = document.getElementById("edit-info-text-align").value;
+    selectedItem.style.fontFamily = document.getElementById("edit-info-font-family").value;
+    selectedItem.style.justifyContent = document.getElementById("edit-info-text-align").value;
+    selectedItem.style.textAlign = document.getElementById("edit-info-text-align").value;
 })
