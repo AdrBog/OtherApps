@@ -206,7 +206,7 @@ class Pops {
                 "Element": "iframe",
                 "Attributes": {
                     "Src": "/static/about/about.html",
-                    "Style": "width: 600px; margin-top: 12px; height: 500px;",
+                    "Style": "width: 600px; margin-top: 12px; height: 460px;",
                     "Frameborder": "0"
                 }
             }

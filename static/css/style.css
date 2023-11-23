@@ -58,19 +58,16 @@ a{
 .primary{
     background-color: var(--primary-bg);
     color: var(--primary-fg);
-    border: var(--primary-border);
 }
 
 .primary:hover{
     background-color: var(--primary-bg-hover);
     color: var(--primary-fg-hover);
-    border: var(--primary-border-hover);
 }
 
 .primary:active{
     background-color: var(--primary-bg-active);
     color: var(--primary-fg-active);
-    border: var(--primary-border-active);
 }
 
 .delete{
@@ -79,33 +76,25 @@ a{
 }
 
 button{
-    border-radius: var(--button-radius);
+    font-family: var(--font);
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 0px;
     background-color: var(--secondary-bg);
     color: var(--secondary-fg);
-    font-size: 16px;
-    border: var(--secondary-border);
-    padding-top: 10px;
-    padding-bottom: 10px;
     font-family: var(--font);
+    min-width: 64px;
+    padding: 6px 12px 6px 12px;
+    box-sizing: border-box;
 }
 
 button:hover{
     background-color: var(--secondary-bg-hover);
     color: var(--secondary-fg-hover);
-    border: var(--secondary-border-hover);
-    cursor:pointer;
 }
 
 button:active{
     background-color: var(--secondary-bg-active);
     color: var(--secondary-fg-active);
-    border: var(--secondary-border-active);
-}
-
-.screen{
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
 }
 
 #virtual-screen input, #virtual-screen textarea{
@@ -129,26 +118,12 @@ button:active{
     justify-content: space-between;
 }
 
-#formula-bar{
-    background-color: #f1f1f1;
-    border-top: 1px solid rgba(0, 0, 0, 0.2);
-    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
-}
-
 #control-button *{
     font-size: 12px;
     resize: none;
     width: 100%;
     table-layout: fixed;
     overflow-x: hidden;
-}
-
-.form-table *{
-    font-size: 16px;
-    resize: none;
-    width: 100%;
-    table-layout: fixed;
-    /*overflow: hidden;*/
 }
 
 #control-button input, #control-button textarea, .form-table input{
@@ -172,6 +147,7 @@ input, textarea{
     overflow: hidden;
 }
 
+
 .window{
     position: absolute;
     z-index: 999;
@@ -184,7 +160,6 @@ input, textarea{
     color: var(--window-fg);
     border: var(--window-border);
     border-radius: var(--window-radius);
-    box-shadow: var(--window-shadow);
 }
 
 #text-editor {
@@ -206,89 +181,63 @@ input, textarea{
     font-family: "icon-worksregular";
 }
 
-/* Navbar container */
-.navbar {
-    background-color: var(--toolbar-bg);
-    color: var(--toolbar-fg);
-    font-family: Arial;
-}
-  
-  /* Links inside the navbar */
 .navbar a {
     float: left;
     font-size: 16px;
-    color: var(--toolbar-fg);
     text-align: center;
     padding: 14px 16px;
     text-decoration: none;
 }
-  
-/* The dropdown container */
+
+.navbar, .navbar a, .dropdown .dropbtn, .dropdown-content{
+    background-color: var(--toolbar-bg);
+    color: var(--toolbar-fg);
+}
+
+.dropdown-content hr{
+    border-color: var(--toolbar-bg);
+}
+
 .dropdown {
     float: left;
     overflow: hidden;
 }
-  
-/* Dropdown button */
+
 .dropdown .dropbtn {
     font-size: 16px;
     border: none;
     outline: none;
-    color: var(--toolbar-fg);
     padding: 14px 16px;
     background-color: inherit;
     font-family: inherit; /* Important for vertical align on mobile phones */
     margin: 0; /* Important for vertical align on mobile phones */
 }
   
-/* Add a red background color to navbar links on hover */
-.navbar a:hover, .dropdown:hover .dropbtn {
+.navbar a:hover, .dropdown:hover .dropbtn, .dropdown-content a:hover {
     background-color: var(--toolbar-bg-hover);
     color: var(--toolbar-fg-hover);
 }
-  
-/* Dropdown content (hidden by default) */
+
 .dropdown-content {
     display: none;
     position: absolute;
-    background-color: var(--dropdown-bg);
-    min-width: 200px;
-    max-height: 420px;
+    min-width: 160px;
+    max-height: 450px;
     overflow-y: scroll;
-    box-shadow: var(--dropdown-shadow);
-    border: var(--dropdown-border);
-    border-radius: var(--dropdown-radius);
-    z-index: 999;
+    z-index: 9990;
 }
-  
-/* Links inside the dropdown */
+
 .dropdown-content a {
     float: none;
-    color: var(--dropdown-fg);
-    padding: 12px 16px;
+    padding: 4px 16px;
     text-decoration: none;
     display: block;
     text-align: left;
 }
-  
-/* Add a grey background color to dropdown links on hover */
-.dropdown-content a:hover {
-    background-color: var(--dropdown-bg-hover);
-    color: var(--dropdown-fg-hover);
-}
-  
+
 /* Show the dropdown menu on hover */
 .dropdown:hover .dropdown-content {
     display: block;
-}
-
-#about-icon{
-    width: 100%;
-    height: 128px;
-    background-image: url("/static/icon.svg");
-    background-position: center;
-    background-size: contain;
-    background-repeat: no-repeat;
 }
 
 .sidebar {
@@ -305,20 +254,9 @@ input, textarea{
     font-size: 24px;
 }
 
-.title{
-    font-size: 40px;
-}
-
-.subtitle{
-    font-size: 32px;
-}
-
-.wide{
-    width: 300px;
-}
-
 .home{
-    background-color: var(--primary-bg);
+    background-color: var(--primary-bg) !important;
+    color: var(--primary-fg) !important;
 }
 
 .Children{

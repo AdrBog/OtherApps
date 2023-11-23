@@ -15,7 +15,7 @@
 </head>
 <body>
     <div class="window" id="editor-window" style="visibility: hidden;">
-        <div class="horizontal-container space-between">
+        <div class="horizontal-container space-between" style="margin-bottom: 16px;">
             <div>
                 <span id="editor-title" style="font-size: 24px;">Code editor</span>
             </div>
@@ -28,15 +28,15 @@
             <a class="home" href="{{ url_for('index') }}">Other Apps</a>
             <a href="#" onclick="save()" id="tool-bar-save">Save</a>
             <a href="#" onclick="test()" id="tool-bar-test">Test</a>
-            <div class="dropdown">
-                <a class="dropbtn">Insert</a>
+            <div id="tool-bar-insert-dropdown" class="dropdown">
+                <button class="dropbtn">Insert </button>
                 <div id="tool-bar-insert" class="dropdown-content">
                     <a id="a-screen" href="#" onclick="editorInsertItem('screen');">Screen</a>
                     <a id="a-label" href="#" onclick="editorInsertItem('label');">Label</a>
                     <a id="a-button" href="#" onclick="editorInsertItem('button');">Button</a>
                 </div>
             </div>
-            <a href="#" onclick="displayConfig()">Settings</a>
+            <a href="#" id="tool-bar-settings" onclick="displayConfig()">Settings</a>
         </div>
         <div id="editor">
             <div class="horizontal-container space-between">
@@ -157,7 +157,7 @@
                             </table>
                         </div>
                         <hr>
-                        <button style="padding: 0; font-size: 14px;" onclick="editorDeleteItem(selectedItem)"><span style="font-family: aurulent-sans-mono; font-size: 14px;">󰩺 </span>Delete this item</button>
+                        <button style="font-size: 14px;" onclick="editorDeleteItem(selectedItem)"><span style="font-family: aurulent-sans-mono; font-size: 14px;">󰩺 </span>Delete this item</button>
                     </div>
                 </div>
             </div>

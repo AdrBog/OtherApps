@@ -5,6 +5,8 @@ body{
 
 #virtual-screen{
     border: 1px dotted #000;
+    display:block;
+    margin: auto auto;
 }
 
 #virtual-screen input, #virtual-screen select, #virtual-screen textarea, #virtual-screen iframe , #virtual-screen label{
@@ -43,11 +45,6 @@ body{
     background-color: var(--map-bg-active);
     color: var(--map-fg-active);
     border: var(--map-border);
-}
-
-#virtual-screen{
-    display:block;
-    margin: auto auto;
 }
 
 #editor-window{

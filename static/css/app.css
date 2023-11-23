@@ -19,3 +19,9 @@
     cursor: pointer;
     filter: opacity(75%);
 }
+
+.screen{
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
