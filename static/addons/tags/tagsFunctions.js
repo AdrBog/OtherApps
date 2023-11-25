@@ -11,5 +11,9 @@ function getAllItemsWithTag(root, tag){
 }
 
 function getItemTags(item){
-    return item.getAttribute("tags").split(" ");
+    try {
+        return item.getAttribute("tags").split(" ");
+    } catch {
+        return [""];
+    }
 }
