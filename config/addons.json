@@ -1,6 +1,7 @@
 {
     "Index": [],
     "Editor":[
+        "/static/addons/tags/tagsEdit.js",
         "/static/addons/extraToolbar.js",
         "/static/addons/extraInsert.js",
         "/static/addons/extraEditor.js",
@@ -12,5 +13,7 @@
     "Play": [
         "/static/addons/scaleApp.js"
     ],
-    "Embed": []
+    "Embed": [
+        "/static/addons/tags/tagsFunctions.js"
+    ]
 }

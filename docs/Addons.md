@@ -19,6 +19,7 @@ These addons comes with Other Apps, so they are stored in the repository.
 | **dblclick.js** | Display the code editor when you double click an item |
 | **unsave.js** | Show "unsaved changes" dialog when you close the editor |
 | **scaleApp.js** | Apps are scaled to fit screen size |
+| **tags** | Adds the feature of grouping items by tags |
 
 ## Addons config file
 
@@ -29,6 +30,7 @@ It is a json file in which the path where the extensions are located is stored.
 {
     "Index": [],
     "Editor":[
+        "/static/addons/tags/tagsEdit.js",
         "/static/addons/extraToolbar.js",
         "/static/addons/extraInsert.js",
         "/static/addons/extraEditor.js",
@@ -40,7 +42,9 @@ It is a json file in which the path where the extensions are located is stored.
     "Play": [
         "/static/addons/scaleApp.js"
     ],
-    "Embed": []
+    "Embed": [
+        "/static/addons/tags/tagsFunctions.js"
+    ]
 }
 ```
 

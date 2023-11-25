@@ -63,6 +63,7 @@ function extraInsert(item) {
             newitemElement.style.height = "64px";
             newitemElement.style.fontFamily = "aurulent-sans-mono";
             newitemElement.style.fontSize = "60px";
+            newitemElement.setAttribute("OnSelect", "back()");
             editorRenameItem(newitemElement, "Back");
             break;
         case "home":

@@ -1,4 +1,5 @@
 function navigate(screen) {
+    backScreen = currentScreen;
     currentScreen = screen;
 
     Array.from(virtualScreen.getElementsByClassName("Screen")).forEach(
@@ -8,6 +9,11 @@ function navigate(screen) {
     )
     currentScreen.style.height = "100%";
     eval(currentScreen.getAttribute("onVisible"));
+}
+
+function back(){
+    if (backScreen)
+        navigate(backScreen);
 }
 
 function destroy(id) {
