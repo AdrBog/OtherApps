@@ -16,7 +16,7 @@ class LibreListsConnection{
             }
         });
         const data = await res.json();
-        return data["items"];
+        return data;
     }
 
     async getItemById(id){
