@@ -1,0 +1,35 @@
+:root {
+    --logo: url("/static/icon.svg");
+
+    --000: rgba(255, 255, 255, 0.2);
+    --ddd: #272727;
+    --505050: #505050;
+    --e0e0e0: #333333;
+    --aaaaaa: #aaaaaa;
+    --f00: #f00;
+
+    --bg: #282828;
+    --fg: #ebdbb2;
+    --bg-2: #32302f;
+    --fg-2: #ebdbb2;
+
+    --a: #a97ec5;
+    
+    --primary-bg: #a97ec5;
+    --primary-fg: #32312b;
+    
+    --toolbar-bg:#1d2021;
+    --toolbar-fg:#ebdbb2;
+
+    --white-005: rgba(0, 0, 0, 0.05);
+    --white-01: rgba(0, 0, 0, 0.1);
+    --white-02: rgba(0, 0, 0, 0.2);
+    --white-05: rgba(0, 0, 0, 0.5);
+
+    --black-005: rgba(255, 255, 255, 0.05);
+    --black-01: rgba(255, 255, 255, 0.1);
+    --black-02: rgba(255, 255, 255, 0.2);
+    --black-05: rgba(255, 255, 255, 0.5);
+
+    --selected: 0px 0px 0px 8px rgba(0,217,255,0.2), 0px 0px 0px 4px rgba(0,217,255,0.4); 
+}

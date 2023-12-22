@@ -1,65 +1,35 @@
 :root {
-    --font: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     --logo: url("/static/icon.svg");
 
-    --background-1:             #e0e0e0;
-    --background-2:             #f4f4f4;
-    --background-3:             #fff;
+    --000: #000;
+    --ddd: #ddd;
+    --505050: #505050;
+    --e0e0e0: #e0e0e0;
+    --aaaaaa: #aaaaaa;
+    --f00: #f00;
+
+    --bg: #f3f2f1;
+    --fg: #000;
+    --bg-2: #f4f4f4;
+    --fg-2: #000;
+
+    --a: #00E;
     
-    --text:                     #000;
-    --links:                    #4300f1;
-
-    --window-bg:                #f1f1f1;
-    --window-fg:                #000;
-    --window-border:            1px solid rgba(0, 0, 0, 0.2);
-    --window-radius:            0;
-
-    --map-bg:                   rgba(0,0,0,0);
-    --map-fg:                   #000;
-    --map-bg-hover:             #dbdbdb;
-    --map-fg-hover:             #000;
-    --map-bg-active:            #dbdbdb;
-    --map-fg-active:            #000;
-    --map-border:               2px dotted #000;
-
-    --primary-bg: 	            #4300f1;
-    --primary-fg:               #fff;
-    --primary-bg-hover:         #505050;
-    --primary-fg-hover:         #fff;
-    --primary-bg-active:        #fff;
-    --primary-fg-active:        #000;
-
-    --secondary-bg:             rgba(0,0,0,0);
-    --secondary-fg:             #000;
-    --secondary-bg-hover:       #c2c2c2;
-    --secondary-fg-hover:       #000;
-    --secondary-bg-active:      #c2c2c2;
-    --secondary-fg-active:      #000;
-
-    --sidebar-bg:               #f4f4f4;
-    --sidebar-fg:               #000;
-    --sidebar-border:           1px solid rgba(0, 0, 0, 0.2);
-
-    --delete:                   #ff0000;
-
-    --toolbar-bg:               #333333;
-    --toolbar-fg:               #fff;
-    --toolbar-bg-hover:         #505050;
-    --toolbar-fg-hover:         #fff;
+    --primary-bg: #4300f1;
+    --primary-fg: rgb(255, 255, 255);
     
-    --wk-scrollbar-bg:          #f4f4f4;
-    --wk-scrollbar-fg:          #c2c2c2;
+    --toolbar-bg:#333333;
+    --toolbar-fg:#fff;
 
-    --button-border:            2px dotted rgba(0, 0, 0, 0);
-    --button-radius:            0;
+    --black-005: rgba(0, 0, 0, 0.05);
+    --black-01: rgba(0, 0, 0, 0.1);
+    --black-02: rgba(0, 0, 0, 0.2);
+    --black-05: rgba(0, 0, 0, 0.5);
 
-    --input-bg:                 #fff;
-    --input-fg:                 #000;
-    --input-border:             1px solid rgba(0, 0, 0, 0.2);
-    --input-radius:             0;
+    --white-005: rgba(255, 255, 255, 0.05);
+    --white-01: rgba(255, 255, 255, 0.1);
+    --white-02: rgba(255, 255, 255, 0.2);
+    --white-05: rgba(255, 255, 255, 0.5);
 
-    --list-bg:                  #fff;
-    --list-fg:                  #000;
-    --list-bg-hover:            #c2c2c2;
-    --list-fg-hover:            #000;    
+    --selected: 0px 0px 0px 8px rgba(0,217,255,0.2), 0px 0px 0px 4px rgba(0,217,255,0.4);  
 }
