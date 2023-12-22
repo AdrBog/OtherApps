@@ -6,6 +6,7 @@
 <hr>
 
 [![GPL v3](https://img.shields.io/badge/License-GNU%20v3-blue)](https://www.gnu.org/licenses/gpl-3.0.en.html)
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/adrbog)
 
 Use Other Apps to create simple apps for small and resource-poor businesses
 
