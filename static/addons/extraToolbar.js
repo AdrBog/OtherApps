@@ -4,7 +4,7 @@ const snapy = 16;
 
 toolbar.insertAdjacentHTML(
     "afterend",`
-    <div style='width: 100%;background-color: var(--bg-2);border-bottom:1px solid rgba(0,0,0,0.2);'>
+    <div style='width: 100%;background-color: var(--bg-2);border-bottom:1px solid var(--black-02);'>
         <div id='extra-tool-bar' style='width:100%;padding-left:8px;padding-right:8px;box-sizing: border-box;'></div>
     </div>
     `

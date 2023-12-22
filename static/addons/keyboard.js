@@ -8,22 +8,23 @@ document.addEventListener('keydown', e => {
     switch (e.target.tagName.toLowerCase()) {
         case 'input':
         case 'textarea':
+            // Hide code editor
+            if (e.key === "Escape"){
+                e.preventDefault();
+                editorWindow.close()
+            }
             break;
         default:
             // Hide code editor
             if (e.key === "Escape"){
                 e.preventDefault();
-                Array.from(document.getElementsByClassName("window")).forEach((win) => {
-                    win.style.visibility = 'hidden';
-                })
-                canClick = true;
+                editorWindow.close()
             }
 
             // Delete
-            if(e.key == "Delete"){
-                if (canClick)
-                    editorDeleteItem(selectedItem);
-            }    
+            if(e.key == "Delete")
+                editorDeleteItem(selectedItem);
+            
 
             // Save
             if (e.ctrlKey && e.key === 's'){
@@ -50,22 +51,18 @@ document.addEventListener('keydown', e => {
 
             // Cut
             if (e.ctrlKey && e.key === 'x') {
-                if (canClick){
-                    clipboard = selectedItem.cloneNode(true);
-                    editorDeleteItem(selectedItem);
-                }
+                clipboard = selectedItem.cloneNode(true);
+                editorDeleteItem(selectedItem);
             }
 
             // Copy
             if (e.ctrlKey && e.key === 'c') {
-                if (canClick)
-                    clipboard = selectedItem.cloneNode(true);
-
+                clipboard = selectedItem.cloneNode(true);
             }
 
             // Paste
             if (e.ctrlKey && e.key === 'v') {
-                if (clipboard && canClick){
+                if (clipboard){
                     if (clipboard.getAttribute("type") != "Screen"){
                         let cloneItem = clipboard.cloneNode(true);
                         renameItem(virtualScreen, cloneItem, cloneItem.id);

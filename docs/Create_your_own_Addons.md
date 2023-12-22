@@ -18,7 +18,6 @@ Here is a list of variables that may be useful when creating addons for Other Ap
 These variables are only present when you are in the application editor. They are stored in **templates/edit.html**
 | Name | Typeof | Function |
 |--|--|--|
-| **canClick** | boolean | This boolean controls whether the user can or cannot select items. Change to false to block being able to select items, change to true to allow the user to select them.
 | **compConfig** | object | This object stores the component configuration. You can add your own properties.
 | **currentScreen** | object | This variable is updated depending on the screen the user is currently editing.
 | **currentVer** | string | The current version of Other Apps

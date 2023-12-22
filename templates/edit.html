@@ -8,15 +8,13 @@
     <title>{{ id }} - Other Apps</title>
 </head>
 <body>
-    <div class="window" id="editor-window" style="visibility: hidden;">
+    <dialog id="editor-window">
         <div class="horizontal-container space-between" style="margin-bottom: 16px;">
-            <div>
-                <span id="editor-title" style="font-size: 24px;">Code editor</span>
-            </div>
-            <button onclick="document.getElementById('editor-window').style.visibility = 'hidden'; canClick = true;">X</button>
+            <span id="editor-title" style="font-size: 24px;">Code editor</span>
+            <button onclick="editorWindow.close()">X</button>
         </div>
         <div id="text-editor"></div>
-    </div>
+    </dialog>
     <div class="vertical-container">
         <div id="tool-bar" class="navbar">
             <a class="home" href="{{ url_for('index') }}">Other Apps</a>
@@ -178,7 +176,6 @@
         
         var currentVer = "{{ ver }}";
         var urlTest = "/play/{{ id }}/test";
-        var canClick = true;
         var selectedItem;
         var textarea_selectedItem;
 
@@ -221,17 +218,13 @@
         const tableButtonChanged =  new Event("table-button-changed");
 
         map.addEventListener('click', (e) => {
-            if (canClick){
-                infoName.classList.remove("error");
-                clickItem(document.getElementById(e.target.getAttribute("point")));
-            }     
+            infoName.classList.remove("error");
+            clickItem(document.getElementById(e.target.getAttribute("point"))); 
         });
         map.addEventListener('dblclick', (e) => clickMap(e.target));
         virtualScreen.addEventListener('click', (e) => {
-            if (canClick){
-                infoName.classList.remove("error");
-                clickItem(e.target);
-            }
+            infoName.classList.remove("error");
+            clickItem(e.target);
         });
         tableId.addEventListener('input', () => {
             old_name = selectedItem.getAttribute("id");
@@ -282,8 +275,7 @@
                 document.getElementById("editor-title").innerHTML = selectedItem.getAttribute("id") + ' ' + textarea_selectedItem.getAttribute("placeholder");
                 aceEditor.setValue(textarea_selectedItem.value);
                 aceEditor.session.setMode("ace/mode/" + textarea_selectedItem.getAttribute("mode"));
-                editorWindow.style.visibility = 'visible';
-                canClick = false;
+                editorWindow.showModal();
             })
         })
         aceEditor.on('input', function() {

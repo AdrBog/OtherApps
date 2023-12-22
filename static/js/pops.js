@@ -262,7 +262,10 @@ class Pops {
                 "InnerHTML": "" +
                     "<input type='number' property='width' value='" + config["width"] + "'/>" + 
                     "<span style='margin: 0px 16px 0px 16px;'> x </span>" + 
-                    "<input type='number' property='height' value='" + config["height"] + "'/>"
+                    "<input type='number' property='height' value='" + config["height"] + "'/>",
+                "Attributes": {
+                    "Class" : "flex"
+                }
             },
             {"Element": "hr"},
             {

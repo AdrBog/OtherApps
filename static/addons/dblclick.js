@@ -5,21 +5,19 @@ function openEditor(textarea){
     aceEditor.session.setMode("ace/mode/" + textarea_selectedItem.getAttribute("mode"));
     aceEditor.focus();
     aceEditor.navigateFileStart();
-    editorWindow.style.visibility = 'visible';
-    canClick = false;
+    editorWindow.showModal();
 }
 
 document.getElementById("virtual-screen").addEventListener('dblclick', (e) => {
-    if (canClick)
-        switch(selectedItem.getAttribute("type")){
-            case "Label":
-                openEditor(document.getElementById("edit-info-text"));
-                break;
-            case "Button":
-                openEditor(document.getElementById("edit-info-onclick"));
-                break;
-            case "Screen":
-                openEditor(document.getElementById("edit-info-onvisible"));
-                break;
-        }
+    switch(selectedItem.getAttribute("type")){
+        case "Label":
+            openEditor(document.getElementById("edit-info-text"));
+            break;
+        case "Button":
+            openEditor(document.getElementById("edit-info-onclick"));
+            break;
+        case "Screen":
+            openEditor(document.getElementById("edit-info-onvisible"));
+            break;
+    }
 })
