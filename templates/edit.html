@@ -1,674 +1,664 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <link rel="shortcut icon" href="/static/favicon.ico">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/edit.css') }}">
-    <title>{{ id }} - Other Apps</title>
-</head>
-<body>
-    <dialog id="editor-window">
-        <div class="horizontal-container space-between" style="margin-bottom: 16px;">
-            <span id="editor-title" style="font-size: 24px;">Code editor</span>
-            <button onclick="editorWindow.close()">X</button>
-        </div>
-        <div id="text-editor"></div>
-    </dialog>
-    <div class="vertical-container">
-        <div id="tool-bar" class="navbar">
-            <a class="home" href="{{ url_for('index') }}">Other Apps</a>
-            <a href="#" onclick="save()" id="tool-bar-save">Save</a>
-            <a href="#" onclick="test()" id="tool-bar-test">Test</a>
-            <div id="tool-bar-insert-dropdown" class="dropdown">
-                <button class="dropbtn">Insert </button>
-                <div id="tool-bar-insert" class="dropdown-content">
-                    <a id="a-screen" href="#" onclick="editorInsertItem('screen');">Screen</a>
-                    <a id="a-label" href="#" onclick="editorInsertItem('label');">Label</a>
-                    <a id="a-button" href="#" onclick="editorInsertItem('button');">Button</a>
+{% extends "base.html" %}
+{% block title %}{{ id }} - Other Apps{% endblock %}
+{% block navbar_content %}
+<a href="#" onclick="save()" id="tool-bar-save">Save</a>
+<a href="#" onclick="test()" id="tool-bar-test">Test</a>
+<div id="tool-bar-insert-dropdown" class="dropdown">
+    <button class="dropbtn">Insert </button>
+    <div id="tool-bar-insert" class="dropdown-content">
+        <a id="a-screen" href="#" onclick="editorInsertItem('screen');">Screen</a>
+        <a id="a-label" href="#" onclick="editorInsertItem('label');">Label</a>
+        <a id="a-button" href="#" onclick="editorInsertItem('button');">Button</a>
+    </div>
+</div>
+<a href="#" id="tool-bar-settings" onclick="displayConfig()">Settings</a>
+{% endblock %}
+
+{% block content %}
+<dialog id="editor-window">
+    <div class="horizontal-container space-between" style="margin-bottom: 16px;">
+        <span id="editor-title" style="font-size: 24px;">Code editor</span>
+        <button onclick="editorWindow.close()">X</button>
+    </div>
+    <div id="text-editor"></div>
+</dialog>
+<div id="editor">
+    <div class="horizontal-container space-between">
+        <div id="nav-sidebar" class="sidebar">
+            <span class="sidebar-header">Tree View</span>
+            <hr>
+            <div>
+                <div id="control-map">
                 </div>
             </div>
-            <a href="#" id="tool-bar-settings" onclick="displayConfig()">Settings</a>
         </div>
-        <div id="editor">
-            <div class="horizontal-container space-between">
-                <div id="nav-sidebar" class="sidebar">
-                    <span class="sidebar-header">Tree View</span>
+        <div id="editor-screen" style="flex: 1 1; display: flex; overflow: scroll;">
+            <div id="virtual-screen"></div>
+        </div>
+        <div id="control-sidebar" class="sidebar">
+            <span id="info-type" class="sidebar-header"></span><br/>
+            <hr/>
+            <div id="control-button">
+                <div id="table-id" style="overflow-y: hidden; height: 0;">
+                    <table id="table-id-options">
+                        <tr id="tr-info-name">
+                            <td>Name (ID)</td>
+                            <td><input type="text" id="edit-info-name"/></td>
+                        </tr>
+                    </table>
+                </div>
+                <div id="table-text" style="overflow-y: hidden; height: 0;">
+                    <table id="table-text-options">
+                        <tr id="tr-info-text">
+                            <td>
+                                Text
+                            </td>
+                            <td>
+                                <textarea id="edit-info-text" rows="4" spellcheck="false" mode="html" placeholder="Text"></textarea>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div id="table-show" style="overflow-y: hidden; height: 0;">
                     <hr>
-                    <div>
-                        <div id="control-map">
-                        </div>
-                    </div>
+                    <table id="table-show-options">
+                        <tr id="tr-info-x-y">
+                            <td>Position (X / Y)</td>
+                            <td>
+                                <table>
+                                    <td><input type="number" id="edit-info-x" min="0"></td>
+                                    <td><input type="number" id="edit-info-y" min="0"></td>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr id="tr-info-w-h">
+                            <td>Size (W / H)</td>
+                            <td>
+                                <table>
+                                    <td><input type="number" id="edit-info-w" min="32"></td>
+                                    <td><input type="number" id="edit-info-h" min="32"></td>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr id="tr-info-z">
+                            <td>Z-Index</td>
+                            <td><input type="number" id="edit-info-z" min="-999" max="998"></td>
+                        </tr>
+                    </table>
                 </div>
-                <div id="editor-screen" style="flex: 1 1; display: flex; overflow: scroll;">
-                    <div id="virtual-screen"></div>
+                <div id="table-decor" style="overflow-y: hidden; height: 0;">
+                    <hr>
+                    <table id="table-decor-options">
+                        <tr id="tr-info-fill">
+                            <td>Fill</td>
+                            <td><input type="color" id="edit-info-fill"></td>
+                        </tr>
+                        <tr id="tr-info-color">
+                            <td>Color</td>
+                            <td><input type="color" id="edit-info-color"></td>
+                        </tr>
+                        <tr id="tr-info-font-size">
+                            <td>Font Size</td>
+                            <td><input type="number" id="edit-info-font-size" min="0"></td>
+                        </tr>
+                        <tr id="tr-info-border">
+                            <td>Border</td>
+                            <td><input type="text" id="edit-info-border"></td>
+                        </tr>
+                        <tr id="tr-info-border-r">
+                            <td>Border Radius</td>
+                            <td><input type="number" id="edit-info-border-r" min="0"></td>
+                        </tr>
+                        <tr id="tr-info-bgimage">
+                            <td>Background Image</td>
+                            <td><textarea id="edit-info-bgimage" rows="4" spellcheck="false" mode="html" placeholder="Background Image"></textarea></td>
+                        </tr>
+                    </table>
                 </div>
-                <div id="control-sidebar" class="sidebar">
-                    <span id="info-type" class="sidebar-header"></span><br/>
-                    <hr/>
-                    <div id="control-button">
-                        <div id="table-id" style="overflow-y: hidden; height: 0;">
-                            <table id="table-id-options">
-                                <tr id="tr-info-name">
-                                    <td>Name (ID)</td>
-                                    <td><input type="text" id="edit-info-name"/></td>
-                                </tr>
-                            </table>
-                        </div>
-                        <div id="table-text" style="overflow-y: hidden; height: 0;">
-                            <table id="table-text-options">
-                                <tr id="tr-info-text">
-                                    <td>
-                                        Text
-                                    </td>
-                                    <td>
-                                        <textarea id="edit-info-text" rows="4" spellcheck="false" mode="html" placeholder="Text"></textarea>
-                                    </td>
-                                </tr>
-                            </table>
-                        </div>
-                        <div id="table-show" style="overflow-y: hidden; height: 0;">
-                            <hr>
-                            <table id="table-show-options">
-                                <tr id="tr-info-x-y">
-                                    <td>Position (X / Y)</td>
-                                    <td>
-                                        <table>
-                                            <td><input type="number" id="edit-info-x" min="0"></td>
-                                            <td><input type="number" id="edit-info-y" min="0"></td>
-                                        </table>
-                                    </td>
-                                </tr>
-                                <tr id="tr-info-w-h">
-                                    <td>Size (W / H)</td>
-                                    <td>
-                                        <table>
-                                            <td><input type="number" id="edit-info-w" min="32"></td>
-                                            <td><input type="number" id="edit-info-h" min="32"></td>
-                                        </table>
-                                    </td>
-                                </tr>
-                                <tr id="tr-info-z">
-                                    <td>Z-Index</td>
-                                    <td><input type="number" id="edit-info-z" min="-999" max="998"></td>
-                                </tr>
-                            </table>
-                        </div>
-                        <div id="table-decor" style="overflow-y: hidden; height: 0;">
-                            <hr>
-                            <table id="table-decor-options">
-                                <tr id="tr-info-fill">
-                                    <td>Fill</td>
-                                    <td><input type="color" id="edit-info-fill"></td>
-                                </tr>
-                                <tr id="tr-info-color">
-                                    <td>Color</td>
-                                    <td><input type="color" id="edit-info-color"></td>
-                                </tr>
-                                <tr id="tr-info-font-size">
-                                    <td>Font Size</td>
-                                    <td><input type="number" id="edit-info-font-size" min="0"></td>
-                                </tr>
-                                <tr id="tr-info-border">
-                                    <td>Border</td>
-                                    <td><input type="text" id="edit-info-border"></td>
-                                </tr>
-                                <tr id="tr-info-border-r">
-                                    <td>Border Radius</td>
-                                    <td><input type="number" id="edit-info-border-r" min="0"></td>
-                                </tr>
-                                <tr id="tr-info-bgimage">
-                                    <td>Background Image</td>
-                                    <td><textarea id="edit-info-bgimage" rows="4" spellcheck="false" mode="html" placeholder="Background Image"></textarea></td>
-                                </tr>
-                            </table>
-                        </div>
-                        <div id="table-screen" style="overflow-y: hidden; height: 0;">
-                            <table id="table-screen-options">
-                                <tr id="tr-info-bgcolor">
-                                    <td>Fill</td>
-                                    <td><input type="color" id="edit-info-bgcolor"></td>
-                                </tr>
-                                <tr id="tr-info-onvisible">
-                                    <td>On Visible</td>
-                                    <td><textarea id="edit-info-onvisible" rows="4" spellcheck="false" mode="javascript" placeholder="On Visible"></textarea></td>
-                                </tr>
-                            </table>
-                        </div>
-                        <div id="table-button" style="overflow-y: hidden; height: 0;">
-                            <hr>
-                            <table id="table-button-options">
-                                <tr id="tr-info-onclick">
-                                    <td>
-                                        On Click
-                                    </td>
-                                    <td>
-                                        <textarea id="edit-info-onclick" rows="4" spellcheck="false" mode="javascript" placeholder="On Click"></textarea>
-                                    </td>
-                                </tr>
-                            </table>
-                        </div>
-                        <hr>
-                        <button style="font-size: 14px;" onclick="editorDeleteItem(selectedItem)"><span style="font-family: aurulent-sans-mono; font-size: 14px;">󰩺 </span>Delete this item</button>
-                    </div>
+                <div id="table-screen" style="overflow-y: hidden; height: 0;">
+                    <table id="table-screen-options">
+                        <tr id="tr-info-bgcolor">
+                            <td>Fill</td>
+                            <td><input type="color" id="edit-info-bgcolor"></td>
+                        </tr>
+                        <tr id="tr-info-onvisible">
+                            <td>On Visible</td>
+                            <td><textarea id="edit-info-onvisible" rows="4" spellcheck="false" mode="javascript" placeholder="On Visible"></textarea></td>
+                        </tr>
+                    </table>
                 </div>
+                <div id="table-button" style="overflow-y: hidden; height: 0;">
+                    <hr>
+                    <table id="table-button-options">
+                        <tr id="tr-info-onclick">
+                            <td>
+                                On Click
+                            </td>
+                            <td>
+                                <textarea id="edit-info-onclick" rows="4" spellcheck="false" mode="javascript" placeholder="On Click"></textarea>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <hr>
+                <button style="font-size: 14px;" onclick="editorDeleteItem(selectedItem)"><span style="font-family: aurulent-sans-mono; font-size: 14px;">󰩺 </span>Delete this item</button>
             </div>
         </div>
     </div>
-    <script src="/static/js/interact.js"></script>
-    {% for addon in addons %}
-    <script src="{{addon}}"></script>
-    {% endfor %}
-    <script src="/static/js/src-min-noconflict/ace.js"></script>
-    <script src="/static/js/src-min-noconflict/mode-javascript.js"></script>
-    <script src="/static/js/src-min-noconflict/mode-html.js"></script>
-    <script src="/static/js/sortable.min.js"></script>
-    <script src="/static/js/global.js"></script>
-    <script src="/static/js/pops.js"></script>
-    <script>
-        const POP = new Pops();
-        var currentScreen;
-        var compConfig = {};
+</div>
+<script src="/static/js/interact.js"></script>
+<script src="/static/js/src-min-noconflict/ace.js"></script>
+<script src="/static/js/src-min-noconflict/mode-javascript.js"></script>
+<script src="/static/js/src-min-noconflict/mode-html.js"></script>
+<script src="/static/js/sortable.min.js"></script>
+<script src="/static/js/global.js"></script>
+<script src="/static/js/pops.js"></script>
+{% for addon in addons %}
+<script src="{{addon}}"></script>
+{% endfor %}
+<script>
+    const POP = new Pops();
+    var currentScreen;
+    var compConfig = {};
 
-        var aceEditor = ace.edit("text-editor");
-        aceEditor.session.setUseWrapMode(true);
-        aceEditor.setOption("showPrintMargin", false);
+    var aceEditor = ace.edit("text-editor");
+    aceEditor.session.setUseWrapMode(true);
+    aceEditor.setOption("showPrintMargin", false);
+    
+    var currentVer = "{{ ver }}";
+    var urlTest = "/play/{{ id }}/test";
+    var selectedItem;
+    var textarea_selectedItem;
+
+    const editorWindow =        document.getElementById("editor-window");
+    const virtualScreen =       document.getElementById("virtual-screen");
+    var map =                   document.getElementById("control-map");
+    
+    const tableApp =            document.getElementById("table-app");
+    const tableId =             document.getElementById("table-id");
+    const tableText =           document.getElementById("table-text");
+    const tableShow =           document.getElementById("table-show");
+    const tableDecor =          document.getElementById("table-decor");
+    const tableScreen =         document.getElementById("table-screen");
+    const tableButton =         document.getElementById("table-button");
+
+    const infoType =            document.getElementById("info-type");
+    const infoName =            document.getElementById("edit-info-name");
+    const infoText =            document.getElementById("edit-info-text");
+    const infoX =               document.getElementById("edit-info-x");
+    const infoY =               document.getElementById("edit-info-y");
+    const infoW =               document.getElementById("edit-info-w");
+    const infoH =               document.getElementById("edit-info-h");
+    const infoZ =               document.getElementById("edit-info-z");
+    const infoFill =            document.getElementById("edit-info-fill");
+    const infoColor =           document.getElementById("edit-info-color");
+    const infoFontSize =        document.getElementById("edit-info-font-size");
+    const infoBorder =          document.getElementById("edit-info-border");
+    const infoBorderRadius =    document.getElementById("edit-info-border-r");
+    const infoBgImage =         document.getElementById("edit-info-bgimage");
+    const infoBgColor =         document.getElementById("edit-info-bgcolor");
+    const infoOnVisible =       document.getElementById("edit-info-onvisible");
+    const infoOnClick =         document.getElementById("edit-info-onclick");
+
+    // Custom events
+    const tableIdChanged =      new Event("table-id-changed");
+    const tableTextChanged =    new Event("table-text-changed");
+    const tableShowChanged =    new Event("table-show-changed");
+    const tableDecorChanged =   new Event("table-decor-changed");
+    const tableScreenChanged =  new Event("table-screen-changed");
+    const tableButtonChanged =  new Event("table-button-changed");
+
+    map.addEventListener('click', (e) => {
+        infoName.classList.remove("error");
+        clickItem(document.getElementById(e.target.getAttribute("point"))); 
+    });
+    map.addEventListener('dblclick', (e) => clickMap(e.target));
+    virtualScreen.addEventListener('click', (e) => {
+        infoName.classList.remove("error");
+        clickItem(e.target);
+    });
+    tableId.addEventListener('input', () => {
+        old_name = selectedItem.getAttribute("id");
+        infoName.classList.remove("error");
+
+        if(document.getElementById(infoName.value) != null || ! isValid(infoName.value))
+            infoName.classList.add("error");
+        else
+            editorRenameItem(selectedItem, infoName.value);
         
-        var currentVer = "{{ ver }}";
-        var urlTest = "/play/{{ id }}/test";
-        var selectedItem;
-        var textarea_selectedItem;
-
-        const editorWindow =        document.getElementById("editor-window");
-        const virtualScreen =       document.getElementById("virtual-screen");
-        var map =                   document.getElementById("control-map");
-        
-        const tableApp =            document.getElementById("table-app");
-        const tableId =             document.getElementById("table-id");
-        const tableText =           document.getElementById("table-text");
-        const tableShow =           document.getElementById("table-show");
-        const tableDecor =          document.getElementById("table-decor");
-        const tableScreen =         document.getElementById("table-screen");
-        const tableButton =         document.getElementById("table-button");
-
-        const infoType =            document.getElementById("info-type");
-        const infoName =            document.getElementById("edit-info-name");
-        const infoText =            document.getElementById("edit-info-text");
-        const infoX =               document.getElementById("edit-info-x");
-        const infoY =               document.getElementById("edit-info-y");
-        const infoW =               document.getElementById("edit-info-w");
-        const infoH =               document.getElementById("edit-info-h");
-        const infoZ =               document.getElementById("edit-info-z");
-        const infoFill =            document.getElementById("edit-info-fill");
-        const infoColor =           document.getElementById("edit-info-color");
-        const infoFontSize =        document.getElementById("edit-info-font-size");
-        const infoBorder =          document.getElementById("edit-info-border");
-        const infoBorderRadius =    document.getElementById("edit-info-border-r");
-        const infoBgImage =         document.getElementById("edit-info-bgimage");
-        const infoBgColor =         document.getElementById("edit-info-bgcolor");
-        const infoOnVisible =       document.getElementById("edit-info-onvisible");
-        const infoOnClick =         document.getElementById("edit-info-onclick");
-
-        // Custom events
-        const tableIdChanged =      new Event("table-id-changed");
-        const tableTextChanged =    new Event("table-text-changed");
-        const tableShowChanged =    new Event("table-show-changed");
-        const tableDecorChanged =   new Event("table-decor-changed");
-        const tableScreenChanged =  new Event("table-screen-changed");
-        const tableButtonChanged =  new Event("table-button-changed");
-
-        map.addEventListener('click', (e) => {
-            infoName.classList.remove("error");
-            clickItem(document.getElementById(e.target.getAttribute("point"))); 
-        });
-        map.addEventListener('dblclick', (e) => clickMap(e.target));
-        virtualScreen.addEventListener('click', (e) => {
-            infoName.classList.remove("error");
-            clickItem(e.target);
-        });
-        tableId.addEventListener('input', () => {
-            old_name = selectedItem.getAttribute("id");
-            infoName.classList.remove("error");
-
-            if(document.getElementById(infoName.value) != null || ! isValid(infoName.value))
-                infoName.classList.add("error");
-            else
-                editorRenameItem(selectedItem, infoName.value);
-            
-            refreshMap();
-            document.dispatchEvent(tableIdChanged);
-        });
-        tableText.addEventListener('input', () => {
-            selectedItem.innerHTML = infoText.value;
-            document.dispatchEvent(tableTextChanged);
-        });
-        tableShow.addEventListener('input', () => {
-            selectedItem.setAttribute("x", infoX.value);
-            selectedItem.setAttribute("y", infoY.value);
-            selectedItem.style.transform = 'translate(' + infoX.value +'px, '+ infoY.value + 'px)';
-            selectedItem.style.width = infoW.value + 'px';
-            selectedItem.style.height = infoH.value + 'px';
-            selectedItem.style.zIndex = infoZ.value;
-            document.dispatchEvent(tableShowChanged);
-        });
-        tableDecor.addEventListener('input', () => {
-            selectedItem.style.backgroundColor = infoFill.value;
-            selectedItem.style.color = infoColor.value;
-            selectedItem.style.fontSize = infoFontSize.value + 'px';
-            selectedItem.style.border = infoBorder.value;
-            selectedItem.style.borderRadius = infoBorderRadius.value + 'px';
-            selectedItem.style.backgroundImage = infoBgImage.value;
-            document.dispatchEvent(tableDecorChanged);
-        });
-        tableScreen.addEventListener('input', () => {
-            currentScreen.style.backgroundColor = infoBgColor.value;
-            selectedItem.setAttribute("onVisible", infoOnVisible.value);
-            document.dispatchEvent(tableScreenChanged);
-        });
-        tableButton.addEventListener('input', () => {
-            selectedItem.setAttribute("OnSelect", infoOnClick.value);
-            document.dispatchEvent(tableButtonChanged);
-        });
-        document.querySelectorAll('textarea').forEach(item => {
-            item.addEventListener('dblclick', (e) => {
-                textarea_selectedItem = item;
-                document.getElementById("editor-title").innerHTML = selectedItem.getAttribute("id") + ' ' + textarea_selectedItem.getAttribute("placeholder");
-                aceEditor.setValue(textarea_selectedItem.value);
-                aceEditor.session.setMode("ace/mode/" + textarea_selectedItem.getAttribute("mode"));
-                editorWindow.showModal();
-            })
+        refreshMap();
+        document.dispatchEvent(tableIdChanged);
+    });
+    tableText.addEventListener('input', () => {
+        selectedItem.innerHTML = infoText.value;
+        document.dispatchEvent(tableTextChanged);
+    });
+    tableShow.addEventListener('input', () => {
+        selectedItem.setAttribute("x", infoX.value);
+        selectedItem.setAttribute("y", infoY.value);
+        selectedItem.style.transform = 'translate(' + infoX.value +'px, '+ infoY.value + 'px)';
+        selectedItem.style.width = infoW.value + 'px';
+        selectedItem.style.height = infoH.value + 'px';
+        selectedItem.style.zIndex = infoZ.value;
+        document.dispatchEvent(tableShowChanged);
+    });
+    tableDecor.addEventListener('input', () => {
+        selectedItem.style.backgroundColor = infoFill.value;
+        selectedItem.style.color = infoColor.value;
+        selectedItem.style.fontSize = infoFontSize.value + 'px';
+        selectedItem.style.border = infoBorder.value;
+        selectedItem.style.borderRadius = infoBorderRadius.value + 'px';
+        selectedItem.style.backgroundImage = infoBgImage.value;
+        document.dispatchEvent(tableDecorChanged);
+    });
+    tableScreen.addEventListener('input', () => {
+        currentScreen.style.backgroundColor = infoBgColor.value;
+        selectedItem.setAttribute("onVisible", infoOnVisible.value);
+        document.dispatchEvent(tableScreenChanged);
+    });
+    tableButton.addEventListener('input', () => {
+        selectedItem.setAttribute("OnSelect", infoOnClick.value);
+        document.dispatchEvent(tableButtonChanged);
+    });
+    document.querySelectorAll('textarea').forEach(item => {
+        item.addEventListener('dblclick', (e) => {
+            textarea_selectedItem = item;
+            document.getElementById("editor-title").innerHTML = selectedItem.getAttribute("id") + ' ' + textarea_selectedItem.getAttribute("placeholder");
+            aceEditor.setValue(textarea_selectedItem.value);
+            aceEditor.session.setMode("ace/mode/" + textarea_selectedItem.getAttribute("mode"));
+            editorWindow.showModal();
         })
-        aceEditor.on('input', function() {
-            textarea_selectedItem.value = aceEditor.getValue();
-            textarea_selectedItem.dispatchEvent(new Event('input', {bubbles:true}));
-        });
+    })
+    aceEditor.on('input', function() {
+        textarea_selectedItem.value = aceEditor.getValue();
+        textarea_selectedItem.dispatchEvent(new Event('input', {bubbles:true}));
+    });
 
-        function generateXML(){
-            let screenList = new Array;
-            compConfig["OAVer"] = currentVer;
-            
-            if (document.getElementById(compConfig["defaultscreen"]) == null)
-                compConfig["defaultscreen"] = virtualScreen.querySelector("[screen]").id;
-
-            const xmlDoc = generateXMLComponent(compConfig);
-            const xmlDocRoot = xmlDoc.getElementsByTagName("Component")[0];
-
-            for (const screen of document.querySelectorAll("[id^=map-screen-for-]"))
-                screenList.push(document.getElementById(screen.getAttribute("id").split("-").pop()));
-
-            for (const screen of screenList) {
-                const xmlDocScreen = generateXMLScreen(xmlDoc, getItemConfig(screen));
-                Array.from(getAllChildrens(screen)).forEach((children) => {
-                    const xmlDocItem = generateXMLChildren(xmlDoc, getItemConfig(children));
-                    xmlDocScreen.appendChild(xmlDocItem);
-                })
-                xmlDocRoot.appendChild(xmlDocScreen);
-            }
-
-            return new XMLSerializer().serializeToString(xmlDoc);
-        }
-
-        async function test(){
-            await saveComponent("{{ id }}", generateXML(), "test");
-            window.open(urlTest, '_blank').focus();
-        }
-
-        async function save() {
-            await saveComponent("{{ id }}", generateXML(), "{{ c }}");
-            alert("App saved");
-            document.dispatchEvent(new Event("app-saved"));
-        }
-
-        async function displayConfig(){
-            const data = await POP.compConfig(compConfig, [...virtualScreen.querySelectorAll("[screen]")].map(item => item.id));
-            if (data["Return"] == 0){
-                for (const c in compConfig)
-                    compConfig[c] = data["Properties"][c];
-                applyConfig();
-            }
-        }
-
-        function applyConfig(){
-            virtualScreen.style.width = compConfig["width"] + 'px';
-            virtualScreen.style.minWidth = compConfig["width"]  + 'px';
-            virtualScreen.style.height = compConfig["height"]  + 'px';
-        }
-
-        function clickMap(item){
-            if (item.getAttribute("class").split(' ')[0] == "map-screen"){
-                if (document.getElementById("map-children-list-for-" + item.getAttribute("point")).getAttribute("expand") == "true"){
-                    document.getElementById("map-children-list-for-" + item.getAttribute("point")).setAttribute("expand", "false");
-                } else {
-                    document.getElementById("map-children-list-for-" + item.getAttribute("point")).setAttribute("expand", "true")
-                }
-                refreshMap();
-            }
-        }
-
-        function changeScreen(screen_name){
-            currentScreen = screen_name;
-
-            Array.from(virtualScreen.getElementsByClassName("Screen")).forEach(
-                (el) => {
-                    el.style.height = "0";
-                }
-            )
-            currentScreen.style.height = "100%";
-        }
-
-        function editorRenameItem(item, newid) {
-            oldid = item.id;
-            while(document.getElementById(newid) != null)
-                newid = newid + "_1";
-            if (item.getAttribute("type") == "Screen"){
-                document.getElementById("map-screen-for-" + oldid).setAttribute("id", "map-screen-for-" + newid);
-                document.getElementById("map-item-" + oldid).setAttribute("point", newid);
-                document.getElementById("map-item-" + oldid).innerHTML = "<span class='icon'>® </span>" + newid;
-                document.getElementById("map-item-" + oldid).setAttribute("id", "map-item-" + newid);
-                document.getElementById("map-children-list-for-" + oldid).setAttribute("id", "map-children-list-for-" + newid);
-            }
-            item.setAttribute("id", newid);
-            refreshMap();
-            clickItem(item);
-            return item;
-        }
+    function generateXML(){
+        let screenList = new Array;
+        compConfig["OAVer"] = currentVer;
         
-        function editorDeleteItem(item){
-            if (item.getAttribute('type') == "Screen"){
-                if (virtualScreen.querySelectorAll("[type='Screen']").length <= 1){
-                    alert("There must be at least one screen");
-                    return;
-                }
-                if (confirm("Are you sure you want to delete " + item.id + "?")) {
-                    document.getElementById("map-screen-for-" + currentScreen.id).remove();
-                    document.getElementById(currentScreen.id).remove();
-                    clickItem(virtualScreen.querySelector("[screen]"));
-                }
-            }else{
-                item.remove();
-                clickItem(document.getElementById(currentScreen.id));
-            }
-            refreshMap();
-            document.dispatchEvent(new CustomEvent("item-deleted", {"detail": {"item" : item}}));
+        if (document.getElementById(compConfig["defaultscreen"]) == null)
+            compConfig["defaultscreen"] = virtualScreen.querySelector("[screen]").id;
+
+        const xmlDoc = generateXMLComponent(compConfig);
+        const xmlDocRoot = xmlDoc.getElementsByTagName("Component")[0];
+
+        for (const screen of document.querySelectorAll("[id^=map-screen-for-]"))
+            screenList.push(document.getElementById(screen.getAttribute("id").split("-").pop()));
+
+        for (const screen of screenList) {
+            const xmlDocScreen = generateXMLScreen(xmlDoc, getItemConfig(screen));
+            Array.from(getAllChildrens(screen)).forEach((children) => {
+                const xmlDocItem = generateXMLChildren(xmlDoc, getItemConfig(children));
+                xmlDocScreen.appendChild(xmlDocItem);
+            })
+            xmlDocRoot.appendChild(xmlDocScreen);
         }
 
-        function clickItem(item) {
-            if (item.parentElement != virtualScreen){
-                while(!item.parentElement.getAttribute("class"))
-                    item = item.parentElement;
-                while(item.parentElement.getAttribute("type") != "Screen")
-                    item = item.parentElement;
-            }
+        return new XMLSerializer().serializeToString(xmlDoc);
+    }
 
-            selectedItem = item;
+    async function test(){
+        await saveComponent("{{ id }}", generateXML(), "test");
+        window.open(urlTest, '_blank').focus();
+    }
 
-            switch(item.getAttribute("type")){
-                case "Screen":
-                    tableId.style.height = "auto";
-                    tableText.style.height = "0";
-                    tableShow.style.height = "0";
-                    tableDecor.style.height = "0";
-                    tableScreen.style.height = "auto";
-                    tableButton.style.height = "0";
-                    break;
-                case "Button":
-                    tableId.style.height = "auto";
-                    tableText.style.height = "auto";
-                    tableShow.style.height = "auto";
-                    tableDecor.style.height = "auto";
-                    tableScreen.style.height = "0";
-                    tableButton.style.height = "auto";
-                    break;
-                case "Label":
-                    tableId.style.height = "auto";
-                    tableText.style.height = "auto";
-                    tableShow.style.height = "auto";
-                    tableDecor.style.height = "auto";
-                    tableScreen.style.height = "0";
-                    tableButton.style.height = "0";
-                    break;
-            }
+    async function save() {
+        await saveComponent("{{ id }}", generateXML(), "{{ c }}");
+        alert("App saved");
+        document.dispatchEvent(new Event("app-saved"));
+    }
 
-            if (item.getAttribute("type") == "Screen")
-            {
-                changeScreen(item);
-                Array.from(getAllItems(virtualScreen)).forEach(
-                    (el) => {
-                        el.classList.remove("selectedItem" , "drag-resize");
-                        document.getElementById("map-item-" + el.getAttribute("id")).classList.remove("map-selected");
-                        document.getElementById("map-item-" + selectedItem.getAttribute("id")).classList.add("map-selected");
-                    }
-                );
-                infoType.innerHTML = "Screen";
-                infoName.value = item.getAttribute("id");
-                infoBgColor.value = rgbToHex(item.style.backgroundColor);
-                infoOnVisible.value = item.getAttribute("onVisible");
-            } else {
-                changeScreen(item.parentElement);
-                Array.from(getAllItems(virtualScreen)).forEach(
-                    (el) => {
-                        el.classList.remove("selectedItem" , "drag-resize");
-                        document.getElementById("map-item-" + el.getAttribute("id")).classList.remove("map-selected");
-                    }
-                );
-                item.classList.add("selectedItem");
-                item.classList.add("drag-resize");
-                document.getElementById("map-item-" + selectedItem.getAttribute("id")).classList.add("map-selected");
-                infoType.innerHTML = item.getAttribute("type");
-                infoName.value = item.getAttribute("id");
-                infoText.value = item.innerHTML;
-                infoX.value = item.getAttribute("x");
-                infoY.value = item.getAttribute("y");
-                infoW.value = item.style.width.replace(/\D/g,'');
-                infoH.value = item.style.height.replace(/\D/g,'');
-                infoZ.value = item.style.zIndex;
-                infoFill.value = rgbToHex(item.style.backgroundColor);
-                infoColor.value = rgbToHex(item.style.color);
-                infoFontSize.value = item.style.fontSize.replace(/\D/g,'');
-                infoBorder.value = item.style.border;
-                infoBorderRadius.value = item.style.borderRadius.replace(/\D/g,''); 
-                infoBgImage.value = getComputedStyle(item).backgroundImage;
-                infoOnClick.value = item.getAttribute("OnSelect");
-            }
-            document.dispatchEvent(new CustomEvent("item-clicked",{"detail":{"item": item}}));
-        }
-        
-        function addScreenInMap(map, screenId){
-            const mapDiv = document.createElement("div");
-            const mapScreen = document.createElement("div");
-            const mapChildrens = document.createElement("div");
-
-            mapDiv.id = "map-screen-for-" + screenId;
-            mapDiv.classList.add("list-group-item");
-
-            mapScreen.id = "map-item-" + screenId;
-            mapScreen.classList.add("map-screen");
-            mapScreen.setAttribute("point", screenId);
-            mapScreen.innerHTML = "<span class='icon'>® </span>" + screenId;
-
-            mapChildrens.id = "map-children-list-for-" + screenId;
-            mapChildrens.setAttribute("expand", true);
-            mapChildrens.style.overflow = "hidden";
-
-            mapDiv.append(mapScreen, mapChildrens);
-            map.appendChild(mapDiv);
-        }
-
-        function addChildrenInMap(map, list, children){
-            const mapChildren = document.createElement("div");
-            mapChildren.classList.add("map-children");
-            mapChildren.id = "map-item-" + children.id;
-            mapChildren.setAttribute("point", children.id);
-            switch(children.getAttribute("type")){
-                case "Button":
-                    mapChildren.innerHTML = "<span class='icon'>0 </span>" + children.id;
-                    break;
-                case "Label":
-                    mapChildren.innerHTML = "<span class='icon'>0 </span>" + children.id;
-                    break;
-            }
-            list.appendChild(mapChildren);
-        }
-
-        function refreshMap(){
-            for (const item of getAllItems(virtualScreen)){
-                if (item.getAttribute("type") == "Screen"){
-                    let screenId = item.id;
-                    if (document.getElementById("map-screen-for-" + screenId) == null)
-                        addScreenInMap(map, screenId);
-                    
-                    let mapChildrenList = document.getElementById("map-children-list-for-" + screenId);
-                    mapChildrenList.style.height = (mapChildrenList.getAttribute("expand") == "true") ? "auto" : "0";
-
-                    for (const children of getAllChildrens(item))
-                        if (document.getElementById("map-item-" + children.id) == null)
-                            addChildrenInMap(map, mapChildrenList, children);
-
-                    for (const mapChildren of mapChildrenList.getElementsByTagName("div")){
-                        if(document.getElementById(mapChildren.getAttribute("point")) == null)
-                            mapChildren.remove();
-                    }
-                }
-            }
-        }
-
-        function editorInsertItem(type){
-            let newItem;
-            switch (type) {
-                case "label":
-                    newItem = insertChildren(currentScreen, DEFAULT_LABEL_CONFIG, true);
-                    break;
-                case "button":
-                    newItem = insertChildren(currentScreen, DEFAULT_BUTTON_CONFIG, true);
-                    break;
-                case "screen":
-                    newItem = insertScreen(virtualScreen, DEFAULT_SCREEN_CONFIG, true);
-                    currentScreen = newItem;
-                    break;
-                default:
-                    break;
-            }
-            refreshMap();
-            clickItem(newItem);
-            document.dispatchEvent(new CustomEvent("item-created", {"detail":{"item": newItem}}));
-            return newItem;
-        }
-
-        async function loadXML(){
-            let appData = await getCompData("{{id}}", "{{c}}");
-
-            if (appData["@OAVer"] != currentVer)
-                alert("It seems that this app was created with an older version of Other Apps\nYou can still run and edit the app, but it MAY NOT work correctly.\nApp's version: " + appData["@OAVer"] +"\nYour current OtherApp version: " + currentVer);
-
-            generateApp(virtualScreen, appData, true);
-
-            refreshMap();
-
-            for (const prop in appData)
-                if(prop.startsWith("@") && !/@xmlns:xsi|@xsi:noNamespaceSchemaLocation/.test(prop))
-                    compConfig[prop.substring(1)] = appData[prop];
-
-            clickItem(document.getElementById(appData["@defaultscreen"]));
+    async function displayConfig(){
+        const data = await POP.compConfig(compConfig, [...virtualScreen.querySelectorAll("[screen]")].map(item => item.id));
+        if (data["Return"] == 0){
+            for (const c in compConfig)
+                compConfig[c] = data["Properties"][c];
             applyConfig();
         }
+    }
 
-        interact('#nav-sidebar').resizable({
-            edges: { left: false, right: true, bottom: false, top: false },
-            listeners: {
-                move (event) {
-                    var target = event.target
-                    target.style.width = event.rect.width + 'px'
+    function applyConfig(){
+        virtualScreen.style.width = compConfig["width"] + 'px';
+        virtualScreen.style.minWidth = compConfig["width"]  + 'px';
+        virtualScreen.style.height = compConfig["height"]  + 'px';
+    }
+
+    function clickMap(item){
+        if (item.getAttribute("class").split(' ')[0] == "map-screen"){
+            if (document.getElementById("map-children-list-for-" + item.getAttribute("point")).getAttribute("expand") == "true"){
+                document.getElementById("map-children-list-for-" + item.getAttribute("point")).setAttribute("expand", "false");
+            } else {
+                document.getElementById("map-children-list-for-" + item.getAttribute("point")).setAttribute("expand", "true")
+            }
+            refreshMap();
+        }
+    }
+
+    function changeScreen(screen_name){
+        currentScreen = screen_name;
+
+        Array.from(virtualScreen.getElementsByClassName("Screen")).forEach(
+            (el) => {
+                el.style.height = "0";
+            }
+        )
+        currentScreen.style.height = "100%";
+    }
+
+    function editorRenameItem(item, newid) {
+        oldid = item.id;
+        while(document.getElementById(newid) != null)
+            newid = newid + "_1";
+        if (item.getAttribute("type") == "Screen"){
+            document.getElementById("map-screen-for-" + oldid).setAttribute("id", "map-screen-for-" + newid);
+            document.getElementById("map-item-" + oldid).setAttribute("point", newid);
+            document.getElementById("map-item-" + oldid).innerHTML = "<span class='icon'>® </span>" + newid;
+            document.getElementById("map-item-" + oldid).setAttribute("id", "map-item-" + newid);
+            document.getElementById("map-children-list-for-" + oldid).setAttribute("id", "map-children-list-for-" + newid);
+        }
+        item.setAttribute("id", newid);
+        refreshMap();
+        clickItem(item);
+        return item;
+    }
+    
+    function editorDeleteItem(item){
+        if (item.getAttribute('type') == "Screen"){
+            if (virtualScreen.querySelectorAll("[type='Screen']").length <= 1){
+                alert("There must be at least one screen");
+                return;
+            }
+            if (confirm("Are you sure you want to delete " + item.id + "?")) {
+                document.getElementById("map-screen-for-" + currentScreen.id).remove();
+                document.getElementById(currentScreen.id).remove();
+                clickItem(virtualScreen.querySelector("[screen]"));
+            }
+        }else{
+            item.remove();
+            clickItem(document.getElementById(currentScreen.id));
+        }
+        refreshMap();
+        document.dispatchEvent(new CustomEvent("item-deleted", {"detail": {"item" : item}}));
+    }
+
+    function clickItem(item) {
+        if (item.parentElement != virtualScreen){
+            while(!item.parentElement.getAttribute("class"))
+                item = item.parentElement;
+            while(item.parentElement.getAttribute("type") != "Screen")
+                item = item.parentElement;
+        }
+
+        selectedItem = item;
+
+        switch(item.getAttribute("type")){
+            case "Screen":
+                tableId.style.height = "auto";
+                tableText.style.height = "0";
+                tableShow.style.height = "0";
+                tableDecor.style.height = "0";
+                tableScreen.style.height = "auto";
+                tableButton.style.height = "0";
+                break;
+            case "Button":
+                tableId.style.height = "auto";
+                tableText.style.height = "auto";
+                tableShow.style.height = "auto";
+                tableDecor.style.height = "auto";
+                tableScreen.style.height = "0";
+                tableButton.style.height = "auto";
+                break;
+            case "Label":
+                tableId.style.height = "auto";
+                tableText.style.height = "auto";
+                tableShow.style.height = "auto";
+                tableDecor.style.height = "auto";
+                tableScreen.style.height = "0";
+                tableButton.style.height = "0";
+                break;
+        }
+
+        if (item.getAttribute("type") == "Screen")
+        {
+            changeScreen(item);
+            Array.from(getAllItems(virtualScreen)).forEach(
+                (el) => {
+                    el.classList.remove("selectedItem" , "drag-resize");
+                    document.getElementById("map-item-" + el.getAttribute("id")).classList.remove("map-selected");
+                    document.getElementById("map-item-" + selectedItem.getAttribute("id")).classList.add("map-selected");
                 }
-            },
-            modifiers: [
-                interact.modifiers.restrictEdges({outer: 'parent'}),
-                interact.modifiers.restrictSize({min: { width: 128 }, max: { width: 512 }})
-            ],
-        })
-
-        interact('#control-sidebar').resizable({
-            edges: { left: true, right: false, bottom: false, top: false },
-            listeners: {
-                move (event) {
-                    var target = event.target
-                    target.style.width = event.rect.width + 'px'
+            );
+            infoType.innerHTML = "Screen";
+            infoName.value = item.getAttribute("id");
+            infoBgColor.value = rgbToHex(item.style.backgroundColor);
+            infoOnVisible.value = item.getAttribute("onVisible");
+        } else {
+            changeScreen(item.parentElement);
+            Array.from(getAllItems(virtualScreen)).forEach(
+                (el) => {
+                    el.classList.remove("selectedItem" , "drag-resize");
+                    document.getElementById("map-item-" + el.getAttribute("id")).classList.remove("map-selected");
                 }
-            },
-            modifiers: [
-                interact.modifiers.restrictEdges({outer: 'parent'}),
-                interact.modifiers.restrictSize({min: { width: 128 }, max: { width: 512 }})
-            ],
-        })
+            );
+            item.classList.add("selectedItem");
+            item.classList.add("drag-resize");
+            document.getElementById("map-item-" + selectedItem.getAttribute("id")).classList.add("map-selected");
+            infoType.innerHTML = item.getAttribute("type");
+            infoName.value = item.getAttribute("id");
+            infoText.value = item.innerHTML;
+            infoX.value = item.getAttribute("x");
+            infoY.value = item.getAttribute("y");
+            infoW.value = item.style.width.replace(/\D/g,'');
+            infoH.value = item.style.height.replace(/\D/g,'');
+            infoZ.value = item.style.zIndex;
+            infoFill.value = rgbToHex(item.style.backgroundColor);
+            infoColor.value = rgbToHex(item.style.color);
+            infoFontSize.value = item.style.fontSize.replace(/\D/g,'');
+            infoBorder.value = item.style.border;
+            infoBorderRadius.value = item.style.borderRadius.replace(/\D/g,''); 
+            infoBgImage.value = getComputedStyle(item).backgroundImage;
+            infoOnClick.value = item.getAttribute("OnSelect");
+        }
+        document.dispatchEvent(new CustomEvent("item-clicked",{"detail":{"item": item}}));
+    }
+    
+    function addScreenInMap(map, screenId){
+        const mapDiv = document.createElement("div");
+        const mapScreen = document.createElement("div");
+        const mapChildrens = document.createElement("div");
 
-        interact('.drag-resize')
-        .resizable({
-            // resize from all edges and corners
-            edges: { left: true, right: true, bottom: true, top: true },
+        mapDiv.id = "map-screen-for-" + screenId;
+        mapDiv.classList.add("list-group-item");
 
-            listeners: {
+        mapScreen.id = "map-item-" + screenId;
+        mapScreen.classList.add("map-screen");
+        mapScreen.setAttribute("point", screenId);
+        mapScreen.innerHTML = "<span class='icon'>® </span>" + screenId;
+
+        mapChildrens.id = "map-children-list-for-" + screenId;
+        mapChildrens.setAttribute("expand", true);
+        mapChildrens.style.overflow = "hidden";
+
+        mapDiv.append(mapScreen, mapChildrens);
+        map.appendChild(mapDiv);
+    }
+
+    function addChildrenInMap(map, list, children){
+        const mapChildren = document.createElement("div");
+        mapChildren.classList.add("map-children");
+        mapChildren.id = "map-item-" + children.id;
+        mapChildren.setAttribute("point", children.id);
+        switch(children.getAttribute("type")){
+            case "Button":
+                mapChildren.innerHTML = "<span class='icon'>0 </span>" + children.id;
+                break;
+            case "Label":
+                mapChildren.innerHTML = "<span class='icon'>0 </span>" + children.id;
+                break;
+        }
+        list.appendChild(mapChildren);
+    }
+
+    function refreshMap(){
+        for (const item of getAllItems(virtualScreen)){
+            if (item.getAttribute("type") == "Screen"){
+                let screenId = item.id;
+                if (document.getElementById("map-screen-for-" + screenId) == null)
+                    addScreenInMap(map, screenId);
+                
+                let mapChildrenList = document.getElementById("map-children-list-for-" + screenId);
+                mapChildrenList.style.height = (mapChildrenList.getAttribute("expand") == "true") ? "auto" : "0";
+
+                for (const children of getAllChildrens(item))
+                    if (document.getElementById("map-item-" + children.id) == null)
+                        addChildrenInMap(map, mapChildrenList, children);
+
+                for (const mapChildren of mapChildrenList.getElementsByTagName("div")){
+                    if(document.getElementById(mapChildren.getAttribute("point")) == null)
+                        mapChildren.remove();
+                }
+            }
+        }
+    }
+
+    function editorInsertItem(type){
+        let newItem;
+        switch (type) {
+            case "label":
+                newItem = insertChildren(currentScreen, DEFAULT_LABEL_CONFIG, true);
+                break;
+            case "button":
+                newItem = insertChildren(currentScreen, DEFAULT_BUTTON_CONFIG, true);
+                break;
+            case "screen":
+                newItem = insertScreen(virtualScreen, DEFAULT_SCREEN_CONFIG, true);
+                currentScreen = newItem;
+                break;
+            default:
+                break;
+        }
+        refreshMap();
+        clickItem(newItem);
+        document.dispatchEvent(new CustomEvent("item-created", {"detail":{"item": newItem}}));
+        return newItem;
+    }
+
+    async function loadXML(){
+        let appData = await getCompData("{{id}}", "{{c}}");
+
+        if (appData["@OAVer"] != currentVer)
+            alert("It seems that this app was created with an older version of Other Apps\nYou can still run and edit the app, but it MAY NOT work correctly.\nApp's version: " + appData["@OAVer"] +"\nYour current OtherApp version: " + currentVer);
+
+        generateApp(virtualScreen, appData, true);
+
+        refreshMap();
+
+        for (const prop in appData)
+            if(prop.startsWith("@") && !/@xmlns:xsi|@xsi:noNamespaceSchemaLocation/.test(prop))
+                compConfig[prop.substring(1)] = appData[prop];
+
+        clickItem(document.getElementById(appData["@defaultscreen"]));
+        applyConfig();
+    }
+
+    interact('#nav-sidebar').resizable({
+        edges: { left: false, right: true, bottom: false, top: false },
+        listeners: {
             move (event) {
                 var target = event.target
-                var x = (parseFloat(target.getAttribute('x')) || 0)
-                var y = (parseFloat(target.getAttribute('y')) || 0)
-
-                // update the element's style
                 target.style.width = event.rect.width + 'px'
-                target.style.height = event.rect.height + 'px'
-
-                // translate when resizing from top or left edges
-                x += event.deltaRect.left
-                y += event.deltaRect.top
-
-                target.style.transform = 'translate(' + x + 'px,' + y + 'px)'
-
-                target.setAttribute('x', x)
-                target.setAttribute('y', y)
             }
-            },
-            modifiers: [
-            // keep the edges inside the parent
-            interact.modifiers.restrictEdges({
-                outer: 'parent'
-            }),
+        },
+        modifiers: [
+            interact.modifiers.restrictEdges({outer: 'parent'}),
+            interact.modifiers.restrictSize({min: { width: 128 }, max: { width: 512 }})
+        ],
+    })
 
-            // minimum size
-            interact.modifiers.restrictSize({
-                min: { width: 32, height: 32 }
-            })
-            ],
-        })
-        .draggable({
-            listeners: { move: window.dragMoveListener },
-            modifiers: [
-            interact.modifiers.restrictRect({
-                restriction: 'parent',
-                endOnly: true
-            })
-            ]
-        })
+    interact('#control-sidebar').resizable({
+        edges: { left: true, right: false, bottom: false, top: false },
+        listeners: {
+            move (event) {
+                var target = event.target
+                target.style.width = event.rect.width + 'px'
+            }
+        },
+        modifiers: [
+            interact.modifiers.restrictEdges({outer: 'parent'}),
+            interact.modifiers.restrictSize({min: { width: 128 }, max: { width: 512 }})
+        ],
+    })
 
-        function dragMoveListener (event) {
+    interact('.drag-resize')
+    .resizable({
+        // resize from all edges and corners
+        edges: { left: true, right: true, bottom: true, top: true },
+
+        listeners: {
+        move (event) {
             var target = event.target
-            // keep the dragged position in the x/y attributes
-            var x = (parseFloat(target.getAttribute('x')) || 0) + event.dx
-            var y = (parseFloat(target.getAttribute('y')) || 0) + event.dy
+            var x = (parseFloat(target.getAttribute('x')) || 0)
+            var y = (parseFloat(target.getAttribute('y')) || 0)
 
-            // translate the element
-            target.style.transform = 'translate(' + x + 'px, ' + y + 'px)'
+            // update the element's style
+            target.style.width = event.rect.width + 'px'
+            target.style.height = event.rect.height + 'px'
 
-            // update the posiion attributes
+            // translate when resizing from top or left edges
+            x += event.deltaRect.left
+            y += event.deltaRect.top
+
+            target.style.transform = 'translate(' + x + 'px,' + y + 'px)'
+
             target.setAttribute('x', x)
             target.setAttribute('y', y)
-            }
+        }
+        },
+        modifiers: [
+        // keep the edges inside the parent
+        interact.modifiers.restrictEdges({
+            outer: 'parent'
+        }),
 
-        // this function is used later in the resizing and gesture demos
-        window.dragMoveListener = dragMoveListener
+        // minimum size
+        interact.modifiers.restrictSize({
+            min: { width: 32, height: 32 }
+        })
+        ],
+    })
+    .draggable({
+        listeners: { move: window.dragMoveListener },
+        modifiers: [
+        interact.modifiers.restrictRect({
+            restriction: 'parent',
+            endOnly: true
+        })
+        ]
+    })
 
-        new Sortable(document.getElementById("control-map"), {
-            animation: 150,
-        });
-        
-        loadXML();
-    </script>
-</body>
-</html>
+    function dragMoveListener (event) {
+        var target = event.target
+        // keep the dragged position in the x/y attributes
+        var x = (parseFloat(target.getAttribute('x')) || 0) + event.dx
+        var y = (parseFloat(target.getAttribute('y')) || 0) + event.dy
+
+        // translate the element
+        target.style.transform = 'translate(' + x + 'px, ' + y + 'px)'
+
+        // update the posiion attributes
+        target.setAttribute('x', x)
+        target.setAttribute('y', y)
+        }
+
+    // this function is used later in the resizing and gesture demos
+    window.dragMoveListener = dragMoveListener
+
+    new Sortable(document.getElementById("control-map"), {
+        animation: 150,
+    });
+    
+    loadXML();
+</script>
+{% endblock %}

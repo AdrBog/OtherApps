@@ -1,0 +1,72 @@
+CHANGELOG
+V 0.5.0
+	- THE WHOLE APPLICATION HAS CHANGED
+	- Unusable variables and functions have been eliminated; those that survived have been remodeled. A lot of cool functions have been added to global.js to ease the development of Other Apps.
+	- A lot of documentation has been added that may help you.
+	- New addon added: Group items by tags to ease the interaction with multiple items.
+	- Implementation of the <dialog> tag for popup handling
+
+V 0.4.1
+	- The entries of some functions have been modified. Instead of entering strings, elements are now entered 
+	- Added custom syntax highlighting when programming.
+	- Implementation of Pops to ease the use of pop-up windows.
+
+V 0.4.0
+	- DATABASE MANAGER HAS BEEN REMOVED
+	To simplify the development of Other Apps, the database manager has been separated to a new project, Libre List.
+	- Added XML validation to apps files
+
+V 0.3.2
+	- Added new functions in static/js/global.js
+		- Create apps from addons with genereateXML...() functions
+
+V 0.3.1
+	- New route "/database/json/x/y" will return json data of table y from database x
+	- Route "/database/raw/x/y" is deleted, as well as templates/dataraw.html
+	- Added new function in static/js/builtinFunctions.js:
+		- Function sqljson() returns json data of database table
+	- Updated the database manager
+	- Fixed minor issues
+
+V 0.3
+	- Created the config folder
+	- Addons are now configurable in config/addons.yml
+		- File templates/plugins.html is deprecated
+	- static/js/builtinFunctions.js:
+		- Function sqlquery() now works in async/await functions
+	- Added "red" and "orange" themes in static/css/virtual-screen.css
+	- Added new addons:
+		- static/addons/extraEditor.js: Adds a toolbar to your code editor
+		- static/addons/scaleApp.js: Now apps are scaled to fit screen size
+	- New route "/database/raw/x/y" will return info about table y from x database, you can use it in your apps as an iframe to extract info
+	- Fixed minor issues
+
+V 0.24
+	- Made easier to add divs inside divs in your applications
+	- Added components in Other Apps
+	- Added new function in static/js/builtinFunctions.js:
+		- Function exevent()
+	- Added themes inside app
+	- Added "unsaved changes" message before leaving page
+	- Fixed minor issues
+
+V 0.23
+	- Made easier to add inputs, selection and textarea tags in your applications
+	- Added new functions in static/js/builtinFunctions.js
+		- Function values()
+	- SortableJS added to Other Apps
+	- Nerd Fonts added to Other Apps
+	- Fixed minor issues
+
+V 0.22
+	- Themes added to Other Apps
+	- Fixed minor issues
+
+V 0.21
+	- Added new functions in templates/edit.html
+	- Fixed minor issues
+
+V 0.2
+	- Database manager added to Other Apps
+	- Added new functions in static/js/builtinFunctions.js
+	- Fixed minor issues

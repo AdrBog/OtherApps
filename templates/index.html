@@ -1,77 +1,69 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" href="/static/favicon.ico">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <title>Other Apps | Home</title>
-</head>
-<body>
-    <div class="vertical-container">
-        <div id="tool-bar" class="navbar">
-            <a class="home" href="{{ url_for('index') }}">Other Apps</a>
-            <a href="#" onclick="saveDialog()">New App</a>
-            <a href="#" onclick="about()">About</a>
-        </div>
-        <div class="vertical-container">
-            <div id="app-list">
-                <span style="font-size: 32px;margin: 16px 16px 0 16px;">Your Apps</span>
-                {% for project in projects %}
-                <div class="app-row">
-                    <a id="{{ project }}" href="{{ url_for('play', id=project, component=1) }}" style="flex: 1;">{{ project }}</a>
-                    <div>
-                        <a href="{{ url_for('edit', id=project )}}">Edit</a>
-                        <a class="error" href="#" onclick="delete_p('{{ project }}')">Delete</a>
-                    </div>
-                </div>
-                {% endfor %}
+{% extends "base.html" %}
+
+{% block title %}Other Apps{% endblock %}
+
+{% block navbar_content %}
+<a href="#" onclick="saveDialog()">New App</a>
+<a href="#" onclick="about()">About</a>
+{% endblock %}
+
+{% block content %}
+<div class="vertical-container">
+    <div class="app-list">
+        <span style="font-size: 32px;margin: 16px 16px 0 16px;">Your Apps</span>
+        {% for project in projects %}
+        <div class="app-row">
+            <a id="{{ project }}" href="{{ url_for('play', id=project, component=1) }}" style="flex: 1;">{{ project }}</a>
+            <div>
+                <a href="{{ url_for('edit', id=project )}}">Edit</a>
+                <a class="error" href="#" onclick="delete_p('{{ project }}')">Delete</a>
             </div>
         </div>
+        {% endfor %}
     </div>
-    <script src="/static/js/global.js"></script>
-    <script src="/static/js/pops.js"></script>
-    {% for addon in addons %}
-    <script src="{{addon}}"></script>
-    {% endfor %}
-    <script>
-        const POP = new Pops();
-        let compConfig = DEFAULT_APP_CONFIG;
+</div>
+<script src="/static/js/global.js"></script>
+<script src="/static/js/pops.js"></script>
+{% for addon in addons %}
+<script src="{{addon}}"></script>
+{% endfor %}
+<script>
+    const POP = new Pops();
+    let compConfig = DEFAULT_APP_CONFIG;
 
-        async function delete_p(id){
-            if(await POP.confirm("Are you sure you want to delete " + id + "?")){
-                await POP.alert(id + " has been removed");
-                window.location = "/remove/" + id;
-            }
+    async function delete_p(id){
+        if(await POP.confirm("Are you sure you want to delete " + id + "?")){
+            await POP.alert(id + " has been removed");
+            window.location = "/remove/" + id;
         }
+    }
 
-        async function about(){
-            await POP.about("{{ ver }}");
-        }
+    async function about(){
+        await POP.iframe("About {{ver}}", "/static/about/about.html", "500px", "458px");
+    }
 
-        async function saveDialog(){
-            const name = await POP.prompt("Enter app name");
-            if (!isValid(name))
-                await POP.alert("Can't create this app\nNot a valid name");
-            else if (document.getElementById(name) != null)
-                await POP.alert("Can't create " + name + "\nThis app already exists");
-            else if (name)
-                save(name);
-        }
+    async function saveDialog(){
+        const name = await POP.prompt("Enter app name");
+        if (!isValid(name))
+            await POP.alert("Can't create this app\nNot a valid name");
+        else if (document.getElementById(name) != null)
+            await POP.alert("Can't create " + name + "\nThis app already exists");
+        else if (name)
+            save(name);
+    }
 
-        function generateDefaultApp(){
-            compConfig ["OAVer"] = "{{ ver }}";
-            var app = generateXMLComponent(compConfig);
-            var appRoot = app.getElementsByTagName("Component")[0];
-            appRoot.appendChild(generateXMLScreen(app, getItemConfig(generateScreen(DEFAULT_SCREEN_CONFIG))));
-            return new XMLSerializer().serializeToString(app);
-        }
+    function generateDefaultApp(){
+        compConfig ["OAVer"] = "{{ ver }}";
+        var app = generateXMLComponent(compConfig);
+        var appRoot = app.getElementsByTagName("Component")[0];
+        appRoot.appendChild(generateXMLScreen(app, getItemConfig(generateScreen(DEFAULT_SCREEN_CONFIG))));
+        return new XMLSerializer().serializeToString(app);
+    }
 
-        async function save(id){
-            await saveComponent(id, generateDefaultApp());
-            await POP.alert("App " + id + " created");
-            location.reload();
-        }
-    </script>
-</body>
-</html>
+    async function save(id){
+        await saveComponent(id, generateDefaultApp());
+        await POP.alert("App " + id + " created");
+        location.reload();
+    }
+</script>
+{% endblock %}

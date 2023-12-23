@@ -34,10 +34,6 @@ body {
   color: var(--fg);
 }
 
-h1,h2,h3,h4,h5,h6{
-    font-weight: normal;
-}
-
 a{
     color: var(--a);
 }
@@ -46,12 +42,10 @@ a{
     box-sizing: border-box;
 }
 
-#app-list {
+.app-list {
 	display: flex;
 	flex-flow: column;
-	height: 100%;
-	width: 100%;
-    padding: 12px;
+    margin: 12px;
 }
 
 .app-row {
@@ -128,8 +122,8 @@ input:not(.error), textarea{
 
 input, textarea, select{
     font-family: var(--font);
-    background-color: var(--white-05);
-    color: var(--fg);
+    background-color: var(--bg-2);
+    color: var(--fg-2);
     border-radius: 0;
     border: 1px solid var(--black-02);
 }
@@ -216,7 +210,7 @@ input, textarea, select{
 }
 
 .sidebar {
-    background-color: var(--bg-2);
+    background-color: var(--bg);
     width: 256px;
     border-right: 1px solid var(--black-02);
     border-left: 1px solid var(--black-02);
@@ -274,7 +268,7 @@ dialog input, dialog select, dialog textarea {
     margin-bottom: 6px;
     font-family: var(--font);
     border-radius: 0;
-    border: 1px solid rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--black-02);
 }
 
 dialog button{

@@ -186,32 +186,39 @@ class Pops {
     }
 
     /**
-     * Display the Other Apps about window. OTHER APPS EXCLUSIVE
+     * Display a popup with an iframe inside
+     * @param {*} title 
+     * @param {*} src 
+     * @param {*} w 
+     * @param {*} h 
+     * @returns 
      */
-    async about(version){
-        await this.custom([
+    async iframe(title, src, w = "400px", h = "400px", className = "center"){
+        return await this.custom([
             {
                 "Element": "p",
-                "InnerText": "About version " + version
+                "InnerText": title
+            },
+            {
+                "Element": "iframe",
+                "Attributes": {
+                    "Src": src,
+                    "Width": w,
+                    "Height": h,
+                    "frameborder": "0"
+                }
             },
             {
                 "Element": "button",
                 "InnerText": "X",
                 "Attributes": {
                     "Return": 0,
-                    "Style": "position: absolute; top: 0; right: 0; min-width: 20px;"
-                }
-            },
-            {
-                "Element": "iframe",
-                "Attributes": {
-                    "Src": "/static/about/about.html",
-                    "Style": "width: 600px; margin-top: 12px; height: 460px;",
-                    "Frameborder": "0"
+                    "Style": "position: absolute; top: 0; right: 0; min-width: auto;"
                 }
             }
-        ])
+        ], className)
     }
+
 
 
     /**
