@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block styles %}
+<link rel="stylesheet" href="/static/css/style.css">
+{% endblock %}
+
+{% block title %}Settings - Other Apps{% endblock %}
+
+{% block content %}
+<div class="app-list">
+    <h1>Settings</h1>
+    <form method="post">
+        <table>
+            {% for key, setting in settings_info.items() %}
+                <tr>
+                    <td>
+                        <label for="setting_{{ key }}"> {{ setting["display"] }} </label>
+                    </td>
+                    <td>
+                        {% if 'options' is in(setting) %}
+                                <select name="{{ key }}" id="setting_{{ key }}" title="{{ setting['comment'] }}">
+                                    {% for option in setting['options'] %}
+                                        <option value="{{option[0]}}" {{ "selected" if option[0] == config[key] else "" }}>{{option[1]}}</option>
+                                    {% endfor %}
+                                </select>
+                        {% else %}
+                            <input name="{{ key }}" id="setting_{{ key }}" type="{{ setting['type'] }}" title="{{ setting['comment'] }}" value="{{ config[key] }}">
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+        <br>
+        <button type="submit" class="primary">Save changes</button>
+    </form>
+</div>
+{% endblock %}

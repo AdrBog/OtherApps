@@ -1,50 +1,47 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" href="/static/favicon.ico">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
-    <title>Other Apps</title>
-</head>
-<body>
-    <div class="screen">
-        <span id="display-name"></span>
-        <div id="app" class="app"></div>
-    </div>
-    <script src="/static/js/global.js"></script>
-    {% for addon in addons %}
-    <script src="{{addon}}"></script>
-    {% endfor %}
-    <script>
-        const id = "{{id}}";
-        const app = document.getElementById("app");
-        const displayName = document.getElementById("display-name");
-        const appFrame = document.createElement("iframe");
-        var compConfig = {};
+{% extends 'base.html' %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
+{% endblock %}
+
+{% block navbar_content %}
+<span id="display-name"></span>
+{% endblock %}
+
+{% block content %}
+<div id="app" class="app"></div>
+<script src="/static/js/global.js"></script>
+{% for addon in addons %}
+<script src="{{addon}}"></script>
+{% endfor %}
+<script>
+    const id = "{{id}}";
+    const app = document.getElementById("app");
+    const displayName = document.getElementById("display-name");
+    const appFrame = document.createElement("iframe");
+    var compConfig = {};
+    
+    async function loadApp(){
+        const appData = await getCompData("{{id}}", "{{ component }}");
         
-        async function loadApp(){
-            const appData = await getCompData("{{id}}", "{{ component }}");
-            
-            for (const prop in appData)
-                if(prop.startsWith("@") && !/@xmlns:xsi|@xsi:noNamespaceSchemaLocation/.test(prop))
-                    compConfig[prop.substring(1)] = appData[prop];
+        for (const prop in appData)
+            if(prop.startsWith("@") && !/@xmlns:xsi|@xsi:noNamespaceSchemaLocation/.test(prop))
+                compConfig[prop.substring(1)] = appData[prop];
 
-            appFrame.style.width = compConfig["width"] + "px";
-            appFrame.style.height = compConfig["height"] + "px";
-            appFrame.setAttribute("id", "app-frame");
-            displayName.innerText = compConfig["displayname"];
-            document.title = compConfig["displayname"];
+        appFrame.style.width = compConfig["width"] + "px";
+        appFrame.style.height = compConfig["height"] + "px";
+        appFrame.setAttribute("id", "app-frame");
+        displayName.innerText = compConfig["displayname"];
+        document.title = compConfig["displayname"];
 
-            appFrame.setAttribute("src", "{{ url_for('embed', id=id , component=component) }}");
-            appFrame.setAttribute("frameborder", 0);
+        appFrame.setAttribute("src", "{{ url_for('embed', id=id , component=component) }}");
+        appFrame.setAttribute("frameborder", 0);
 
-            app.appendChild(appFrame);
-            document.dispatchEvent(new CustomEvent("app-loaded", {"config": compConfig}));
-        }
+        app.appendChild(appFrame);
+        document.dispatchEvent(new CustomEvent("app-loaded", {"config": compConfig}));
+    }
 
-        loadApp();
-    </script>
-</body>
-</html>
+    loadApp();
+</script>
+{% endblock %}

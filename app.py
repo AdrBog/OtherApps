@@ -4,16 +4,15 @@ from flask_cors import CORS, cross_origin
 from werkzeug.exceptions import abort
 from xmlschema import XMLSchema, etree_tostring
 from xml.dom import minidom
+from settings import *
 
 app = Flask(__name__)
 CORS(app)
 PROJECTS_DIR = "projects"
-CONFIG_DIR = "config"
-CONFIG_FILE = "config.json"
 ADDONS_FILE = "addons.json"
 VERSION = "0.5.0"
 
-def reload_addons():
+def reloadAddons():
     with open(f"{CONFIG_DIR}/{ADDONS_FILE}") as f:
         return json.load(f)
 
@@ -38,29 +37,32 @@ def generateComponent():
 
 @app.route('/')
 def index():
-    addons = reload_addons()
-    reload_addons()
+    addons = reloadAddons()
+    reloadAddons()
     if not os.path.exists(f"{PROJECTS_DIR}"):
         os.makedirs(f"{PROJECTS_DIR}")
+    if not os.path.exists(f"{CONFIG_DIR}/{CONFIG_FILE}"):
+        setDefaultSettings()
+    config.read(f"{CONFIG_DIR}/{CONFIG_FILE}")
     projects = os.listdir(f'{PROJECTS_DIR}/')
-    return render_template('index.html', projects=projects, ver=VERSION, addons=addons["Index"])
+    return render_template('index.html', projects=projects, ver=VERSION, addons=addons["Index"], theme=config.get("Config", "theme"))
 
 @app.route('/play/<id>/<component>')
 def play(id, component):
-    addons = reload_addons()
-    return render_template('play.html', id=id, component=component, addons=addons["Play"])
+    addons = reloadAddons()
+    return render_template('play.html', id=id, component=component, addons=addons["Play"], theme=config.get("Config", "theme"))
 
 @app.route('/embed/<id>/<component>')
 def embed(id, component):
-    addons = reload_addons()
+    addons = reloadAddons()
     s = request.args.get('s', type = str)
     return render_template('embed.html', id=id, component=component, addons=addons["Embed"])
 
 @app.route('/edit/<id>')
 def edit(id):
-    addons = reload_addons()
+    addons = reloadAddons()
     c = request.args.get('c', default = '1', type = str)
-    return render_template('edit.html', id=id, ver=VERSION, c=c, addons=addons["Editor"])
+    return render_template('edit.html', id=id, ver=VERSION, c=c, addons=addons["Editor"], theme=config.get("Config", "theme"))
 
 @app.route('/appdata/<id>')
 def appdata(id):
@@ -94,7 +96,17 @@ def save():
         data = {'xmldata': xmldata}
         return jsonify(data)
 
-@app.route('/json/config', methods=('GET', 'POST'))
-def jsonConfig():
-    with open(f"{CONFIG_DIR}/{CONFIG_FILE}") as f:
-        return jsonify(json.load(f))
+@app.route('/settings', methods=('GET', 'POST'))
+def settings():
+    if request.method == "POST":
+        for k, v in request.form.items():
+            config.set("Config", k, v)
+        with open(f"{CONFIG_DIR}/{CONFIG_FILE}", "w") as f:
+            config.write(f)
+    config.read(f"{CONFIG_DIR}/{CONFIG_FILE}")
+    return render_template("settings.html", settings_info=SETTINGS, config=config["Config"], theme=config.get("Config", "theme"))
+
+@app.route('/config/<optionName>', methods=('GET', 'POST'))
+def configure(optionName):
+    if request.method == 'GET':
+        return config.get("Config", optionName)

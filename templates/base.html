@@ -5,16 +5,20 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="/static/favicon.ico">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/edit.css') }}">
+    {% block styles %}{% endblock %}
     <title>{% block title %}{% endblock %}</title>
 </head>
-<body>
+<body class="{{ theme }}">
     <div class="vertical-container">
         <div id="tool-bar" class="navbar">
             <a class="home" href="{{ url_for('index') }}">Other Apps</a>
             {% block navbar_content %}{% endblock %}
         </div>
+        <noscript>
+            <dialog open>
+                Your browser does not support JavaScript!
+            </dialog>
+        </noscript>
         {% block content %}{% endblock %}
     </div>
 </body>

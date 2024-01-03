@@ -1,4 +1,8 @@
 {% extends "base.html" %}
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/edit.css') }}">
+{% endblock %}
 {% block title %}{{ id }} - Other Apps{% endblock %}
 {% block navbar_content %}
 <a href="#" onclick="save()" id="tool-bar-save">Save</a>

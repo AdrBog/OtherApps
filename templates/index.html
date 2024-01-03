@@ -1,16 +1,41 @@
 {% extends "base.html" %}
 
+{% block styles %}
+<link rel="stylesheet" href="/static/css/style.css">
+{% endblock %}
+
 {% block title %}Other Apps{% endblock %}
 
 {% block navbar_content %}
 <a href="#" onclick="saveDialog()">New App</a>
-<a href="#" onclick="about()">About</a>
+<a href="#" onclick="aboutDialog.showModal()">About</a>
+<a href="/settings">Settings</a>
 {% endblock %}
 
 {% block content %}
+
+<dialog id="aboutDialog" style="width: 600px;">
+    <div style="text-align: right;">
+        <button onclick="aboutDialog.close()" style="min-width: 0; margin: 0;">X</button>
+    </div>
+    <img src="/static/icon.svg" alt="logo" class="center">
+    <h2>Version {{ ver }}</h2>
+    <h3>Lightweight administrative app builder</h3>
+    <hr>
+    This software was created with the purpose of helping with the development of administrative apps for companies with low resources.
+    <br><br>
+    This software is released under the GNU General Public License v3.0
+    <hr>
+    More info:
+    <a href="https://github.com/AdrBog/OtherApps" target="_blank">Source code</a>
+    <a href="https://raw.githubusercontent.com/AdrBog/OtherApps/main/LICENSE" target="_blank">License</a>
+    <a href="/static/about/changelog.txt" target="_blank">Changelog</a>
+    <a href="/static/about/third-party.txt" target="_blank">Third party scripts</a>
+</dialog>
+
 <div class="vertical-container">
     <div class="app-list">
-        <span style="font-size: 32px;margin: 16px 16px 0 16px;">Your Apps</span>
+        <h1>Your Apps</h1>
         {% for project in projects %}
         <div class="app-row">
             <a id="{{ project }}" href="{{ url_for('play', id=project, component=1) }}" style="flex: 1;">{{ project }}</a>
@@ -36,10 +61,6 @@
             await POP.alert(id + " has been removed");
             window.location = "/remove/" + id;
         }
-    }
-
-    async function about(){
-        await POP.iframe("About {{ver}}", "/static/about/about.html", "500px", "458px");
     }
 
     async function saveDialog(){

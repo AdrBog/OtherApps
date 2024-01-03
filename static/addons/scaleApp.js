@@ -1,14 +1,16 @@
 function resize_app(){
-    appWidth = parseInt(appFrame.style.width);
-    appHeight = parseInt(appFrame.style.height);
-    targetWidth = app.offsetWidth;
-    targetHeight = app.offsetHeight;
+    scaledWrapper = app;
+    scaledContent = appFrame;
+    
+    scaledContent.style.transform = 'scale(1, 1)';
+    
+    let { width: cw, height: ch } = scaledContent.getBoundingClientRect();
+    let { width: ww, height: wh } = scaledWrapper.getBoundingClientRect();
 
-    scale = app.scrollHeight / targetHeight;
+    let scaleAmtX = Math.min(ww / cw, wh / ch);
+    let scaleAmtY = scaleAmtX;
     
-    scale = (targetWidth < appWidth) ? scale = targetWidth / appWidth : scale = targetHeight / appHeight;
-    
-    appFrame.style.transform = "scale(" + scale + ")";
+    scaledContent.style.transform = `scale(${scaleAmtX}, ${scaleAmtY})`;
 }
 
 document.addEventListener('app-loaded', () => {resize_app();})

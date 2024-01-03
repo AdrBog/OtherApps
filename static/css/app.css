@@ -5,14 +5,11 @@
     justify-content: center;
     background-color: var(--505050);
     overflow: hidden;
+    position: relative;
 }
 
-#display-name{
-    background-color: var(--bg);
-    color: var(--fg);
-    padding: 10px;
-    font-size: 20px;
-    z-index: 1;
+.app iframe{
+    display: inline-block;
 }
 
 .Button:hover{

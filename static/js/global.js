@@ -83,10 +83,14 @@ function rgbToHex(color){
     return "#" + hex(r) + hex(g) + hex(b);
 }
 
-async function getOAConfig(attributeName){
-    const res = await fetch("/json/config");
-    const data = await res.json();
-    return data[attributeName];
+/**
+ * Read a value from the Other Apps config file
+ * @param {*} optionName 
+ * @returns 
+ */
+async function getOAConfig(optionName){
+    const res = await fetch(`/config/${optionName}`);
+    return await res.text();
 }
 
 async function saveComponent(id ,xmlData, component = 1){

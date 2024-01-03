@@ -1,10 +1,8 @@
-/*
-    To change the theme of Other Apps, edit the import url below
-    For example:
-    @import url("themes/dark.css");
-    @import url("themes/gruvbox.css");
-*/
+/* THEMES */
 @import url("themes/light.css");
+@import url("themes/dark.css");
+@import url("themes/gruvbox.css");
+
 @import url("webkit.css");
 @import url("virtual-screen.css");
 @font-face {
@@ -34,12 +32,22 @@ body {
   color: var(--fg);
 }
 
+h1,h2,h3,h4,h5,h6{
+    font-weight: normal;
+}
+
 a{
     color: var(--a);
 }
 
 *{
     box-sizing: border-box;
+}
+
+.center{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .app-list {
@@ -152,7 +160,7 @@ input, textarea, select{
     font-family: "icon-worksregular";
 }
 
-.navbar a {
+.navbar a, .navbar span {
     float: left;
     font-size: 16px;
     text-align: center;
@@ -269,6 +277,15 @@ dialog input, dialog select, dialog textarea {
     font-family: var(--font);
     border-radius: 0;
     border: 1px solid var(--black-02);
+}
+
+dialog form details{
+    display: flex;
+    flex-direction: column;
+}
+
+dialog form * {
+    width: auto !important;
 }
 
 dialog button{
