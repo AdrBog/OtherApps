@@ -6,7 +6,7 @@ document.getElementById("a-button").setAttribute("onclick", "extraInsert('button
 
 document.getElementById("tool-bar-insert").innerHTML += `
     <hr>
-    <a href="#" onclick="extrainsert('iframe')">Frame</a>
+    <a href="#" onclick="extraInsert('iframe')">Frame</a>
     <hr>
     <a href="#" onclick="extraInsert('plus')">Plus Icon</a>
     <a href="#" onclick="extraInsert('refresh')">Refresh Icon</a>
