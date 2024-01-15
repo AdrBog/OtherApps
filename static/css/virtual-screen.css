@@ -40,60 +40,81 @@
 
 /*    THEMED BLUE    */
 
-#virtual-screen .themed-blue{
+#virtual-screen .themed-blue:not(form), 
+#virtual-screen form.themed-blue *:not(label) {
     background-color: white;
     border: 2px solid var(--themed-blue-accent);
     accent-color: var(--themed-blue-accent);
 }
 
-#virtual-screen .themed-blue:hover {
+#virtual-screen .themed-blue:hover:not(form), 
+#virtual-screen form.themed-blue *:hover:not(label) {
     background-color: var(--themed-blue-focus);
 }
 
-#virtual-screen select.themed-blue {
+#virtual-screen select.themed-blue, 
+#virtual-screen form.themed-blue select {
     background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='64'%3E%3Crect fill='%233860B2' x='0' y='0' width='32' height='64'/%3E%3Cpolyline points='9,28 17,38 25,28' stroke='white' stroke-width='2' fill='none' /%3E%3C/svg%3E") no-repeat right;
 }
 
-#virtual-screen .themed-blue[type="checkbox"]:checked, #virtual-screen .themed-blue[type="radio"]:checked{
+#virtual-screen .themed-blue[type="checkbox"]:checked, 
+#virtual-screen .themed-blue[type="radio"]:checked,
+#virtual-screen form.themed-blue [type="checkbox"]:checked, 
+#virtual-screen form.themed-blue [type="radio"]:checked
+{
     background-color: var(--themed-blue-accent);
 }
 
 /*    THEMED ORANGE    */
 
-#virtual-screen .themed-orange{
+#virtual-screen .themed-orange:not(form), 
+#virtual-screen form.themed-orange *:not(label) {
     background-color: white;
     border: 2px solid var(--themed-orange-accent);
     accent-color: var(--themed-orange-accent);
 }
 
-#virtual-screen .themed-orange:hover {
+#virtual-screen .themed-orange:hover:not(form), 
+#virtual-screen form.themed-orange *:hover:not(label) {
     background-color: var(--themed-orange-focus);
 }
 
-#virtual-screen select.themed-orange {
+#virtual-screen select.themed-orange, 
+#virtual-screen form.themed-orange select {
     background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='64'%3E%3Crect fill='%23F65810' x='0' y='0' width='32' height='64'/%3E%3Cpolyline points='9,28 17,38 25,28' stroke='white' stroke-width='2' fill='none' /%3E%3C/svg%3E") no-repeat right;
 }
 
-#virtual-screen .themed-orange[type="checkbox"]:checked, #virtual-screen .themed-orange[type="radio"]:checked{
+#virtual-screen .themed-orange[type="checkbox"]:checked, 
+#virtual-screen .themed-orange[type="radio"]:checked,
+#virtual-screen form.themed-orange [type="checkbox"]:checked, 
+#virtual-screen form.themed-orange [type="radio"]:checked
+{
     background-color: var(--themed-orange-accent);
 }
 
 /*    THEMED red    */
 
-#virtual-screen .themed-red{
+#virtual-screen .themed-red:not(form), 
+#virtual-screen form.themed-red *:not(label) {
     background-color: white;
     border: 2px solid var(--themed-red-accent);
     accent-color: var(--themed-red-accent);
 }
 
-#virtual-screen .themed-red:hover {
+#virtual-screen .themed-red:hover:not(form), 
+#virtual-screen form.themed-red *:hover:not(label) {
     background-color: var(--themed-red-focus);
 }
 
-#virtual-screen select.themed-red {
+#virtual-screen select.themed-red, 
+#virtual-screen form.themed-red select {
     background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='64'%3E%3Crect fill='%23A80000' x='0' y='0' width='32' height='64'/%3E%3Cpolyline points='9,28 17,38 25,28' stroke='white' stroke-width='2' fill='none' /%3E%3C/svg%3E") no-repeat right;
 }
 
-#virtual-screen .themed-red[type="checkbox"]:checked, #virtual-screen .themed-red[type="radio"]:checked{
+#virtual-screen .themed-red[type="checkbox"]:checked, 
+#virtual-screen .themed-red[type="radio"]:checked,
+#virtual-screen form.themed-red [type="checkbox"]:checked, 
+#virtual-screen form.themed-red [type="radio"]:checked
+{
     background-color: var(--themed-red-accent);
 }

@@ -4,18 +4,22 @@ document.getElementById("a-button").setAttribute("onclick", "extraInsert('button
 
 // This addon adds extra options to the insert button
 
-document.getElementById("tool-bar-insert").innerHTML += '<hr>' +
-    '<a href="#" onclick="extraInsert(\'iframe\')">Frame</a>' +
-    '<hr>' +
-    '<a href="#" onclick="extraInsert(\'plus\')">Plus Icon</a>' +
-    '<a href="#" onclick="extraInsert(\'refresh\')">Refresh Icon</a>' +
-    '<a href="#" onclick="extraInsert(\'back\')">Back Icon</a>' +
-    '<a href="#" onclick="extraInsert(\'home\')">Home Icon</a>' +
-    '<hr>' +
-    '<a href="#" onclick="extraInsert(\'input\')">Input</a>' +
-    '<a href="#" onclick="extraInsert(\'checkbox\')">Checkbox</a>' +
-    '<a href="#" onclick="extraInsert(\'radio\')">Radio</a>' +
-    '<a href="#" onclick="extraInsert(\'select\')">Select</a>';
+document.getElementById("tool-bar-insert").innerHTML += `
+    <hr>
+    <a href="#" onclick="extrainsert('iframe')">Frame</a>
+    <hr>
+    <a href="#" onclick="extraInsert('plus')">Plus Icon</a>
+    <a href="#" onclick="extraInsert('refresh')">Refresh Icon</a>
+    <a href="#" onclick="extraInsert('back')">Back Icon</a>
+    <a href="#" onclick="extraInsert('home')">Home Icon</a>
+    <hr>
+    <a href="#" onclick="extraInsert('form')">Form</a>
+    <hr>
+    <a href="#" onclick="extraInsert('input')">Input</a>
+    <a href="#" onclick="extraInsert('checkbox')">Checkbox</a>
+    <a href="#" onclick="extraInsert('radio')">Radio</a>
+    <a href="#" onclick="extraInsert('select')">Select</a>
+`
     
 
 function extraInsert(item) {
@@ -83,6 +87,15 @@ function extraInsert(item) {
             newitemElement.style.width = "420px";
             newitemElement.style.height = "256px";
             newitemElement.innerHTML = "<iframe src='' style='flex: 1;'></iframe>";
+            newitemElement.style.backgroundColor = "transparent";
+            editorRenameItem(newitemElement, "Frame");
+            break;
+        case "form":
+            newitemElement = editorInsertItem("label");
+            newitemElement.style.width = "420px";
+            newitemElement.style.height = "256px";
+            newitemElement.style.whiteSpace = "pre";
+            newitemElement.innerHTML = `<form class="themed-blue" action="">\n\t<label>Label :</label>\n\t<input type="text">\n\t\n\t<input type="submit">\n</form>`;
             newitemElement.style.backgroundColor = "transparent";
             editorRenameItem(newitemElement, "Frame");
             break;
