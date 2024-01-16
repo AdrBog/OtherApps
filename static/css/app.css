@@ -1,7 +1,7 @@
 .app{
     flex: 1;
-    display: flex;
-    align-items: center;
+    display: grid;
+    /*align-items: center;*/
     justify-content: center;
     background-color: var(--505050);
     overflow: hidden;
@@ -10,6 +10,7 @@
 
 .app iframe{
     display: inline-block;
+    transform-origin: top;
 }
 
 .Button:hover{
